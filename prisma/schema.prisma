@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model app_user {
+  id       String  @id @default(uuid())
+  username String  @unique
+  avatar   String?
+
+  // Relations
+  posts                post[]
+  comments             comment[]
+  communitiesFounded   community[]        @relation("Founder")
+  communitiesModerated community[]        @relation("Moderator")
+  communityMemberships community_member[]
+  likes                app_like[]
+}
+
+model community {
+  id           String   @id @default(uuid())
+  name         String   @unique
+  description  String
+  created_on   DateTime @default(now())
+  flairs       Json?
+  rules        Json?
+  icon         String
+  banner       String
+  founder_id   String
+  moderator_id String
+
+  // Relations
+  founder   app_user           @relation("Founder", fields: [founder_id], references: [id])
+  moderator app_user           @relation("Moderator", fields: [moderator_id], references: [id])
+  posts     post[]
+  members   community_member[]
+}
+
+model post {
+  id           String  @id @default(uuid())
+  title        String
+  content      String
+  type         String
+  is_nsfw      Boolean @default(false)
+  is_spoiler   Boolean @default(false)
+  user_id      String
+  community_id String
+
+  // Relations
+  author    app_user   @relation(fields: [user_id], references: [id])
+  community community  @relation(fields: [community_id], references: [id])
+  comments  comment[] // One-to-many relation with Comment
+  likes     app_like[]
+}
+
+model comment {
+  id                String  @id @default(uuid())
+  text              String
+  user_id           String
+  post_id           String // Foreign key that references Post
+  parent_comment_id String?
+
+  // Relations
+  author   app_user   @relation(fields: [user_id], references: [id])
+  post     post       @relation(fields: [post_id], references: [id]) // Relating to Post
+  parent   comment?   @relation("ParentChild", fields: [parent_comment_id], references: [id])
+  children comment[]  @relation("ParentChild")
+  likes    app_like[]
+}
+
+model community_member {
+  id           String @id @default(uuid())
+  user_id      String
+  community_id String
+
+  // Relations
+  user      app_user  @relation(fields: [user_id], references: [id])
+  community community @relation(fields: [community_id], references: [id])
+
+  @@unique([user_id, community_id]) // Prevents duplicate community memberships
+}
+
+model app_like {
+  id         String   @id @default(uuid())
+  user_id    String
+  post_id    String? // Foreign key to Post (nullable)
+  comment_id String? // Foreign key to Comment (nullable)
+  type       String // Values: 'upvote' or 'downvote'
+  created_on DateTime @default(now())
+
+  // Relations
+  user    app_user @relation(fields: [user_id], references: [id])
+  post    post?    @relation(fields: [post_id], references: [id])
+  comment comment? @relation(fields: [comment_id], references: [id])
+
+  @@unique([user_id, post_id, comment_id]) // Ensures a user can only like/dislike once per post or comment
+}
