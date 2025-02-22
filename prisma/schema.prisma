@@ -8,9 +8,14 @@ datasource db {
 }
 
 model app_user {
-  id       String  @id @default(uuid())
-  username String  @unique
-  avatar   String?
+  id         String   @id @default(uuid())
+  created_on DateTime @default(now())
+  clerk_id   String   @unique
+  username   String   @unique
+  email      String   @unique
+  first_name String
+  last_name  String
+  avatar_url String?
 
   // Relations
   posts                post[]
@@ -41,12 +46,13 @@ model community {
 }
 
 model post {
-  id           String  @id @default(uuid())
+  id           String   @id @default(uuid())
+  created_on   DateTime @default(now())
   title        String
   content      String
   type         String
-  is_nsfw      Boolean @default(false)
-  is_spoiler   Boolean @default(false)
+  is_nsfw      Boolean  @default(false)
+  is_spoiler   Boolean  @default(false)
   user_id      String
   community_id String
 
@@ -58,7 +64,8 @@ model post {
 }
 
 model comment {
-  id                String  @id @default(uuid())
+  id                String   @id @default(uuid())
+  created_on        DateTime @default(now())
   text              String
   user_id           String
   post_id           String // Foreign key that references Post
@@ -86,11 +93,11 @@ model community_member {
 
 model app_like {
   id         String   @id @default(uuid())
+  created_on DateTime @default(now())
   user_id    String
   post_id    String? // Foreign key to Post (nullable)
   comment_id String? // Foreign key to Comment (nullable)
   type       String // Values: 'upvote' or 'downvote'
-  created_on DateTime @default(now())
 
   // Relations
   user    app_user @relation(fields: [user_id], references: [id])
