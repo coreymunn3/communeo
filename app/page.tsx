@@ -3,7 +3,6 @@ import Header from "@/components/Header";
 export default function Home() {
   return (
     <div>
-      <Header />
       {/* 
       Not Logged In: Main Page will default be a feed of top posts from the curernt day 
         - Fallback Idea: One Page vibrant Image/abstract shapes, possibly some animations to catch the users eye
