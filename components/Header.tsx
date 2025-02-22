@@ -23,12 +23,15 @@ const Header = () => {
       <div className="flex items-center space-x-2">
         <DarkModeToggle />
         <SignedIn>
-          <Button
-            variant={"ghost"}
-            className="hover:bg-slate-200 dark:hover:bg-slate-700"
-          >
+          {/* button to quickly create a post */}
+          <Button variant={"ghost"}>
             <Plus />
-            Create
+            Post
+          </Button>
+          {/* button to quickly create a community */}
+          <Button variant={"ghost"}>
+            <Plus />
+            Commune
           </Button>
           <UserButton />
         </SignedIn>
