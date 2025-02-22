@@ -97,7 +97,7 @@ model app_like {
   user_id    String
   post_id    String? // Foreign key to Post (nullable)
   comment_id String? // Foreign key to Comment (nullable)
-  type       String // Values: 'upvote' or 'downvote'
+  value      Int      @default(1) // 1 for upvote, -1 for downvote
 
   // Relations
   user    app_user @relation(fields: [user_id], references: [id])
