@@ -5,8 +5,13 @@ import Link from "next/link";
 import DarkModeToggle from "./DarkModeToggle";
 import { Button } from "./ui/button";
 import { Plus } from "lucide-react";
+import { useState } from "react";
+import CreateCommunityDialog from "./CreateCommunityDialog";
 
 const Header = () => {
+  const [createCommunityOpen, setCreateCommunityOpen] = useState(false);
+  const handleCloseForm = () => setCreateCommunityOpen(false);
+
   return (
     <div className="px-4 py-2 flex justify-between items-center bg-slate-100 dark:bg-slate-800">
       {/* brand logo */}
@@ -29,7 +34,10 @@ const Header = () => {
             Post
           </Button>
           {/* button to quickly create a community */}
-          <Button variant={"ghost"}>
+          <Button
+            variant={"ghost"}
+            onClick={() => setCreateCommunityOpen(true)}
+          >
             <Plus />
             Commune
           </Button>
@@ -41,6 +49,11 @@ const Header = () => {
           </SignInButton>
         </SignedOut>
       </div>
+      {/* Dialog to create a new community */}
+      <CreateCommunityDialog
+        open={createCommunityOpen}
+        onClose={handleCloseForm}
+      />
     </div>
   );
 };
