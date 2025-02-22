@@ -91,6 +91,7 @@ export async function POST(req: Request) {
       });
       break;
     case "user.deleted":
+      await prisma.app_user.delete({ where: { id } });
       break;
     default:
       throw new Error(`Unhandled Event Type from Clerk webhook: ${evt.type}`);
