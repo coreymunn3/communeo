@@ -24,6 +24,7 @@ export async function POST(req: Request) {
 
   // If there are no headers, error out
   if (!svix_id || !svix_timestamp || !svix_signature) {
+    console.error("Error: Missing Svix headers");
     return new Response("Error: Missing Svix headers", {
       status: 400,
     });
@@ -59,6 +60,9 @@ export async function POST(req: Request) {
   console.log("Webhook payload:", body);
 
   if (!id || !username || !email_address) {
+    console.error(
+      "Incomplete Webhook Payload: missing id, username, or email_address"
+    );
     return new Response(
       "Incomplete Webhook Payload: missing id, username, or email_address",
       {
