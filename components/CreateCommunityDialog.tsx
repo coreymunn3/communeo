@@ -16,6 +16,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+
 import { Input } from "@/components/ui/input";
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -198,12 +204,11 @@ const CreateCommunityDialog = ({
                     </FormLabel>
                     <Button
                       type="button"
-                      variant="outline"
+                      variant="ghost"
                       size="sm"
-                      className="bg-slate-100 dark:bg-slate-900 p-2"
                       onClick={() => appendRule({ title: "", description: "" })}
                     >
-                      <Plus className="h-4 w-4 mr-2" />
+                      <Plus className="h-4 w-4" />
                       Add Rule
                     </Button>
                   </div>
@@ -212,22 +217,26 @@ const CreateCommunityDialog = ({
                     {rulesFields.map((rule, index) => (
                       <div
                         key={rule.id}
-                        className="bg-slate-100 dark:bg-slate-900 pt-6 space-y-1 p-2 rounded-lg relative"
+                        className="bg-slate-100 dark:bg-slate-900 space-y-2 p-2 rounded-lg"
                       >
                         <FormField
                           control={createCommunityForm.control}
                           name={`rules.${index}.title`}
                           render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Rule Title</FormLabel>
-                              <FormControl>
-                                <Input
-                                  placeholder="Enter rule title"
-                                  className="bg-slate-100 dark:bg-slate-900 border-slate-300 dark:border-slate-700"
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage className="ml-2" />
+                            <FormItem className="flex flex-row items-center space-x-4">
+                              <FormLabel className="w-20 text-right">
+                                Rule Title
+                              </FormLabel>
+                              <div className="flex-1 flex flex-col space-y-1">
+                                <FormControl>
+                                  <Input
+                                    placeholder="Enter rule title"
+                                    className="bg-slate-100 dark:bg-slate-900 border-slate-300 dark:border-slate-700"
+                                    {...field}
+                                  />
+                                </FormControl>
+                                <FormMessage className="ml-2" />
+                              </div>
                             </FormItem>
                           )}
                         />
@@ -235,27 +244,31 @@ const CreateCommunityDialog = ({
                           control={createCommunityForm.control}
                           name={`rules.${index}.description`}
                           render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Rule Description</FormLabel>
-                              <FormControl>
-                                <Textarea
-                                  placeholder="Enter rule description"
-                                  className="bg-slate-100 dark:bg-slate-900 border-slate-300 dark:border-slate-700"
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage className="ml-2" />
+                            <FormItem className="flex flex-row items-center space-x-4">
+                              <FormLabel className="w-20 text-right">
+                                Rule Description
+                              </FormLabel>
+                              <div className="flex-1 flex flex-col space-y-1">
+                                <FormControl>
+                                  <Textarea
+                                    placeholder="Enter rule description"
+                                    className="bg-slate-100 dark:bg-slate-900 border-slate-300 dark:border-slate-700"
+                                    {...field}
+                                  />
+                                </FormControl>
+                                <FormMessage className="ml-2" />
+                              </div>
                             </FormItem>
                           )}
                         />
                         <Button
                           type="button"
-                          variant="destructive"
+                          variant="ghost"
                           size="sm"
-                          className="absolute top-1 right-1"
+                          className="w-full"
                           onClick={() => removeRule(index)}
                         >
-                          <Trash className="h-4 w-4" />
+                          <Trash className="h-4 w-4 text-destructive" />
                         </Button>
                       </div>
                     ))}
