@@ -5,7 +5,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Form,
@@ -16,66 +15,16 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-
 import { Input } from "@/components/ui/input";
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { Plus, Trash } from "lucide-react";
-import { isValidUrl } from "@/lib/utils";
-
-/**
- * create a schema from our form through which we will infer types and create fields
- */
-const createCommunityFormSchema = z.object({
-  name: z
-    .string()
-    .min(5, "Community name must be at least 5 characters long.")
-    .max(50, "Community name cannot exceed 50 characters."),
-  description: z
-    .string()
-    .max(200, "Community description cannot exceed 200 characters.")
-    .optional(),
-  icon: z
-    .string()
-    .optional()
-    .refine(
-      (value) => !value || isValidUrl(value), // Validate only if value is provided
-      "Icon must be a valid URL."
-    ),
-  banner: z
-    .string()
-    .optional()
-    .refine(
-      (value) => !value || isValidUrl(value), // Validate only if value is provided
-      "Icon must be a valid URL."
-    ),
-  rules: z
-    .array(
-      z.object({
-        title: z.string().min(1, "Rule title is required."),
-        description: z.string().min(1, "Rule description is required"),
-      })
-    )
-    .min(1, "At least 1 rule is require for each commune"),
-  flairs: z.array(
-    z
-      .object({
-        title: z
-          .string()
-          .min(1, "Flair title is required.")
-          .max(20, "Flair title cannot exceed 20 characters."),
-      })
-      .optional()
-  ),
-});
+import {
+  createCommunityFormData,
+  createCommunityFormSchema,
+} from "@/lib/types";
 
 const CreateCommunityDialog = ({
   open,
@@ -84,9 +33,7 @@ const CreateCommunityDialog = ({
   open: boolean;
   onClose: () => void;
 }) => {
-  const createCommunityForm = useForm<
-    z.infer<typeof createCommunityFormSchema>
-  >({
+  const createCommunityForm = useForm<createCommunityFormData>({
     resolver: zodResolver(createCommunityFormSchema),
     defaultValues: {
       name: "",
@@ -117,9 +64,7 @@ const CreateCommunityDialog = ({
     name: "flairs",
   });
 
-  const onSubmit = async (
-    values: z.infer<typeof createCommunityFormSchema>
-  ) => {
+  const onSubmit = async (values: createCommunityFormData) => {
     console.log(values);
     // parse the rules and flairs into JSON
     const defaultRulees = {};
@@ -131,9 +76,11 @@ const CreateCommunityDialog = ({
     };
   };
 
+  /**
+   * When we close the dialog, we want to clear the form fields then call whatever onClose function was passed into here
+   */
   const handleClose = () => {
-    createCommunityForm.reset({ rules: [], flairs: [] });
-    // clear the field arrays
+    createCommunityForm.reset();
     onClose();
   };
 
@@ -168,7 +115,7 @@ const CreateCommunityDialog = ({
                   name="description"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Description</FormLabel>
+                      <FormLabel>* Description</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="A brief description of your commune"
