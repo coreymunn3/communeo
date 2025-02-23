@@ -228,59 +228,63 @@ const CreateCommunityDialog = ({
                     {rulesFields.map((rule, index) => (
                       <div
                         key={rule.id}
-                        className="bg-slate-100 dark:bg-slate-900 space-y-2 p-2 rounded-lg"
+                        className="flex flex-row bg-slate-100 dark:bg-slate-900 space-x-2 p-2 rounded-lg"
                       >
-                        <FormField
-                          control={createCommunityForm.control}
-                          name={`rules.${index}.title`}
-                          render={({ field }) => (
-                            <FormItem className="flex flex-row items-center space-x-4">
-                              <FormLabel className="w-20 text-right">
-                                Rule Title
-                              </FormLabel>
-                              <div className="flex-1 flex flex-col space-y-1">
-                                <FormControl>
-                                  <Input
-                                    placeholder="Enter rule title"
-                                    className="bg-slate-100 dark:bg-slate-900 border-slate-300 dark:border-slate-700"
-                                    {...field}
-                                  />
-                                </FormControl>
-                                <FormMessage className="ml-2" />
-                              </div>
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={createCommunityForm.control}
-                          name={`rules.${index}.description`}
-                          render={({ field }) => (
-                            <FormItem className="flex flex-row items-center space-x-4">
-                              <FormLabel className="w-20 text-right">
-                                Rule Description
-                              </FormLabel>
-                              <div className="flex-1 flex flex-col space-y-1">
-                                <FormControl>
-                                  <Textarea
-                                    placeholder="Enter rule description"
-                                    className="bg-slate-100 dark:bg-slate-900 border-slate-300 dark:border-slate-700"
-                                    {...field}
-                                  />
-                                </FormControl>
-                                <FormMessage className="ml-2" />
-                              </div>
-                            </FormItem>
-                          )}
-                        />
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          className="w-full"
-                          onClick={() => removeRule(index)}
-                        >
-                          <Trash className="h-4 w-4 text-destructive" />
-                        </Button>
+                        <div className="flex-1">
+                          <FormField
+                            control={createCommunityForm.control}
+                            name={`rules.${index}.title`}
+                            render={({ field }) => (
+                              <FormItem className="flex flex-row items-center space-x-4">
+                                <FormLabel className="w-20 text-right mt-2">
+                                  Rule Title
+                                </FormLabel>
+                                <div className="flex-1 flex flex-col space-y-1">
+                                  <FormControl>
+                                    <Input
+                                      placeholder="Enter rule title"
+                                      className="bg-slate-100 dark:bg-slate-900 border-slate-300 dark:border-slate-700"
+                                      {...field}
+                                    />
+                                  </FormControl>
+                                  <FormMessage className="ml-2" />
+                                </div>
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={createCommunityForm.control}
+                            name={`rules.${index}.description`}
+                            render={({ field }) => (
+                              <FormItem className="flex flex-row items-center space-x-4">
+                                <FormLabel className="w-20 text-right mt-2">
+                                  Rule Description
+                                </FormLabel>
+                                <div className="flex-1 flex flex-col space-y-1">
+                                  <FormControl>
+                                    <Textarea
+                                      placeholder="Enter rule description"
+                                      className="bg-slate-100 dark:bg-slate-900 border-slate-300 dark:border-slate-700"
+                                      {...field}
+                                    />
+                                  </FormControl>
+                                  <FormMessage className="ml-2" />
+                                </div>
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                        <div>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            className="w-full h-full"
+                            onClick={() => removeRule(index)}
+                          >
+                            <Trash className="h-4 w-4 text-destructive" />
+                          </Button>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -307,38 +311,42 @@ const CreateCommunityDialog = ({
                     {flairsFields.map((flair, index) => (
                       <div
                         key={flair.id}
-                        className="bg-slate-100 dark:bg-slate-900 space-y-2 p-2 rounded-lg"
+                        className="flex flex-row bg-slate-100 dark:bg-slate-900 space-x-2 p-2 rounded-lg"
                       >
-                        <FormField
-                          control={createCommunityForm.control}
-                          name={`flairs.${index}.title`}
-                          render={({ field }) => (
-                            <FormItem className="flex flex-row items-center space-x-4">
-                              <FormLabel className="w-20 text-right">
-                                Flair Title
-                              </FormLabel>
-                              <div className="flex-1 flex flex-col space-y-1">
-                                <FormControl>
-                                  <Input
-                                    placeholder="Enter rule title"
-                                    className="bg-slate-100 dark:bg-slate-900 border-slate-300 dark:border-slate-700"
-                                    {...field}
-                                  />
-                                </FormControl>
-                                <FormMessage className="ml-2" />
-                              </div>
-                            </FormItem>
-                          )}
-                        />
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          className="w-full"
-                          onClick={() => removeFlair(index)}
-                        >
-                          <Trash className="h-4 w-4 text-destructive" />
-                        </Button>
+                        <div className="flex-1">
+                          <FormField
+                            control={createCommunityForm.control}
+                            name={`flairs.${index}.title`}
+                            render={({ field }) => (
+                              <FormItem className="flex flex-row items-center space-x-4">
+                                <FormLabel className="w-20 text-right mt-2">
+                                  Flair Title
+                                </FormLabel>
+                                <div className="flex-1 flex flex-col space-y-1">
+                                  <FormControl>
+                                    <Input
+                                      placeholder="Enter rule title"
+                                      className="bg-slate-100 dark:bg-slate-900 border-slate-300 dark:border-slate-700"
+                                      {...field}
+                                    />
+                                  </FormControl>
+                                  <FormMessage className="ml-2" />
+                                </div>
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                        <div>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            className="w-full h-full"
+                            onClick={() => removeFlair(index)}
+                          >
+                            <Trash className="h-4 w-4 text-destructive" />
+                          </Button>
+                        </div>
                       </div>
                     ))}
                   </div>
