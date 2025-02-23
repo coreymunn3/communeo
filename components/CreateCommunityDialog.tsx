@@ -21,10 +21,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { Plus, Trash } from "lucide-react";
+import { toast } from "sonner";
 import {
   createCommunityFormData,
   createCommunityFormSchema,
 } from "@/lib/types";
+
 import { createCommunity } from "@/actions/createCommunity";
 
 const CreateCommunityDialog = ({
@@ -67,7 +69,13 @@ const CreateCommunityDialog = ({
 
   const onSubmit = async (formData: createCommunityFormData) => {
     console.log(formData);
-    await createCommunity(formData);
+    const { success } = await createCommunity(formData);
+    if (success) {
+      toast.success(`${formData.name} has been created!`);
+      handleClose();
+    } else {
+      toast.error(`Something went wrong!`);
+    }
   };
 
   /**
