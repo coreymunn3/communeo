@@ -25,6 +25,7 @@ import {
   createCommunityFormData,
   createCommunityFormSchema,
 } from "@/lib/types";
+import { createCommunity } from "@/actions/createCommunity";
 
 const CreateCommunityDialog = ({
   open,
@@ -64,16 +65,9 @@ const CreateCommunityDialog = ({
     name: "flairs",
   });
 
-  const onSubmit = async (values: createCommunityFormData) => {
-    console.log(values);
-    // parse the rules and flairs into JSON
-    const defaultRulees = {};
-    const defaultFlairs = {};
-    const parsedData = {
-      ...values,
-      // rules: values.rules ? JSON.parse(values.rules) : defaultRulees,
-      // flairs: values.flairs ? JSON.parse(values.flairs) : defaultFlairs,
-    };
+  const onSubmit = async (formData: createCommunityFormData) => {
+    console.log(formData);
+    await createCommunity(formData);
   };
 
   /**

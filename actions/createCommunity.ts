@@ -1,0 +1,42 @@
+"use server";
+import { createCommunityFormData } from "@/lib/types";
+import { prisma } from "@/lib/prisma";
+import { auth } from "@clerk/nextjs/server";
+import { DEFAULT_COMMUNITY_BANNER, DEFAULT_COMMUNITY_ICON } from "@/CONSTANTS";
+
+export async function createCommunity(formData: createCommunityFormData) {
+  auth.protect();
+  const { userId: clerkUserId } = await auth();
+  console.log(clerkUserId);
+  // get the user's database ID. the userId: clerkUserId above is actually the clerkId
+  const dbUser = await prisma.app_user.findFirst({
+    where: {
+      clerk_id: clerkUserId!,
+    },
+  });
+  if (!dbUser) {
+    throw new Error(
+      `Unable to find a database user with this Clerk Id: ${clerkUserId}`
+    );
+  }
+  // create the community
+  const commune = await prisma.community.create({
+    data: {
+      name: formData.name,
+      description: formData.description,
+      icon: formData?.icon || DEFAULT_COMMUNITY_ICON,
+      banner: formData?.banner || DEFAULT_COMMUNITY_BANNER,
+      rules: formData?.rules,
+      flairs: formData?.flairs,
+      founder_id: dbUser.id,
+      moderator_id: dbUser.id,
+    },
+  });
+  // add the user as a community member for this community
+  await prisma.community_member.create({
+    data: {
+      user_id: dbUser.id,
+      community_id: commune.id,
+    },
+  });
+}
