@@ -3,6 +3,7 @@ import { createCommunityFormData } from "@/lib/types";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { DEFAULT_COMMUNITY_BANNER, DEFAULT_COMMUNITY_ICON } from "@/CONSTANTS";
+import { slugify } from "@/lib/utils";
 
 export async function createCommunity(formData: createCommunityFormData) {
   auth.protect();
@@ -23,6 +24,7 @@ export async function createCommunity(formData: createCommunityFormData) {
     const commune = await prisma.community.create({
       data: {
         name: formData.name,
+        slug: slugify(formData.name),
         description: formData.description,
         icon: formData?.icon || DEFAULT_COMMUNITY_ICON,
         banner: formData?.banner || DEFAULT_COMMUNITY_BANNER,

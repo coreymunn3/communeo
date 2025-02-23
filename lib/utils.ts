@@ -13,3 +13,10 @@ export function isValidUrl(value: string) {
     return false;
   }
 }
+
+export function slugify(name: string): string {
+  return name
+    .toLowerCase() // Convert to lowercase
+    .replace(/\s+/g, "") // Remove spaces
+    .replace(/[^\w-]+/g, ""); // Remove special characters
+}

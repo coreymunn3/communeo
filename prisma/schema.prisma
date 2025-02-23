@@ -29,6 +29,7 @@ model app_user {
 model community {
   id           String   @id @default(uuid())
   name         String   @unique
+  slug         String   @unique // a URL-friendly version of the name that we will use for routing
   description  String
   created_on   DateTime @default(now())
   flairs       Json?
