@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { WebhookEvent } from "@clerk/nextjs/server";
 import { ClerkWebhookEvent } from "@/lib/types";
 import { prisma } from "@/lib/prisma";
+import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   const CLERK_WEBHOOK_SIGNING_SECRET = process.env.CLERK_WEBHOOK_SIGNING_SECRET;
@@ -74,28 +75,50 @@ export async function POST(req: Request) {
   switch (evt.type) {
     case "user.created":
     case "user.updated":
-      await prisma.app_user.upsert({
-        where: { id },
-        update: {
-          username: username,
-          email: email_address,
-          clerk_id: id,
-          first_name: first_name || "",
-          last_name: last_name || "",
-          avatar_url: image_url,
-        },
-        create: {
-          username: username,
-          email: email_address,
-          clerk_id: id,
-          first_name: first_name || "",
-          last_name: last_name || "",
-          avatar_url: image_url,
-        },
-      });
+      try {
+        await prisma.app_user.upsert({
+          where: { id },
+          update: {
+            username: username,
+            email: email_address,
+            clerk_id: id,
+            first_name: first_name || "",
+            last_name: last_name || "",
+            avatar_url: image_url,
+          },
+          create: {
+            username: username,
+            email: email_address,
+            clerk_id: id,
+            first_name: first_name || "",
+            last_name: last_name || "",
+            avatar_url: image_url,
+          },
+        });
+      } catch (error) {
+        console.error(error);
+        return new NextResponse(
+          `Unable to ${evt.type} user ${email_address}: ${error}`,
+          {
+            status: 500,
+          }
+        );
+      }
+
       break;
     case "user.deleted":
-      await prisma.app_user.delete({ where: { id } });
+      try {
+        await prisma.app_user.delete({ where: { id } });
+      } catch (error) {
+        console.error(error);
+        return new NextResponse(
+          `Unable to ${evt.type} user ${email_address}: ${error}`,
+          {
+            status: 500,
+          }
+        );
+      }
+
       break;
     default:
       throw new Error(`Unhandled Event Type from Clerk webhook: ${evt.type}`);
