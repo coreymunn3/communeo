@@ -29,6 +29,7 @@ import { z } from "zod";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { Plus, Trash } from "lucide-react";
+import { isValidUrl } from "@/lib/utils";
 
 /**
  * create a schema from our form through which we will infer types and create fields
@@ -42,21 +43,37 @@ const createCommunityFormSchema = z.object({
     .string()
     .max(200, "Community description cannot exceed 200 characters.")
     .optional(),
-  icon: z.string().url("Icon must be a valid URL.").optional(),
-  banner: z.string().url("Banner must be a valid URL.").optional(),
-  rules: z.array(
-    z.object({
-      title: z.string().min(1, "Rule title is required."),
-      description: z.string().min(1, "Rule description is required"),
-    })
-  ),
+  icon: z
+    .string()
+    .optional()
+    .refine(
+      (value) => !value || isValidUrl(value), // Validate only if value is provided
+      "Icon must be a valid URL."
+    ),
+  banner: z
+    .string()
+    .optional()
+    .refine(
+      (value) => !value || isValidUrl(value), // Validate only if value is provided
+      "Icon must be a valid URL."
+    ),
+  rules: z
+    .array(
+      z.object({
+        title: z.string().min(1, "Rule title is required."),
+        description: z.string().min(1, "Rule description is required"),
+      })
+    )
+    .min(1, "At least 1 rule is require for each commune"),
   flairs: z.array(
-    z.object({
-      title: z
-        .string()
-        .min(1, "Flair title is required.")
-        .max(20, "Flair title cannot exceed 20 characters."),
-    })
+    z
+      .object({
+        title: z
+          .string()
+          .min(1, "Flair title is required.")
+          .max(20, "Flair title cannot exceed 20 characters."),
+      })
+      .optional()
   ),
 });
 
@@ -137,7 +154,7 @@ const CreateCommunityDialog = ({
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Community Name</FormLabel>
+                      <FormLabel>* Community Name</FormLabel>
                       <FormControl>
                         <Input placeholder="Enter community name" {...field} />
                       </FormControl>
@@ -154,7 +171,7 @@ const CreateCommunityDialog = ({
                       <FormLabel>Description</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="A brief description of your commune (optional)"
+                          placeholder="A brief description of your commune"
                           {...field}
                         />
                       </FormControl>
@@ -170,10 +187,7 @@ const CreateCommunityDialog = ({
                     <FormItem>
                       <FormLabel>Icon URL</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="Enter icon URL (optional)"
-                          {...field}
-                        />
+                        <Input placeholder="Enter icon URL" {...field} />
                       </FormControl>
                       <FormMessage className="ml-2" />
                     </FormItem>
@@ -187,20 +201,17 @@ const CreateCommunityDialog = ({
                     <FormItem>
                       <FormLabel>Banner URL</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="Enter banner URL (optional)"
-                          {...field}
-                        />
+                        <Input placeholder="Enter banner URL" {...field} />
                       </FormControl>
                       <FormMessage className="ml-2" />
                     </FormItem>
                   )}
                 />
                 {/* rules field */}
-                <div className="">
+                <div>
                   <div className="flex space-x-2 justify-start items-center mb-2">
                     <FormLabel className="sticky">
-                      Define your communes rules
+                      * Define your commune rules (min 1 rule)
                     </FormLabel>
                     <Button
                       type="button"
@@ -274,40 +285,64 @@ const CreateCommunityDialog = ({
                     ))}
                   </div>
                 </div>
-                {/* <FormField
-                  control={createCommunityForm.control}
-                  name="rules"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Rules</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="Enter rules as JSON (optional)"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage className="ml-2" />
-                    </FormItem>
-                  )}
-                /> */}
 
                 {/* Flairs (JSON Object) */}
-                {/* <FormField
-                  control={createCommunityForm.control}
-                  name="flairs"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Flairs</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="Enter flairs as JSON (optional)"
-                          {...field}
+                <div>
+                  <div className="flex space-x-2 justify-start items-center mb-2">
+                    <FormLabel className="sticky">
+                      Define your commune flairs
+                    </FormLabel>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => appendFlair({ title: "" })}
+                    >
+                      <Plus className="h-4 w-4" />
+                      Add Flair
+                    </Button>
+                  </div>
+
+                  <div className="flex flex-col space-y-4 max-h-[300px] overflow-scroll">
+                    {flairsFields.map((flair, index) => (
+                      <div
+                        key={flair.id}
+                        className="bg-slate-100 dark:bg-slate-900 space-y-2 p-2 rounded-lg"
+                      >
+                        <FormField
+                          control={createCommunityForm.control}
+                          name={`flairs.${index}.title`}
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-center space-x-4">
+                              <FormLabel className="w-20 text-right">
+                                Flair Title
+                              </FormLabel>
+                              <div className="flex-1 flex flex-col space-y-1">
+                                <FormControl>
+                                  <Input
+                                    placeholder="Enter rule title"
+                                    className="bg-slate-100 dark:bg-slate-900 border-slate-300 dark:border-slate-700"
+                                    {...field}
+                                  />
+                                </FormControl>
+                                <FormMessage className="ml-2" />
+                              </div>
+                            </FormItem>
+                          )}
                         />
-                      </FormControl>
-                      <FormMessage className="ml-2" />
-                    </FormItem>
-                  )}
-                /> */}
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="w-full"
+                          onClick={() => removeFlair(index)}
+                        >
+                          <Trash className="h-4 w-4 text-destructive" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
                 {/* submit */}
                 <Button
                   type="submit"
