@@ -20,3 +20,11 @@ export function slugify(name: string): string {
     .replace(/\s+/g, "") // Remove spaces
     .replace(/[^\w-]+/g, ""); // Remove special characters
 }
+
+export function capitalizeEachWord(phrase: string): string {
+  if (!phrase) return phrase; // Return the input if it's empty or null
+  return phrase
+    .split(" ") // Split the phrase into words
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize each word
+    .join(" "); // Join the words back into a single string
+}

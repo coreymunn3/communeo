@@ -13,6 +13,29 @@ export interface ClerkWebhookEvent {
   };
 }
 
+export type Community = {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  created_on: Date;
+  flairs?: CommunityFlair[];
+  rules?: CommunityRule[];
+  icon?: string;
+  banner?: string;
+  founder_id: string;
+  moderator_id: string;
+} | null;
+
+export type CommunityRule = {
+  title: string;
+  description: string;
+};
+
+export type CommunityFlair = {
+  title: string;
+};
+
 /**
  * create a schema from our form through which we will infer types and create fields
  */

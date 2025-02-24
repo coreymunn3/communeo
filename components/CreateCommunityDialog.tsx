@@ -73,6 +73,7 @@ const CreateCommunityDialog = ({
     if (success) {
       toast.success(`${formData.name} has been created!`);
       handleClose();
+      // TO DO - route the user to the new community page
     } else {
       toast.error(`Something went wrong!`);
     }
