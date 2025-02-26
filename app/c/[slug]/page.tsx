@@ -84,7 +84,7 @@ const CommunityPage = async ({ params }: CommunityPageProps) => {
           </div>
           {/* Title */}
           <div className=" flex ml-[16%] md:ml-[20%] justify-between p-2 md:h-[60px]">
-            <h1 className="text-2xl md:text-4xl font-bold tracking-tight">
+            <h1 className="text-2xl md:text-4xl tracking-tight">
               {`${capitalizeEachWord(community.name)}`}
             </h1>
             <div className="flex space-x-2 items-center">

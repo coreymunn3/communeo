@@ -84,6 +84,40 @@ export const createCommunityFormSchema = z.object({
 
 export type createCommunityFormData = z.infer<typeof createCommunityFormSchema>;
 
+// Define schemas for each post type
+const textPostSchema = z.object({
+  type: z.literal("text"),
+  title: z.string().min(5).max(100),
+  content: z.string().min(1, "Content is required for text posts."),
+  is_nsfw: z.boolean().default(false), // Boolean field for is_NSFW
+  is_spoiler: z.boolean().default(false), // Boolean field for is_Spoiler
+});
+
+const imagePostSchema = z.object({
+  type: z.literal("image"),
+  title: z.string().min(5).max(100),
+  content: z.string().url("Content must be a valid URL for image posts."),
+  is_nsfw: z.boolean().default(false),
+  is_spoiler: z.boolean().default(false),
+});
+
+const linkPostSchema = z.object({
+  type: z.literal("link"),
+  title: z.string().min(5).max(100),
+  content: z.string().url("Content must be a valid URL for link posts."),
+  is_nsfw: z.boolean().default(false),
+  is_spoiler: z.boolean().default(false),
+});
+
+// Combine the schemas into a discriminated union
+export const postFormSchema = z.discriminatedUnion("type", [
+  textPostSchema,
+  imagePostSchema,
+  linkPostSchema,
+]);
+
+export type postFormData = z.infer<typeof postFormSchema>;
+
 export type CommunityPost = {
   id: string;
   title: string;
