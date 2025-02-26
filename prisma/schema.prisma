@@ -46,14 +46,20 @@ model community {
   members   community_member[]
 }
 
+enum post_type {
+  text
+  image
+  link
+}
+
 model post {
-  id           String   @id @default(uuid())
-  created_on   DateTime @default(now())
+  id           String    @id @default(uuid())
+  created_on   DateTime  @default(now())
   title        String
   content      String
-  type         String
-  is_nsfw      Boolean  @default(false)
-  is_spoiler   Boolean  @default(false)
+  type         post_type
+  is_nsfw      Boolean   @default(false)
+  is_spoiler   Boolean   @default(false)
   user_id      String
   community_id String
 
