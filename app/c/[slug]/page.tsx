@@ -2,10 +2,13 @@ import Image from "next/image";
 import CommunityNotFound from "@/components/CommunityNotFound";
 import { prisma } from "@/lib/prisma";
 import { capitalizeEachWord } from "@/lib/utils";
-import { CakeIcon, UserIcon } from "lucide-react";
+import { CakeIcon, PlusIcon, UserIcon } from "lucide-react";
 import { CommunityFlair, CommunityRule } from "@/lib/types";
 import CommunityRules from "@/components/CommunityRules";
 import CommunityFlairs from "@/components/CommunityFlairs";
+import { Button } from "@/components/ui/button";
+import CommunityPosts from "@/components/CommunityPosts";
+import Link from "next/link";
 
 interface CommunityPageProps {
   params: {
@@ -23,24 +26,32 @@ const CommunityPage = async ({ params }: CommunityPageProps) => {
   });
   const communityRules = community?.rules as CommunityRule[];
   const communityFlairs = community?.flairs as CommunityFlair[];
+  console.log(community);
 
   if (!community) {
     return <CommunityNotFound slug={slug} />;
   }
 
-  const moderator = await prisma.app_user.findUnique({
-    where: {
-      id: community?.moderator_id,
-    },
-  });
-
-  const numMembers = await prisma.community_member.count({
-    where: {
-      community_id: community?.id,
-    },
-  });
-
   if (community) {
+    // find the moderator
+    const moderator = await prisma.app_user.findUnique({
+      where: {
+        id: community?.moderator_id,
+      },
+    });
+    // find the number of members
+    const numMembers = await prisma.community_member.count({
+      where: {
+        community_id: community?.id,
+      },
+    });
+    // get the posts for this community
+    const communityPosts = await prisma.post.findMany({
+      where: {
+        community_id: community.id,
+      },
+    });
+    console.log(communityPosts);
     return (
       <div className="max-h-screen max-w-6xl mx-auto mt-12 p-4">
         <div className="container mx-auto flex flex-col space-y-2">
@@ -72,15 +83,37 @@ const CommunityPage = async ({ params }: CommunityPageProps) => {
             </div>
           </div>
           {/* Title */}
-          <div className=" flex justify-center p-2 md:h-[60px]">
-            <h1 className="text-4xl font-bold tracking-tight">
+          <div className=" flex ml-[16%] md:ml-[20%] justify-between p-2 md:h-[60px]">
+            <h1 className="text-2xl md:text-4xl font-bold tracking-tight">
               {`${capitalizeEachWord(community.name)}`}
             </h1>
+            <div className="flex space-x-2 items-center">
+              <Button variant={"community"} asChild>
+                <Link href={`/c/${slug}/create?type=text`}>
+                  <PlusIcon />
+                  Create Post
+                </Link>
+              </Button>
+              <Button
+                variant={"community"}
+                className="bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800"
+              >
+                Join
+              </Button>
+            </div>
           </div>
           {/* Main Content */}
           <div className="flex gap-4 flex-col-reverse md:flex-row">
             {/* Left Section - Posts */}
-            <div className="md:w-2/3 bg-slate-100 p-4">Posts!</div>
+            <div className="md:w-2/3 p-4">
+              {communityPosts.length > 0 ? (
+                <CommunityPosts posts={communityPosts} />
+              ) : (
+                <div className="flex  flex-col space-y-4 h-full justify-center items-center  text-slate-600 dark:text-slate-400">
+                  <p>There are no posts here yet!</p>
+                </div>
+              )}
+            </div>
             {/* Right Section - Meta & Controls */}
             <div className="md:w-1/3 bg-slate-100 dark:bg-slate-900 rounded-lg p-4 text-slate-600 dark:text-slate-400">
               {/* top section, about the community */}

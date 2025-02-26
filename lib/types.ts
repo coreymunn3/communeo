@@ -83,3 +83,15 @@ export const createCommunityFormSchema = z.object({
 });
 
 export type createCommunityFormData = z.infer<typeof createCommunityFormSchema>;
+
+export type CommunityPost = {
+  id: string;
+  title: string;
+  content: string;
+  type: string;
+  is_nsfw: boolean;
+  is_spoiler: boolean;
+  user_id: string;
+  community_id: string;
+  created_on: Date;
+};
