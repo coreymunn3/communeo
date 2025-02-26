@@ -21,7 +21,7 @@ export async function createCommunity(formData: createCommunityFormData) {
   }
   try {
     // create the community
-    const commune = await prisma.community.create({
+    const community = await prisma.community.create({
       data: {
         name: formData.name,
         slug: slugify(formData.name),
@@ -38,10 +38,10 @@ export async function createCommunity(formData: createCommunityFormData) {
     await prisma.community_member.create({
       data: {
         user_id: dbUser.id,
-        community_id: commune.id,
+        community_id: community.id,
       },
     });
-    return { success: true };
+    return { success: true, community };
   } catch (error) {
     console.error(error);
     return { success: false };
