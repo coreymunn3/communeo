@@ -129,3 +129,9 @@ export type CommunityPost = {
   community_id: string;
   created_on: Date;
 };
+
+export type PublicUser = {
+  id: string;
+  avatar_url: string;
+  username: string;
+};

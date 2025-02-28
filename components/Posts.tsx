@@ -11,7 +11,7 @@ const Posts = ({
   communityId: string;
 }) => {
   // fetch the posts for this community using as placeholder the initial posts from the server
-  const { data: posts } = useQuery({
+  const { data: posts } = useQuery<CommunityPost[]>({
     queryKey: [communityId, "posts"],
     queryFn: async () => {
       const res = await fetch(`/api/posts/${communityId}`);
