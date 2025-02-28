@@ -23,8 +23,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
 import { postFormData, postFormSchema } from "@/lib/types";
-import { AlertTriangle, Eye } from "lucide-react";
+import { AlertTriangle, Eye, Loader2Icon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
 import { createPost } from "@/actions/createPost";
 
 // Page Structure
@@ -58,19 +59,23 @@ const CreatePostForm = ({
     mode: "onBlur",
   });
 
-  const onSubmit = async (formData: postFormData) => {
-    console.log(formData);
-    // try to create the post with an action
-    try {
-      createPost(formData, communityId);
-      // alert success
+  const createPostMutation = useMutation({
+    mutationFn: (formData: postFormData) => createPost(formData, communityId),
+    // if successful, alert the user and redirect
+    onSuccess: (data) => {
       toast.success("Post has been created");
-      // redirect
       router.push(redirectOnCreate);
-    } catch (error) {
-      // alert failure
+    },
+    // if failure, alert the user, keep form dirty
+    onError: (data, error) => {
+      console.error(error);
       toast.error("Unable to create post");
-    }
+    },
+  });
+
+  const onSubmit = async (formData: postFormData) => {
+    // try to create the post with an action
+    createPostMutation.mutate(formData);
   };
 
   const handleCancel = () => {
@@ -195,10 +200,17 @@ const CreatePostForm = ({
             </Button>
             <Button
               type="submit"
-              disabled={!createPostForm.formState.isValid}
+              disabled={
+                !createPostForm.formState.isValid ||
+                !createPostForm.formState.isSubmitting
+              }
               className="w-40"
             >
-              Create Post
+              {createPostMutation.isPending ? (
+                <Loader2Icon className="h-4 w-4 animate-spin" />
+              ) : (
+                "Create Post"
+              )}
             </Button>
           </div>
         </form>

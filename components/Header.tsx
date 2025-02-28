@@ -39,7 +39,7 @@ const Header = () => {
             onClick={() => setCreateCommunityOpen(true)}
           >
             <Plus />
-            Commune
+            Community
           </Button>
           <UserButton />
         </SignedIn>

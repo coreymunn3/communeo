@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { TanstackQueryClientProvider } from "@/components/providers/TanstackQueryClientProvider";
 import { Toaster } from "@/components/ui/sonner";
 import Header from "@/components/Header";
 
@@ -33,15 +34,17 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <ThemeProvider
-            attribute={"class"}
-            defaultTheme="light"
-            enableSystem={false}
-          >
-            <Header />
-            {children}
-            <Toaster position="top-center" richColors />
-          </ThemeProvider>
+          <TanstackQueryClientProvider>
+            <ThemeProvider
+              attribute={"class"}
+              defaultTheme="light"
+              enableSystem={false}
+            >
+              <Header />
+              {children}
+              <Toaster position="top-center" richColors />
+            </ThemeProvider>
+          </TanstackQueryClientProvider>
         </body>
       </html>
     </ClerkProvider>

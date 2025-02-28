@@ -20,13 +20,14 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
-import { Plus, Trash } from "lucide-react";
+import { Loader2Icon, Plus, Trash } from "lucide-react";
 import { toast } from "sonner";
 import {
   createCommunityFormData,
   createCommunityFormSchema,
 } from "@/lib/types";
-
+import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
 import { createCommunity } from "@/actions/createCommunity";
 
 const CreateCommunityDialog = ({
@@ -36,6 +37,7 @@ const CreateCommunityDialog = ({
   open: boolean;
   onClose: () => void;
 }) => {
+  const router = useRouter();
   const createCommunityForm = useForm<createCommunityFormData>({
     resolver: zodResolver(createCommunityFormSchema),
     defaultValues: {
@@ -67,16 +69,23 @@ const CreateCommunityDialog = ({
     name: "flairs",
   });
 
-  const onSubmit = async (formData: createCommunityFormData) => {
-    console.log(formData);
-    const { success } = await createCommunity(formData);
-    if (success) {
-      toast.success(`${formData.name} has been created!`);
+  const createCommunityMutation = useMutation({
+    mutationFn: (formData: createCommunityFormData) =>
+      createCommunity(formData),
+    onSuccess: (data) => {
+      toast.success(`Community ${data.community?.name} has been created!`);
       handleClose();
-      // TO DO - route the user to the new community page
-    } else {
+      router.push(`/c/${data.community?.slug}`);
+    },
+    onError: (data, error) => {
+      console.error(error);
       toast.error(`Something went wrong!`);
-    }
+    },
+  });
+
+  const onSubmit = async (formData: createCommunityFormData) => {
+    // create the community with an action
+    createCommunityMutation.mutate(formData);
   };
 
   /**
@@ -91,7 +100,7 @@ const CreateCommunityDialog = ({
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="max-h-screen overflow-scroll">
         <DialogHeader>
-          <DialogTitle>Tell us about your commune</DialogTitle>
+          <DialogTitle>Tell us about your community</DialogTitle>
           <DialogDescription>
             <Form {...createCommunityForm}>
               <form
@@ -121,7 +130,7 @@ const CreateCommunityDialog = ({
                       <FormLabel>* Description</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="A brief description of your commune"
+                          placeholder="A brief description of your community"
                           {...field}
                         />
                       </FormControl>
@@ -161,7 +170,7 @@ const CreateCommunityDialog = ({
                 <div>
                   <div className="flex space-x-2 justify-start items-center mb-2">
                     <FormLabel className="sticky">
-                      * Define your commune rules (min 1 rule)
+                      * Define your community rules (min 1 rule)
                     </FormLabel>
                     <Button
                       type="button"
@@ -244,7 +253,7 @@ const CreateCommunityDialog = ({
                 <div>
                   <div className="flex space-x-2 justify-start items-center mb-2">
                     <FormLabel className="sticky">
-                      Define your commune flairs
+                      Define your community flairs
                     </FormLabel>
                     <Button
                       type="button"
@@ -304,9 +313,16 @@ const CreateCommunityDialog = ({
                 {/* submit */}
                 <Button
                   type="submit"
-                  disabled={!createCommunityForm.formState.isValid}
+                  disabled={
+                    !createCommunityForm.formState.isValid ||
+                    !createCommunityForm.formState.isSubmitting
+                  }
                 >
-                  Create Commune
+                  {createCommunityMutation.isPending ? (
+                    <Loader2Icon className="h-4 w-4 animate-spin" />
+                  ) : (
+                    "Create Community"
+                  )}
                 </Button>
               </form>
             </Form>

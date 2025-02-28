@@ -26,7 +26,6 @@ const CommunityPage = async ({ params }: CommunityPageProps) => {
   });
   const communityRules = community?.rules as CommunityRule[];
   const communityFlairs = community?.flairs as CommunityFlair[];
-  console.log(community);
 
   if (!community) {
     return <CommunityNotFound slug={slug} />;
@@ -51,7 +50,7 @@ const CommunityPage = async ({ params }: CommunityPageProps) => {
         community_id: community.id,
       },
     });
-    console.log(communityPosts);
+
     return (
       <div className="max-h-screen max-w-6xl mx-auto mt-12 p-4">
         <div className="container mx-auto flex flex-col space-y-2">
