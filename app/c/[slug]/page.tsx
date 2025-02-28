@@ -7,7 +7,7 @@ import { CommunityFlair, CommunityRule } from "@/lib/types";
 import CommunityRules from "@/components/CommunityRules";
 import CommunityFlairs from "@/components/CommunityFlairs";
 import { Button } from "@/components/ui/button";
-import CommunityPosts from "@/components/CommunityPosts";
+import Posts from "@/components/Posts";
 import Link from "next/link";
 
 interface CommunityPageProps {
@@ -104,9 +104,9 @@ const CommunityPage = async ({ params }: CommunityPageProps) => {
           {/* Main Content */}
           <div className="flex gap-4 flex-col-reverse md:flex-row">
             {/* Left Section - Posts */}
-            <div className="md:w-2/3 p-4">
+            <div className="md:w-2/3">
               {communityPosts.length > 0 ? (
-                <CommunityPosts
+                <Posts
                   communityId={community.id}
                   initialPosts={communityPosts}
                 />

@@ -1,8 +1,9 @@
 "use client";
 import { CommunityPost } from "@/lib/types";
 import { useQuery } from "@tanstack/react-query";
+import Post from "./Post";
 
-const CommunityPosts = ({
+const Posts = ({
   initialPosts,
   communityId,
 }: {
@@ -10,7 +11,7 @@ const CommunityPosts = ({
   communityId: string;
 }) => {
   // fetch the posts for this community using as placeholder the initial posts from the server
-  const { data: communityPosts } = useQuery({
+  const { data: posts } = useQuery({
     queryKey: [communityId, "posts"],
     queryFn: async () => {
       const res = await fetch(`/api/posts/${communityId}`);
@@ -20,11 +21,11 @@ const CommunityPosts = ({
   });
 
   return (
-    <div>
-      {communityPosts.map((post: CommunityPost) => (
-        <div>{post.title}</div>
+    <div className="flex flex-col space-y-2">
+      {posts.map((post: CommunityPost) => (
+        <Post post={post} key={post.id} />
       ))}
     </div>
   );
 };
-export default CommunityPosts;
+export default Posts;
