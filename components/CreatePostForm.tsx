@@ -25,7 +25,7 @@ import { toast } from "sonner";
 import { postFormData, postFormSchema } from "@/lib/types";
 import { AlertTriangle, Eye, Loader2Icon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createPost } from "@/actions/createPost";
 
 // Page Structure
@@ -47,6 +47,8 @@ const CreatePostForm = ({
   communityId,
 }: CreatePostFormProps) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
+
   const createPostForm = useForm<postFormData>({
     resolver: zodResolver(postFormSchema),
     defaultValues: {
@@ -65,6 +67,7 @@ const CreatePostForm = ({
     onSuccess: (data) => {
       toast.success("Post has been created");
       router.push(redirectOnCreate);
+      queryClient.invalidateQueries({ queryKey: [communityId, "posts"] });
     },
     // if failure, alert the user, keep form dirty
     onError: (data, error) => {
@@ -202,7 +205,7 @@ const CreatePostForm = ({
               type="submit"
               disabled={
                 !createPostForm.formState.isValid ||
-                !createPostForm.formState.isSubmitting
+                createPostForm.formState.isSubmitting
               }
               className="w-40"
             >

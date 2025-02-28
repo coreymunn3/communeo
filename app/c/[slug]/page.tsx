@@ -106,7 +106,10 @@ const CommunityPage = async ({ params }: CommunityPageProps) => {
             {/* Left Section - Posts */}
             <div className="md:w-2/3 p-4">
               {communityPosts.length > 0 ? (
-                <CommunityPosts posts={communityPosts} />
+                <CommunityPosts
+                  communityId={community.id}
+                  initialPosts={communityPosts}
+                />
               ) : (
                 <div className="flex  flex-col space-y-4 h-full justify-center items-center  text-slate-600 dark:text-slate-400">
                   <p>There are no posts here yet!</p>
