@@ -315,7 +315,7 @@ const CreateCommunityDialog = ({
                   type="submit"
                   disabled={
                     !createCommunityForm.formState.isValid ||
-                    !createCommunityForm.formState.isSubmitting
+                    createCommunityForm.formState.isSubmitting
                   }
                 >
                   {createCommunityMutation.isPending ? (
