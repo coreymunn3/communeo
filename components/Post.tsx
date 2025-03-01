@@ -6,8 +6,11 @@ import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { DateTime } from "luxon";
 import { normalizeDate } from "@/lib/utils";
+import Image from "next/image";
+import LinkPreview from "./LinkPreview";
 
 const Post = ({ post }: { post: CommunityPost }) => {
+  console.log(post);
   /**
    * Query to fetch the user details to display in the post
    */
@@ -18,6 +21,31 @@ const Post = ({ post }: { post: CommunityPost }) => {
       return res.json();
     },
   });
+
+  const renderPostContent = (type: string, content: string, postId: string) => {
+    switch (type) {
+      case "text":
+        return <p>{content}</p>;
+      case "image":
+        return (
+          <div className="w-full h-auto relative aspect-video">
+            <Image
+              src={content}
+              alt={"post image"}
+              style={{ objectFit: "cover", borderRadius: "16px" }}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+          </div>
+        );
+      case "link":
+        return <LinkPreview url={content} postId={postId} />;
+      default:
+        console.error(`Unsupported post content type passed: ${type}`);
+        break;
+    }
+  };
+
   const normalizedPostDate = normalizeDate(post.created_on);
   return (
     <div className="flex flex-col p-2 space-y-1">
@@ -46,7 +74,7 @@ const Post = ({ post }: { post: CommunityPost }) => {
       {/* TO DO - render content differently depending on type! swtich statement */}
       <div>
         <p className="text-slate-500 dark:text-slate-400 text-sm">
-          {post.content}
+          {renderPostContent(post.type, post.content, post.id)}
         </p>
       </div>
       {/* TO DO - controls: upvote downvote (with count), number of comments (expandable), share (copy link, crosspost, embed?) */}

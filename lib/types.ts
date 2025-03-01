@@ -135,3 +135,12 @@ export type PublicUser = {
   avatar_url: string;
   username: string;
 };
+
+export type LinkPreviewMetadata = {
+  title: string;
+  description: string;
+  author_name: string | null;
+  author_url: string | null;
+  image: string | null;
+  url: string;
+};
