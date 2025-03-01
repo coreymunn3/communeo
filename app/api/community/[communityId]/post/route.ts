@@ -2,6 +2,12 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
+/**
+ * This endpoint fetches the posts in a community
+ * @param request the NextRequest object
+ * @param param1 community ID string
+ * @returns
+ */
 export async function GET(
   request: NextRequest,
   { params }: { params: { communityId: string } }
