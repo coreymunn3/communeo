@@ -6,13 +6,11 @@ const nextConfig = {
         hostname: "i.imgur.com",
         protocol: "https",
       },
+      // users can upload images and links from potentiall anywhere
+      // consider implementing some kind of image proxy service
       {
-        hostname: "pbs.twimg.com",
         protocol: "https",
-      },
-      {
-        hostname: "example.com",
-        protocol: "http",
+        hostname: "**", // Allow all domains
       },
     ],
   },

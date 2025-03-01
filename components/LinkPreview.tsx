@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import { LinkPreviewMetadata } from "@/lib/types";
 import Link from "next/link";
-import { Link2Icon } from "lucide-react";
+import { Skeleton } from "./ui/skeleton";
 
 const LinkPreview = ({ url, postId }: { url: string; postId: string }) => {
   const linkPreviewQuery = useQuery<LinkPreviewMetadata>({
@@ -14,6 +14,18 @@ const LinkPreview = ({ url, postId }: { url: string; postId: string }) => {
       return res.json();
     },
   });
+  if (linkPreviewQuery.isLoading) {
+    return (
+      <div className="flex">
+        <div className="w-1/3 aspect-video">
+          <Skeleton className="h-full w-full rounded-tl-lg rounded-bl-lg" />
+        </div>
+        <div className="w-2/3">
+          <Skeleton className="h-full w-full rounded-tr-lg rounded-br-lg" />
+        </div>
+      </div>
+    );
+  }
   if (linkPreviewQuery.isSuccess) {
     return (
       <Link

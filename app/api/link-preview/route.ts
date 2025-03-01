@@ -1,4 +1,5 @@
 import * as cheerio from "cheerio";
+import puppeteer from "puppeteer";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -43,7 +44,29 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    // otherwise just fetch it
+    // check if URL is facebook marketplace
+    if (url.includes("facebook.com/marketplace")) {
+      // use puppeteer to render the facebook page and get the page content for rendering a link preview
+      const browser = await puppeteer.launch();
+      const page = await browser.newPage();
+      // visit the page
+      await page.goto(url, { waitUntil: "networkidle2" });
+      // extract page content
+      const content = await page.content();
+      await browser.close();
+      // scrape it
+      const $ = cheerio.load(content);
+      return NextResponse.json({
+        title: $("title").text() || "Facebook Marketplace Listing",
+        description: $('meta[property="og:description"]').attr("content") || "",
+        author_name: "Facebook Marketplace",
+        author_url: null,
+        image: $('meta[property="og:image"]').attr("content") || null,
+        url,
+      });
+    }
+
+    // otherwise just fetch the link with default og metadeata
     const response = await fetch(url);
     const html = await response.text();
     // Load HTML into Cheerio
@@ -59,7 +82,6 @@ export async function GET(request: NextRequest) {
       author_name:
         $('meta[name="author"]').attr("content") ||
         $('meta[property="article:author"]').attr("content") ||
-        $('meta[name="twitter:creator"]').attr("content") ||
         $('meta[property="og:site_name"]').attr("content") ||
         null,
       author_url: null, // Non-Twitter links typically don't have an author URL
