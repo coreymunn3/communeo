@@ -137,7 +137,7 @@ const CommunityPage = async ({ params }: CommunityPageProps) => {
                 {`${numMembers} Members`}
               </div>
 
-              <hr className="border-slate-300 dark:border-slate-700 my-6" />
+              <hr className="border-slate-200 dark:border-slate-800 my-6" />
 
               {/* rules section */}
               <div className="flex flex-col space-y-2 text-sm">
@@ -149,7 +149,7 @@ const CommunityPage = async ({ params }: CommunityPageProps) => {
                 )}
               </div>
 
-              <hr className="border-slate-300 dark:border-slate-700 my-6" />
+              <hr className="border-slate-200 dark:border-slate-800 my-6" />
 
               {/* Flairs section */}
               <div className="flex flex-col space-y-2 text-sm">
