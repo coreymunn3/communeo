@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { CommunityPost, PublicUser } from "@/lib/types";
 import { Separator } from "./ui/separator";
@@ -15,12 +16,19 @@ const Post = ({ post }: { post: CommunityPost }) => {
    * Query to fetch the user details to display in the post
    */
   const userQuery = useQuery<PublicUser>({
-    queryKey: [post.user_id, "user"],
+    queryKey: ["user", post.user_id],
     queryFn: async () => {
       const res = await fetch(`/api/publicUser/${post.user_id}`);
       return res.json();
     },
   });
+
+  // const scoreQuery = useQuery({
+  //   queryKey: [post.id, 'score'],
+  //   queryFn: async () => {
+  //     const res = await fetch(`/api/posts/`)
+  //   }
+  // });
 
   const renderPostContent = (type: string, content: string, postId: string) => {
     switch (type) {

@@ -14,7 +14,7 @@ const Posts = ({
   const { data: posts } = useQuery<CommunityPost[]>({
     queryKey: [communityId, "posts"],
     queryFn: async () => {
-      const res = await fetch(`/api/posts/${communityId}`);
+      const res = await fetch(`/api/community/${communityId}`);
       return res.json();
     },
     initialData: initialPosts,
