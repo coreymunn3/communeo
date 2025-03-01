@@ -30,6 +30,9 @@ const LinkPreview = ({ url, postId }: { url: string; postId: string }) => {
                 fill
                 style={{ objectFit: "cover" }}
                 sizes="(max-width: 768px) 100vw, 50vw"
+                onError={(e) => {
+                  e.currentTarget.src = "/images/fallback-image.jpg";
+                }}
               />
             </div>
           )}

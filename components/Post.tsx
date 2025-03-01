@@ -35,6 +35,9 @@ const Post = ({ post }: { post: CommunityPost }) => {
               style={{ objectFit: "cover", borderRadius: "16px" }}
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
+              onError={(e) => {
+                e.currentTarget.src = "/images/fallback-image.jpg";
+              }}
             />
           </div>
         );
@@ -71,7 +74,6 @@ const Post = ({ post }: { post: CommunityPost }) => {
         <p className="font-semibold text-lg">{post.title}</p>
       </div>
       {/* content */}
-      {/* TO DO - render content differently depending on type! swtich statement */}
       <div>
         <p className="text-slate-500 dark:text-slate-400 text-sm">
           {renderPostContent(post.type, post.content, post.id)}
