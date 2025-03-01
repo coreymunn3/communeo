@@ -39,7 +39,10 @@ export async function GET(
     // return posts as json response
     return NextResponse.json(posts, { status: 200 });
   } catch (error) {
-    console.error("Error fetching posts in /api/posts/communityId: ", error);
+    console.error(
+      "Error fetching posts in /api/community/communityId: ",
+      error
+    );
     return NextResponse.json(
       { error: `Failed to fetch posts for ${params.communityId}` },
       { status: 500 }
