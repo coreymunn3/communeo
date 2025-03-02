@@ -7,19 +7,26 @@ import { VoteData } from "@/lib/types";
 import { voteOnPost } from "@/actions/voteOnPost";
 import { toast } from "sonner";
 
-const Votes = ({ postId }: { postId: string }) => {
+const PostVotes = ({ postId }: { postId: string }) => {
   const queryClient = useQueryClient();
 
   /**
    * Query to fetch the total votes for the post
    */
-  const votesQuery = useQuery<{ score: number }>({
+  const totalVotesQuery = useQuery<{ score: number }>({
     queryKey: [postId, "score"],
     queryFn: async () => {
       const res = await fetch(`/api/post/${postId}/score`);
       return res.json();
     },
   });
+
+  // const userVoteQuery = useQuery({
+  //   queryKey: [postId, "user-vote"],
+  //   queryFn: async () => {
+  //     const res = await fetch(`/api/post/${postId}/`);
+  //   },
+  // });
 
   /**
    * Mutation to vote on the post, up or down
@@ -60,12 +67,12 @@ const Votes = ({ postId }: { postId: string }) => {
   }, [voteMutation]);
 
   return (
-    <div className="flex bg-slate-100 rounded-full items-center">
+    <div className="flex bg-slate-100 dark:bg-slate-900 rounded-full items-center">
       <Button variant={"ghost"} className="p-2" onClick={handleUpvote}>
         <CircleArrowUpIcon className="!w-6 !h-6" />
       </Button>
       <span className="mx-1">
-        {votesQuery.isSuccess && votesQuery.data.score}
+        {totalVotesQuery.isSuccess && totalVotesQuery.data.score}
       </span>
       <Button variant={"ghost"} className="p-2" onClick={handleDownvote}>
         <CircleArrowDownIcon className="!w-6 !h-6" />
@@ -73,4 +80,4 @@ const Votes = ({ postId }: { postId: string }) => {
     </div>
   );
 };
-export default Votes;
+export default PostVotes;

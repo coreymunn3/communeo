@@ -9,7 +9,7 @@ import { DateTime } from "luxon";
 import { normalizeDate } from "@/lib/utils";
 import Image from "next/image";
 import LinkPreview from "./LinkPreview";
-import Votes from "./Votes";
+import PostVotes from "./PostVotes";
 
 const Post = ({ post }: { post: CommunityPost }) => {
   /**
@@ -82,7 +82,7 @@ const Post = ({ post }: { post: CommunityPost }) => {
       </div>
       {/* TO DO - controls: upvote downvote (with count), number of comments (expandable), share (copy link, crosspost, embed?) */}
       <div className="flex space-x-2 items-center pt-4">
-        <Votes postId={post.id} />
+        <PostVotes postId={post.id} />
       </div>
     </div>
   );
