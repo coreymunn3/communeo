@@ -77,7 +77,7 @@ const CreateCommunityDialog = ({
       handleClose();
       router.push(`/c/${data.community?.slug}`);
     },
-    onError: (data, error) => {
+    onError: (error) => {
       console.error(error);
       toast.error(`Something went wrong!`);
     },

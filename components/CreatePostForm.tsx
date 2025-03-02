@@ -70,7 +70,7 @@ const CreatePostForm = ({
       queryClient.invalidateQueries({ queryKey: [communityId, "posts"] });
     },
     // if failure, alert the user, keep form dirty
-    onError: (data, error) => {
+    onError: (error) => {
       console.error(error);
       toast.error("Unable to create post");
     },
