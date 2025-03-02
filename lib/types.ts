@@ -144,3 +144,7 @@ export type LinkPreviewMetadata = {
   image: string | null;
   url: string;
 };
+
+export type VoteData = {
+  voteValue: number;
+};

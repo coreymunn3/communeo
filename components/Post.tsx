@@ -9,9 +9,9 @@ import { DateTime } from "luxon";
 import { normalizeDate } from "@/lib/utils";
 import Image from "next/image";
 import LinkPreview from "./LinkPreview";
+import Votes from "./Votes";
 
 const Post = ({ post }: { post: CommunityPost }) => {
-  console.log(post);
   /**
    * Query to fetch the user details to display in the post
    */
@@ -22,13 +22,6 @@ const Post = ({ post }: { post: CommunityPost }) => {
       return res.json();
     },
   });
-
-  // const scoreQuery = useQuery({
-  //   queryKey: [post.id, 'score'],
-  //   queryFn: async () => {
-  //     const res = await fetch(`/api/posts/`)
-  //   }
-  // });
 
   const renderPostContent = (type: string, content: string, postId: string) => {
     switch (type) {
@@ -88,6 +81,9 @@ const Post = ({ post }: { post: CommunityPost }) => {
         </p>
       </div>
       {/* TO DO - controls: upvote downvote (with count), number of comments (expandable), share (copy link, crosspost, embed?) */}
+      <div className="flex space-x-2 items-center pt-4">
+        <Votes postId={post.id} />
+      </div>
     </div>
   );
 };
