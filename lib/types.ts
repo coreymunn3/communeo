@@ -148,3 +148,12 @@ export type LinkPreviewMetadata = {
 export type VoteData = {
   voteValue: number;
 };
+
+export type UserPostVote = {
+  id: string;
+  created_on: Date;
+  user_id: string;
+  post_id: string;
+  comment_id: string;
+  value: number;
+};
