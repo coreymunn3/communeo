@@ -2,6 +2,12 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
+/**
+ * This api route returns the total score (upvotes minus downvotes) for a post
+ * @param request
+ * @param param1 the postId
+ * @returns
+ */
 export async function GET(
   request: NextRequest,
   { params }: { params: { postId: string } }

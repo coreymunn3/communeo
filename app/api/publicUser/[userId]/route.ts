@@ -2,6 +2,13 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
+/**
+ * This endpoint returns the public information for a user, just the id, username, and avatar_url
+ * for display in posts
+ * @param request
+ * @param param1 the userId
+ * @returns
+ */
 export async function GET(
   request: Request,
   { params }: { params: { userId: string } }
