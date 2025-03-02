@@ -24,6 +24,6 @@ export async function createPost(formData: postFormData, communityId: string) {
     return { success: true, post };
   } catch (error) {
     console.error(error);
-    return { success: false };
+    throw error;
   }
 }

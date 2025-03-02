@@ -35,6 +35,6 @@ export async function createCommunity(formData: createCommunityFormData) {
     return { success: true, community };
   } catch (error) {
     console.error(error);
-    return { success: false };
+    throw error;
   }
 }
