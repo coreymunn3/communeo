@@ -1,10 +1,8 @@
 "use client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Button } from "./ui/button";
 import { useCallback } from "react";
-import { CircleArrowDownIcon, CircleArrowUpIcon } from "lucide-react";
 import { UserPostVote, VoteData } from "@/lib/types";
-import { voteOnPost } from "@/actions/voteOnPost";
+import { voteOnPostOrComment } from "@/actions/voteOnPostOrComment";
 import { toast } from "sonner";
 import UpvoteDownvoteButton from "./UpvoteDownvoteButton";
 
@@ -38,7 +36,7 @@ const PostVotes = ({ postId }: { postId: string }) => {
    * when mutation function is fired, we optimistically update the vote totals
    */
   const voteMutation = useMutation({
-    mutationFn: (data: VoteData) => voteOnPost(data, postId, null),
+    mutationFn: (data: VoteData) => voteOnPostOrComment(data, postId, null),
     onMutate: async (data) => {
       // Cancel any outgoing refetches
       await queryClient.cancelQueries({ queryKey: ["post", postId, "score"] });
@@ -106,7 +104,7 @@ const PostVotes = ({ postId }: { postId: string }) => {
           onClick={handleUpvote}
         />
       )}
-      <span className="mx-1">
+      <span className="mx-1 min-w-6 text-center">
         {totalVotesQuery.isSuccess && totalVotesQuery.data.score}
       </span>
       {userVoteQuery.isSuccess && (
