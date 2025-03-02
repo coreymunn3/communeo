@@ -3,21 +3,11 @@
 import { prisma } from "@/lib/prisma";
 import { postFormData } from "@/lib/types";
 import { auth } from "@clerk/nextjs/server";
+import { getDbUser } from "./getDbUser";
 
 export async function createPost(formData: postFormData, communityId: string) {
   auth.protect();
-  // get the user
-  const { userId: clerkUserId } = await auth();
-  const dbUser = await prisma.app_user.findFirst({
-    where: {
-      clerk_id: clerkUserId!,
-    },
-  });
-  if (!dbUser) {
-    throw new Error(
-      `Unable to find a database user with this Clerk Id: ${clerkUserId}`
-    );
-  }
+  const dbUser = await getDbUser();
   // create the post
   try {
     const post = await prisma.post.create({

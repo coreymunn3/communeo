@@ -4,21 +4,12 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { DEFAULT_COMMUNITY_BANNER, DEFAULT_COMMUNITY_ICON } from "@/CONSTANTS";
 import { slugify } from "@/lib/utils";
+import { getDbUser } from "./getDbUser";
 
 export async function createCommunity(formData: createCommunityFormData) {
   auth.protect();
   const { userId: clerkUserId } = await auth();
-  // get the user's database ID. the clerkUserId above is not what we want to use for the user Id
-  const dbUser = await prisma.app_user.findFirst({
-    where: {
-      clerk_id: clerkUserId!,
-    },
-  });
-  if (!dbUser) {
-    throw new Error(
-      `Unable to find a database user with this Clerk Id: ${clerkUserId}`
-    );
-  }
+  const dbUser = await getDbUser();
   try {
     // create the community
     const community = await prisma.community.create({
