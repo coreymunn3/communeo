@@ -67,7 +67,9 @@ const CreatePostForm = ({
     onSuccess: (data) => {
       toast.success("Post has been created");
       router.push(redirectOnCreate);
-      queryClient.invalidateQueries({ queryKey: [communityId, "posts"] });
+      queryClient.invalidateQueries({
+        queryKey: ["community", communityId, "posts"],
+      });
     },
     // if failure, alert the user, keep form dirty
     onError: (error) => {

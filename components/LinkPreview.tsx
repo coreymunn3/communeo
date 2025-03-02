@@ -8,7 +8,7 @@ import { Skeleton } from "./ui/skeleton";
 
 const LinkPreview = ({ url, postId }: { url: string; postId: string }) => {
   const linkPreviewQuery = useQuery<LinkPreviewMetadata>({
-    queryKey: [postId, "link-preview", url],
+    queryKey: ["post", postId, "link-preview", url],
     queryFn: async () => {
       const res = await fetch(`/api/link-preview?url=${url}`);
       return res.json();
