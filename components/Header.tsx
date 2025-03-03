@@ -13,7 +13,7 @@ const Header = () => {
   const handleCloseForm = () => setCreateCommunityOpen(false);
 
   return (
-    <div className="px-4 py-2 flex justify-between items-center bg-slate-100 dark:bg-slate-800">
+    <div className="px-4 py-2 flex justify-between items-center">
       {/* brand logo */}
       <Link href={"/"}>
         <p className="text-xl font-bold tracking-widest text-primary">
