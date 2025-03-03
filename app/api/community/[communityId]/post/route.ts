@@ -44,7 +44,7 @@ export async function GET(
       error
     );
     return NextResponse.json(
-      { error: `Failed to fetch posts for ${params.communityId}` },
+      { error: `Failed to fetch posts for community ${params.communityId}` },
       { status: 500 }
     );
   }
