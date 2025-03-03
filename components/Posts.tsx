@@ -20,6 +20,14 @@ const Posts = ({
     initialData: initialPosts,
   });
 
+  if (posts.length === 0) {
+    return (
+      <div className="flex  flex-col space-y-4 h-full justify-center items-center  text-slate-600 dark:text-slate-400">
+        <p>There are no posts here yet!</p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col space-y-4">
       {posts.map((post: CommunityPost) => (

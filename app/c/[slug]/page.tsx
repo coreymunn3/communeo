@@ -104,13 +104,7 @@ const CommunityPage = async ({ params }: CommunityPageProps) => {
         <div className="flex gap-4 flex-col-reverse md:flex-row">
           {/* Left Section - Posts */}
           <div className="md:w-2/3">
-            {communityPosts.length > 0 ? (
-              <Posts communityId={community.id} initialPosts={communityPosts} />
-            ) : (
-              <div className="flex  flex-col space-y-4 h-full justify-center items-center  text-slate-600 dark:text-slate-400">
-                <p>There are no posts here yet!</p>
-              </div>
-            )}
+            <Posts communityId={community.id} initialPosts={communityPosts} />
           </div>
           {/* Right Section - Meta & Controls */}
           <div className="md:w-1/3 bg-slate-100 dark:bg-slate-900 rounded-lg p-4 text-slate-600 dark:text-slate-400">
