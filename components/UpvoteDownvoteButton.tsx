@@ -1,5 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { ChevronUpIcon, ChevronDownIcon } from "lucide-react";
+import {
+  ChevronUpIcon,
+  ChevronDownIcon,
+  CircleArrowUpIcon,
+  CircleArrowDownIcon,
+} from "lucide-react";
 
 interface UpvoteDownvoteButtonProps {
   type: "upvote" | "downvote";
@@ -12,13 +17,15 @@ const UpvoteDownvoteButton = ({
   isActive,
   onClick,
 }: UpvoteDownvoteButtonProps) => {
-  const Icon = type === "upvote" ? ChevronUpIcon : ChevronDownIcon;
+  const Icon = type === "upvote" ? CircleArrowUpIcon : CircleArrowDownIcon;
 
   return (
     <Button
-      variant={isActive ? "default" : "ghost"}
+      variant={"ghost"}
       className={`p-2 rounded-full ${
-        isActive ? "bg-primary/50" : "bg-transparent"
+        isActive
+          ? "text-primary hover:text-primary"
+          : "text-black dark:text-white"
       }`}
       onClick={onClick}
     >
