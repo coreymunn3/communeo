@@ -28,13 +28,6 @@ import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createPost } from "@/actions/createPost";
 
-// Page Structure
-// Post type select - text/image/link
-// Title (required)
-// Add Flairs (get flairs for community)
-// Post Body - Rich Text editor or Link (no image upload)
-// Post | Cancel (buttons)
-
 interface CreatePostFormProps {
   redirectOnCreate: string;
   redirectOnCancel: string;
