@@ -43,7 +43,7 @@ export default function RootLayout({
               <div className="fixed top-0 left-0 w-full z-10 backdrop-blur-md  bg-slate-100/70 dark:bg-slate-800/70">
                 <Header />
               </div>
-              <div className="pt-8">{children}</div>
+              <div className="pt-12">{children}</div>
               <Toaster position="top-center" richColors />
             </ThemeProvider>
           </TanstackQueryClientProvider>
