@@ -10,8 +10,11 @@ import { normalizeDate } from "@/lib/utils";
 import Image from "next/image";
 import LinkPreview from "./LinkPreview";
 import PostVotes from "./PostVotes";
+import { useParams } from "next/navigation";
 
 const Post = ({ post }: { post: CommunityPost }) => {
+  const params = useParams();
+
   /**
    * Query to fetch the user details to display in the post
    */
@@ -71,9 +74,12 @@ const Post = ({ post }: { post: CommunityPost }) => {
         </div>
       )}
       {/* title */}
-      <div>
-        <p className="font-semibold text-lg">{post.title}</p>
-      </div>
+      <Link
+        href={`/c/${params.slug}/post/${post.id}`}
+        className="font-semibold text-lg hover:text-blue-800 dark:hover:text-blue-200 transition-colors duration-300"
+      >
+        {post.title}
+      </Link>
       {/* content */}
       <div>
         <p className="text-slate-500 dark:text-slate-400 text-sm">

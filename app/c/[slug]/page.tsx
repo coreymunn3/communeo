@@ -1,5 +1,4 @@
 import Image from "next/image";
-import CommunityNotFound from "@/components/CommunityNotFound";
 import { prisma } from "@/lib/prisma";
 import { capitalizeEachWord } from "@/lib/utils";
 import { CakeIcon, PlusIcon, UserIcon } from "lucide-react";
@@ -9,6 +8,7 @@ import CommunityFlairs from "@/components/CommunityFlairs";
 import { Button } from "@/components/ui/button";
 import Posts from "@/components/Posts";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 interface CommunityPageProps {
   params: {
@@ -28,7 +28,7 @@ const CommunityPage = async ({ params }: CommunityPageProps) => {
   const communityFlairs = community?.flairs as CommunityFlair[];
 
   if (!community) {
-    return <CommunityNotFound slug={slug} />;
+    notFound();
   }
 
   if (community) {
