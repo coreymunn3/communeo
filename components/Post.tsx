@@ -55,7 +55,7 @@ const Post = ({ post }: { post: CommunityPost }) => {
 
   const normalizedPostDate = normalizeDate(post.created_on);
   return (
-    <div className="flex flex-col p-2 space-y-1">
+    <div className="flex flex-col space-y-1">
       <Separator />
       {/* top line - avatar, username, datetime posted (time ago) */}
       {userQuery.isSuccess && (

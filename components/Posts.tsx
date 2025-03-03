@@ -21,7 +21,7 @@ const Posts = ({
   });
 
   return (
-    <div className="flex flex-col space-y-2">
+    <div className="flex flex-col space-y-4">
       {posts.map((post: CommunityPost) => (
         <Post post={post} key={post.id} />
       ))}
