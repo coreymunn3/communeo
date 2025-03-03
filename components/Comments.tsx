@@ -23,6 +23,14 @@ const Comments = ({
     initialData: initialComments,
   });
 
+  if (comments.length === 0) {
+    return (
+      <div className="flex flex-col my-4 justify-center items-center  text-slate-600 dark:text-slate-400">
+        <p>There are no comments here yet!</p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col">
       {comments.map((comment: Comment) => (

@@ -43,13 +43,7 @@ const PostPage = async ({ params }: PostPageProps) => {
 
       {/* tree of comments on this post */}
       <div>
-        {comments.length > 0 ? (
-          <Comments postId={post.id} initialComments={comments} />
-        ) : (
-          <div className="flex flex-col my-4 justify-center items-center  text-slate-600 dark:text-slate-400">
-            <p>There are no comments here yet!</p>
-          </div>
-        )}
+        <Comments postId={post.id} initialComments={comments} />
       </div>
     </div>
   );
