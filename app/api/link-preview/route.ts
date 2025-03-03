@@ -1,8 +1,10 @@
 import * as cheerio from "cheerio";
 import puppeteer from "puppeteer";
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 
 export async function GET(request: NextRequest) {
+  auth.protect();
   const { searchParams } = new URL(request.url);
   const url = searchParams.get("url");
 
