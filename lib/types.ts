@@ -157,3 +157,12 @@ export type UserPostVote = {
   comment_id: string;
   value: number;
 };
+
+export type Comment = {
+  text: string;
+  id: string;
+  created_on: Date;
+  user_id: string;
+  post_id: string;
+  parent_comment_id: string | null;
+};
