@@ -1,4 +1,5 @@
 import Comments from "@/components/Comments";
+import CreateComment from "@/components/CreateComment";
 import Post from "@/components/Post";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
@@ -32,10 +33,11 @@ const PostPage = async ({ params }: PostPageProps) => {
   }
 
   return (
-    <div>
+    <div className="flex flex-col space-y-8">
       <Post post={post} />
 
       {/* Textarea to leave a comment with comment/cancel buttons "inside" */}
+      <CreateComment postId={postId} parentCommentId={null} />
 
       {/* sort by: top/new */}
 
@@ -44,7 +46,7 @@ const PostPage = async ({ params }: PostPageProps) => {
         {comments.length > 0 ? (
           <Comments postId={post.id} initialComments={comments} />
         ) : (
-          <div className="flex flex-col my-10 justify-center items-center  text-slate-600 dark:text-slate-400">
+          <div className="flex flex-col my-4 justify-center items-center  text-slate-600 dark:text-slate-400">
             <p>There are no comments here yet!</p>
           </div>
         )}

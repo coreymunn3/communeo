@@ -158,6 +158,12 @@ export type UserPostVote = {
   value: number;
 };
 
+export const commentFormSchema = z.object({
+  comment: z.string().min(1, "Some text is required"),
+});
+
+export type commentFormData = z.infer<typeof commentFormSchema>;
+
 export type Comment = {
   text: string;
   id: string;
