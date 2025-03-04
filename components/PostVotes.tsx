@@ -4,7 +4,6 @@ import { useCallback } from "react";
 import { UserPostVote, VoteData } from "@/lib/types";
 import { voteOnPostOrComment } from "@/actions/voteOnPostOrComment";
 import { toast } from "sonner";
-import UpvoteDownvoteButton from "./UpvoteDownvoteButton";
 import VoteControls from "./VoteControls";
 
 const PostVotes = ({ postId }: { postId: string }) => {

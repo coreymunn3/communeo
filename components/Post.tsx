@@ -2,15 +2,14 @@
 import React from "react";
 import { CommunityPost, PublicUser } from "@/lib/types";
 import { Separator } from "./ui/separator";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import { DateTime } from "luxon";
 import { normalizeDate } from "@/lib/utils";
 import Image from "next/image";
 import LinkPreview from "./LinkPreview";
 import PostVotes from "./PostVotes";
 import { useParams } from "next/navigation";
+import UserTagAndCreation from "./UserTagAndCreation";
 
 const Post = ({ post }: { post: CommunityPost }) => {
   const params = useParams();
@@ -59,19 +58,10 @@ const Post = ({ post }: { post: CommunityPost }) => {
       <Separator />
       {/* top line - avatar, username, datetime posted (time ago) */}
       {userQuery.isSuccess && (
-        <div className="flex space-x-1 w-full pt-4 items-center text-sm">
-          {/* user avatar */}
-          <Avatar className="h-8 w-8">
-            <AvatarImage src={userQuery.data.avatar_url} />
-            <AvatarFallback>{userQuery.data.username}</AvatarFallback>
-          </Avatar>
-          {/* username - links to the user's page */}
-          <Link href={`/u/${userQuery.data.username}`}>
-            <p className="font-semibold">{`/u/${userQuery.data.username}`}</p>
-          </Link>
-          {/* datetime posted */}
-          <p> | {DateTime.fromISO(normalizedPostDate).toRelative()}</p>
-        </div>
+        <UserTagAndCreation
+          user={userQuery.data}
+          createdDate={normalizedPostDate}
+        />
       )}
       {/* title */}
       <Link
