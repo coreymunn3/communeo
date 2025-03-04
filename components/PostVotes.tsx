@@ -5,6 +5,7 @@ import { UserPostVote, VoteData } from "@/lib/types";
 import { voteOnPostOrComment } from "@/actions/voteOnPostOrComment";
 import { toast } from "sonner";
 import UpvoteDownvoteButton from "./UpvoteDownvoteButton";
+import VoteControls from "./VoteControls";
 
 const PostVotes = ({ postId }: { postId: string }) => {
   const queryClient = useQueryClient();
@@ -95,26 +96,15 @@ const PostVotes = ({ postId }: { postId: string }) => {
     voteMutation.mutate({ voteValue: -1 });
   }, [voteMutation]);
 
-  return (
-    <div className="flex bg-slate-100 dark:bg-slate-900 rounded-full items-center">
-      {userVoteQuery.isSuccess && (
-        <UpvoteDownvoteButton
-          type="upvote"
-          isActive={userVoteQuery.data.value > 0}
-          onClick={handleUpvote}
-        />
-      )}
-      <span className="mx-1 min-w-6 text-center">
-        {totalVotesQuery.isSuccess && totalVotesQuery.data.score}
-      </span>
-      {userVoteQuery.isSuccess && (
-        <UpvoteDownvoteButton
-          type="downvote"
-          isActive={userVoteQuery.data.value < 0}
-          onClick={handleDownvote}
-        />
-      )}
-    </div>
-  );
+  if (userVoteQuery.isSuccess && totalVotesQuery.isSuccess) {
+    return (
+      <VoteControls
+        userVoteValue={userVoteQuery.data.value}
+        totalVoteValue={totalVotesQuery.data.score}
+        handleUpvote={handleUpvote}
+        handleDownvote={handleDownvote}
+      />
+    );
+  }
 };
 export default PostVotes;
