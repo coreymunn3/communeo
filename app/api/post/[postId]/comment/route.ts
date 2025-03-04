@@ -30,6 +30,9 @@ export async function GET(
       where: {
         post_id: postId,
       },
+      // TO DO - how to implement sort by top? votes stored in different table. should I create a view?
+      // orderBy: {
+      // }
     });
     // return comments
     return NextResponse.json(comments, { status: 200 });

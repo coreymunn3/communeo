@@ -1,20 +1,21 @@
 "use client";
 
-import { Comment } from "@/lib/types";
+import { Comment as CommentType } from "@/lib/types";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import Comment from "./Comment";
 
 const Comments = ({
   initialComments,
   postId,
 }: {
-  initialComments: Comment[];
+  initialComments: CommentType[];
   postId: string;
 }) => {
   const sortByOptions = ["top", "newest"];
   const [sortBy, setSortBy] = useState<string>(sortByOptions[0]);
   // fetch the comments for this post using the initialComments as placeholder
-  const { data: comments } = useQuery<Comment[]>({
+  const { data: comments } = useQuery<CommentType[]>({
     queryKey: ["post", postId, "comments"],
     queryFn: async () => {
       const res = await fetch(`/api/post/${postId}/comment?sort=${sortBy}`);
@@ -33,8 +34,8 @@ const Comments = ({
 
   return (
     <div className="flex flex-col">
-      {comments.map((comment: Comment) => (
-        <div>{comment.text}</div>
+      {comments.map((comment: CommentType) => (
+        <Comment key={comment.id} comment={comment} />
       ))}
     </div>
   );
