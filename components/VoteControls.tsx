@@ -7,7 +7,7 @@ interface VoteControlsProps {
   handleDownvote: () => void;
   userVoteValue: number;
   totalVoteValue: number;
-  emphasize: boolean | null;
+  emphasize?: boolean;
 }
 
 const VoteControls = ({
@@ -28,7 +28,7 @@ const VoteControls = ({
         isActive={userVoteValue > 0}
         onClick={handleUpvote}
       />
-      <span className="mx-1 min-w-4 text-center">{totalVoteValue}</span>
+      <span className="mx-1 min-w-4 text-center text-sm">{totalVoteValue}</span>
       <UpvoteDownvoteButton
         type="downvote"
         isActive={userVoteValue < 0}

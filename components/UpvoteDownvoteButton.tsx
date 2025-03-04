@@ -17,7 +17,7 @@ const UpvoteDownvoteButton = ({
   isActive,
   onClick,
 }: UpvoteDownvoteButtonProps) => {
-  const Icon = type === "upvote" ? CircleArrowUpIcon : CircleArrowDownIcon;
+  const Icon = type === "upvote" ? ChevronUpIcon : ChevronDownIcon;
 
   return (
     <Button

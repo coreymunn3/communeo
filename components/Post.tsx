@@ -8,11 +8,14 @@ import { normalizeDate } from "@/lib/utils";
 import Image from "next/image";
 import LinkPreview from "./LinkPreview";
 import PostVotes from "./PostVotes";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import UserTagAndCreation from "./UserTagAndCreation";
+import CommentCount from "./CommentCount";
 
 const Post = ({ post }: { post: CommunityPost }) => {
   const params = useParams();
+  const router = useRouter();
+  const normalizedPostDate = normalizeDate(post.created_on);
 
   /**
    * Query to fetch the user details to display in the post
@@ -52,7 +55,10 @@ const Post = ({ post }: { post: CommunityPost }) => {
     }
   };
 
-  const normalizedPostDate = normalizeDate(post.created_on);
+  const handleOpenComments = () => {
+    router.push(`/c/${params.slug}/post/${post.id}`);
+  };
+
   return (
     <div className="flex flex-col space-y-1">
       <Separator />
@@ -77,8 +83,14 @@ const Post = ({ post }: { post: CommunityPost }) => {
         </p>
       </div>
       {/* TO DO - controls: upvote downvote (with count), number of comments (expandable), share (copy link, crosspost, embed?) */}
-      <div className="flex space-x-2 items-center pt-4">
+      <div className="flex flex-row space-x-2 items-center pt-4">
         <PostVotes postId={post.id} />
+        <CommentCount
+          type="post"
+          postId={post.id}
+          emphasize={true}
+          action={handleOpenComments}
+        />
       </div>
     </div>
   );
