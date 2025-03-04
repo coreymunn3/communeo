@@ -102,6 +102,7 @@ const PostVotes = ({ postId }: { postId: string }) => {
         totalVoteValue={totalVotesQuery.data.score}
         handleUpvote={handleUpvote}
         handleDownvote={handleDownvote}
+        emphasize={true}
       />
     );
   }
