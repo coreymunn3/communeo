@@ -22,13 +22,23 @@ import { createComment } from "@/actions/createComment";
 const CreateComment = ({
   postId,
   parentCommentId,
+  commentOpen: defaultCommentOpen,
+  formFocused: defaultFormFocused,
+  onSubmit: propOnSubmit,
+  onReset,
 }: {
   postId: string;
   parentCommentId: string | null;
+  commentOpen?: boolean;
+  formFocused?: boolean;
+  onSubmit?: () => void;
+  onReset?: () => void;
 }) => {
   const queryClient = useQueryClient();
-  const [commentOpen, setCommentOpen] = useState(false);
-  const [isFormFocused, setIsFormFocused] = useState(false);
+  const [commentOpen, setCommentOpen] = useState(defaultCommentOpen || false);
+  const [isFormFocused, setIsFormFocused] = useState(
+    defaultFormFocused || false
+  );
 
   const createCommentMutation = useMutation({
     mutationFn: (formData: commentFormData) =>
@@ -37,6 +47,9 @@ const CreateComment = ({
       handleReset();
       toast.success("Comment has been added");
       queryClient.invalidateQueries({ queryKey: ["post", postId, "comments"] });
+      queryClient.invalidateQueries({
+        queryKey: ["post", postId, "comment-count"],
+      });
     },
   });
 
@@ -50,11 +63,13 @@ const CreateComment = ({
 
   const onSubmit = async (formData: commentFormData) => {
     createCommentMutation.mutate(formData);
+    if (propOnSubmit) propOnSubmit();
   };
 
   const handleReset = () => {
     createCommentForm.reset();
     setCommentOpen(false);
+    if (onReset) onReset();
   };
 
   return (
