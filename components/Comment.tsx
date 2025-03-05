@@ -1,6 +1,6 @@
 "use client";
 
-import { Comment as CommentType, PublicUser } from "@/lib/types";
+import { Comment as CommentType, Author } from "@/lib/types";
 import { normalizeDate } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import UserTagAndCreation from "./UserTagAndCreation";
@@ -13,17 +13,6 @@ const Comment = ({ comment }: { comment: CommentType }) => {
   const normalizeCommentDate = normalizeDate(comment.created_on);
   const [showCommentForm, setShowCommentForm] = useState<boolean>(false);
 
-  /**
-   * Query to fetch the user details to display in the post
-   */
-  const userQuery = useQuery<PublicUser>({
-    queryKey: ["user", comment.user_id],
-    queryFn: async () => {
-      const res = await fetch(`/api/publicUser/${comment.user_id}`);
-      return res.json();
-    },
-  });
-
   const handleReply = () => {
     setShowCommentForm(true);
   };
@@ -35,12 +24,10 @@ const Comment = ({ comment }: { comment: CommentType }) => {
   return (
     <div className="flex flex-col space-y-1">
       <div>
-        {userQuery.isSuccess && (
-          <UserTagAndCreation
-            user={userQuery.data}
-            createdDate={normalizeCommentDate}
-          />
-        )}
+        <UserTagAndCreation
+          user={comment.author}
+          createdDate={normalizeCommentDate}
+        />
       </div>
       {/* comment text */}
       <p className="text-sm pl-8 py-2">{comment.text}</p>
@@ -57,7 +44,7 @@ const Comment = ({ comment }: { comment: CommentType }) => {
           <span className="text-sm">Reply</span>
         </Button>
       </div>
-      <div className="py-2 pl-8">
+      <div className="py-2 pl-8 ">
         {showCommentForm && (
           <CreateComment
             postId={comment.post_id}
@@ -67,6 +54,14 @@ const Comment = ({ comment }: { comment: CommentType }) => {
             onReset={cancelReply}
           />
         )}
+        {/* replies */}
+        <div className="flex flex-col space-y-1">
+          {comment?.replies &&
+            comment.replies.length > 0 &&
+            comment.replies.map((replyComment) => (
+              <Comment key={replyComment.id} comment={replyComment} />
+            ))}
+        </div>
       </div>
     </div>
   );

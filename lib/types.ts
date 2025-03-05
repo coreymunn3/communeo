@@ -130,9 +130,9 @@ export type CommunityPost = {
   created_on: Date;
 };
 
-export type PublicUser = {
+export type Author = {
   id: string;
-  avatar_url: string;
+  avatar_url: string | null;
   username: string;
 };
 
@@ -171,4 +171,6 @@ export type Comment = {
   user_id: string;
   post_id: string;
   parent_comment_id: string | null;
+  author: Author;
+  replies?: Comment[];
 };

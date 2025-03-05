@@ -19,12 +19,32 @@ const PostPage = async ({ params }: PostPageProps) => {
     where: {
       id: postId,
     },
+    include: {
+      author: {
+        select: {
+          id: true,
+          username: true,
+          avatar_url: true,
+        },
+      },
+    },
   });
+
+  console.log(post);
 
   // get the comments
   const comments = await prisma.comment.findMany({
     where: {
       post_id: postId,
+    },
+    include: {
+      author: {
+        select: {
+          id: true,
+          username: true,
+          avatar_url: true,
+        },
+      },
     },
   });
 

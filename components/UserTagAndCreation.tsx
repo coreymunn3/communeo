@@ -1,12 +1,12 @@
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { PublicUser } from "@/lib/types";
+import { Author } from "@/lib/types";
 import { DateTime } from "luxon";
 import Link from "next/link";
 
 interface UserTagAndCreationProps {
-  user: PublicUser;
+  user: Author;
   createdDate: string;
 }
 
@@ -15,7 +15,7 @@ const UserTagAndCreation = ({ user, createdDate }: UserTagAndCreationProps) => {
     <div className="flex space-x-1 w-full pt-4 items-center text-sm">
       {/* user avatar */}
       <Avatar className="h-8 w-8">
-        <AvatarImage src={user.avatar_url} />
+        <AvatarImage src={user.avatar_url || ""} />
         <AvatarFallback>{user.username}</AvatarFallback>
       </Avatar>
       {/* username - links to the user's page */}
