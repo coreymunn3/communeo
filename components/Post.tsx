@@ -86,7 +86,6 @@ const Post = ({ post }: { post: CommunityPost }) => {
       <div className="flex flex-row space-x-2 items-center pt-4">
         <PostVotes postId={post.id} />
         <CommentCount
-          type="post"
           postId={post.id}
           emphasize={true}
           action={handleOpenComments}

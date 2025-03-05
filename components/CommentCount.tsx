@@ -2,42 +2,24 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { MessageCircleIcon } from "lucide-react";
-import { Skeleton } from "./ui/skeleton";
 import { Button } from "./ui/button";
 
-type BaseProps = {
+type CommentCountProps = {
+  postId: string;
+  commentId?: never;
   emphasize?: boolean;
   action: () => void;
 };
 
-type CommentCountProps =
-  | ({
-      type: "post";
-      postId: string;
-      commentId?: never;
-    } & BaseProps)
-  | ({
-      type: "comment";
-      postId?: never;
-      commentId: string;
-    } & BaseProps);
-
-// Retrieves and displays the number of comments on a post or comment
-const CommentCount = ({
-  type,
-  emphasize,
-  postId,
-  commentId,
-  action,
-}: CommentCountProps) => {
-  const typeId = type === "post" ? postId : commentId;
+// Retrieves and displays the number of comments on a post
+const CommentCount = ({ emphasize, postId, action }: CommentCountProps) => {
   /**
-   * Query to get the number of comments on the post OR comment
+   * Query to get the number of comments on the post
    */
   const commentCount = useQuery<{ count: number }>({
-    queryKey: ["post", typeId, "comment-count"],
+    queryKey: ["post", postId, "comment-count"],
     queryFn: async () => {
-      const res = await fetch(`/api/post/${typeId}/commentCount`);
+      const res = await fetch(`/api/post/${postId}/commentCount`);
       return res.json();
     },
   });
