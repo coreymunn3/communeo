@@ -6,15 +6,9 @@ import UserTagAndCreation from "./UserTagAndCreation";
 import { useState } from "react";
 import CreateComment from "./CreateComment";
 import { Button } from "./ui/button";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 import {
   MessageCircleIcon,
-  ChevronUp,
-  ChevronDown,
   CirclePlusIcon,
   CircleMinusIcon,
 } from "lucide-react";
@@ -24,28 +18,42 @@ const Comment = ({ comment }: { comment: CommentType }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [showCommentForm, setShowCommentForm] = useState<boolean>(false);
 
-  const handleReply = () => {
-    setShowCommentForm(true);
+  const handleCommentClick = () => {
+    setIsOpen((prev) => !prev);
+  };
+
+  const handleReply = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setShowCommentForm((prev) => !prev);
   };
 
   const cancelReply = () => {
     setShowCommentForm(false);
   };
 
-  const handleToggleOpenReplies = () => {
-    setIsOpen(!isOpen);
+  const handleToggleOpenReplies = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setIsOpen((prev) => !prev);
   };
 
   return (
-    <div>
+    <div className="flex flex-col space-y-1">
       {/* The Comment Itself */}
-      <div className="flex flex-col space-y-2 px-2 rounded-lg hover:bg-slate-100 transition-colors duration-300">
-        <div>
-          <UserTagAndCreation
-            user={comment.author}
-            createdDate={normalizeCommentDate}
-          />
-        </div>
+      <div
+        className="flex flex-col space-y-2 px-2 rounded-lg hover:bg-slate-100 transition-colors duration-300 cursor-pointer"
+        onClick={handleCommentClick}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            handleCommentClick();
+          }
+        }}
+      >
+        <UserTagAndCreation
+          user={comment.author}
+          createdDate={normalizeCommentDate}
+        />
         {/* comment text */}
         <p className="text-sm pl-6">{comment.text}</p>
         {/* comment controls - view replies, view votes, reply */}
@@ -77,6 +85,7 @@ const Comment = ({ comment }: { comment: CommentType }) => {
           </Button>
         </div>
       </div>
+
       {/* The create comment form */}
       <div className="pl-6 ml-4">
         {showCommentForm && (
@@ -88,8 +97,10 @@ const Comment = ({ comment }: { comment: CommentType }) => {
             onReset={cancelReply}
           />
         )}
+      </div>
 
-        {/* Comment Replies */}
+      {/* Comment Replies */}
+      <div className="pl-6 ml-4">
         {comment?.replies && comment.replies.length > 0 && (
           <Collapsible open={isOpen} onOpenChange={setIsOpen}>
             <CollapsibleContent className="pl-1 border-l-2 border-slate-200 dark:border-slate-700">

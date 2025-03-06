@@ -73,7 +73,7 @@ const CreateComment = ({
   };
 
   return (
-    <div>
+    <div className="pt-2">
       {commentOpen ? (
         <Form {...createCommentForm}>
           <form
