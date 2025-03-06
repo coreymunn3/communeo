@@ -32,6 +32,15 @@ export async function GET(
       where: {
         community_id: communityId,
       },
+      include: {
+        author: {
+          select: {
+            id: true,
+            username: true,
+            avatar_url: true,
+          },
+        },
+      },
       orderBy: {
         created_on: "desc",
       },

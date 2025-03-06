@@ -49,6 +49,15 @@ const CommunityPage = async ({ params }: CommunityPageProps) => {
       where: {
         community_id: community.id,
       },
+      include: {
+        author: {
+          select: {
+            id: true,
+            username: true,
+            avatar_url: true,
+          },
+        },
+      },
     });
 
     return (

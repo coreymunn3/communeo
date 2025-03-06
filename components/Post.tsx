@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { CommunityPost, PublicUser } from "@/lib/types";
+import { CommunityPost, Author } from "@/lib/types";
 import { Separator } from "./ui/separator";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
@@ -16,17 +16,6 @@ const Post = ({ post }: { post: CommunityPost }) => {
   const params = useParams();
   const router = useRouter();
   const normalizedPostDate = normalizeDate(post.created_on);
-
-  /**
-   * Query to fetch the user details to display in the post
-   */
-  const userQuery = useQuery<PublicUser>({
-    queryKey: ["user", post.user_id],
-    queryFn: async () => {
-      const res = await fetch(`/api/publicUser/${post.user_id}`);
-      return res.json();
-    },
-  });
 
   const renderPostContent = (type: string, content: string, postId: string) => {
     switch (type) {
@@ -62,34 +51,34 @@ const Post = ({ post }: { post: CommunityPost }) => {
   return (
     <div className="flex flex-col space-y-1">
       <Separator />
-      {/* top line - avatar, username, datetime posted (time ago) */}
-      {userQuery.isSuccess && (
+      <div className="flex flex-col space-y-1 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg p-2">
+        {/* top line - avatar, username, datetime posted (time ago) */}
         <UserTagAndCreation
-          user={userQuery.data}
+          user={post.author}
           createdDate={normalizedPostDate}
         />
-      )}
-      {/* title */}
-      <Link
-        href={`/c/${params.slug}/post/${post.id}`}
-        className="font-semibold text-lg hover:text-blue-800 dark:hover:text-blue-200 transition-colors duration-300"
-      >
-        {post.title}
-      </Link>
-      {/* content */}
-      <div>
-        <p className="text-slate-500 dark:text-slate-400 text-sm">
-          {renderPostContent(post.type, post.content, post.id)}
-        </p>
-      </div>
-      {/* TO DO - controls: upvote downvote (with count), number of comments (expandable), share (copy link, crosspost, embed?) */}
-      <div className="flex flex-row space-x-2 items-center pt-4">
-        <PostVotes postId={post.id} />
-        <CommentCount
-          postId={post.id}
-          emphasize={true}
-          action={handleOpenComments}
-        />
+        {/* title */}
+        <Link
+          href={`/c/${params.slug}/post/${post.id}`}
+          className="font-semibold text-lg hover:text-blue-800 dark:hover:text-blue-200 transition-colors duration-300"
+        >
+          {post.title}
+        </Link>
+        {/* content */}
+        <div>
+          <p className="text-slate-500 dark:text-slate-400 text-sm">
+            {renderPostContent(post.type, post.content, post.id)}
+          </p>
+        </div>
+        {/* TO DO - controls: upvote downvote (with count), number of comments (expandable), share (copy link, crosspost, embed?) */}
+        <div className="flex flex-row space-x-2 items-center pt-4">
+          <PostVotes postId={post.id} />
+          <CommentCount
+            postId={post.id}
+            emphasize={true}
+            action={handleOpenComments}
+          />
+        </div>
       </div>
     </div>
   );

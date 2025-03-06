@@ -118,6 +118,12 @@ export const postFormSchema = z.discriminatedUnion("type", [
 
 export type postFormData = z.infer<typeof postFormSchema>;
 
+export type Author = {
+  id: string;
+  avatar_url: string | null;
+  username: string;
+};
+
 export type CommunityPost = {
   id: string;
   title: string;
@@ -128,12 +134,7 @@ export type CommunityPost = {
   user_id: string;
   community_id: string;
   created_on: Date;
-};
-
-export type Author = {
-  id: string;
-  avatar_url: string | null;
-  username: string;
+  author: Author;
 };
 
 export type LinkPreviewMetadata = {
