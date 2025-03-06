@@ -12,7 +12,7 @@ interface UserTagAndCreationProps {
 
 const UserTagAndCreation = ({ user, createdDate }: UserTagAndCreationProps) => {
   return (
-    <div className="flex space-x-1 w-full pt-4 items-center text-sm">
+    <div className="flex space-x-1 w-full pt-2 items-center text-sm">
       {/* user avatar */}
       <Avatar className="h-8 w-8">
         <AvatarImage src={user.avatar_url || ""} />

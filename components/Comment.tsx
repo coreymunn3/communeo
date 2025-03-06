@@ -37,44 +37,48 @@ const Comment = ({ comment }: { comment: CommentType }) => {
   };
 
   return (
-    <div className="flex flex-col space-y-2">
-      <div>
-        <UserTagAndCreation
-          user={comment.author}
-          createdDate={normalizeCommentDate}
-        />
-      </div>
-      {/* comment text */}
-      <p className="text-sm pl-6">{comment.text}</p>
-      {/* comment controls - view replies, view votes, reply */}
-      <div className="flex flex-row pl-6 space-x-2 items-center">
-        {/* open replies  */}
-        {comment?.replies && comment.replies.length > 0 && (
-          <Button
-            variant="ghost"
-            className="p-0 h-full"
-            onClick={handleToggleOpenReplies}
-          >
-            {isOpen ? (
-              <CircleMinusIcon className="h-4 w-4" />
-            ) : (
-              <CirclePlusIcon className="h-4 w-4" />
-            )}
-          </Button>
-        )}
+    <div>
+      {/* The Comment Itself */}
+      <div className="flex flex-col space-y-2 px-2 rounded-lg hover:bg-slate-100 transition-colors duration-300">
+        <div>
+          <UserTagAndCreation
+            user={comment.author}
+            createdDate={normalizeCommentDate}
+          />
+        </div>
+        {/* comment text */}
+        <p className="text-sm pl-6">{comment.text}</p>
+        {/* comment controls - view replies, view votes, reply */}
+        <div className="flex flex-row pl-6 space-x-2 items-center">
+          {/* open replies  */}
+          {comment?.replies && comment.replies.length > 0 && (
+            <Button
+              variant="ghost"
+              className="p-0 h-full"
+              onClick={handleToggleOpenReplies}
+            >
+              {isOpen ? (
+                <CircleMinusIcon className="h-4 w-4" />
+              ) : (
+                <CirclePlusIcon className="h-4 w-4" />
+              )}
+            </Button>
+          )}
 
-        {/* comment votes */}
-        {/* comment reply button */}
-        <Button
-          variant={"ghost"}
-          className="flex items-center"
-          onClick={handleReply}
-        >
-          <MessageCircleIcon className="mr-1" />
-          <span className="text-sm">Reply</span>
-        </Button>
+          {/* comment votes */}
+          {/* comment reply button */}
+          <Button
+            variant={"ghost"}
+            className="flex items-center"
+            onClick={handleReply}
+          >
+            <MessageCircleIcon className="mr-1" />
+            <span className="text-sm">Reply</span>
+          </Button>
+        </div>
       </div>
-      <div className="pl-6 ml-2">
+      {/* The create comment form */}
+      <div className="pl-6 ml-4">
         {showCommentForm && (
           <CreateComment
             postId={comment.post_id}
@@ -85,10 +89,10 @@ const Comment = ({ comment }: { comment: CommentType }) => {
           />
         )}
 
-        {/* Replies */}
+        {/* Comment Replies */}
         {comment?.replies && comment.replies.length > 0 && (
           <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-            <CollapsibleContent className="pl-2 border-l-2 border-slate-200 dark:border-slate-700">
+            <CollapsibleContent className="pl-1 border-l-2 border-slate-200 dark:border-slate-700">
               <div className="flex flex-col space-y-1">
                 {comment.replies.map((replyComment) => (
                   <Comment key={replyComment.id} comment={replyComment} />
