@@ -40,7 +40,7 @@ const Comment = ({ comment }: { comment: CommentType }) => {
     <div className="flex flex-col space-y-1">
       {/* The Comment Itself */}
       <div
-        className="flex flex-col space-y-2 px-2 rounded-lg hover:bg-slate-100 transition-colors duration-300 cursor-pointer"
+        className="flex flex-col space-y-2 px-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors duration-300 cursor-pointer"
         onClick={handleCommentClick}
         role="button"
         tabIndex={0}
@@ -103,7 +103,7 @@ const Comment = ({ comment }: { comment: CommentType }) => {
       <div className="pl-6 ml-4">
         {comment?.replies && comment.replies.length > 0 && (
           <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-            <CollapsibleContent className="pl-1 border-l-2 border-slate-200 dark:border-slate-700">
+            <CollapsibleContent className="pl-1 border-l-2 border-slate-200 dark:border-slate-700 transition-all duration-300 ease-in-out overflow-hidden data[state=open]:animate-slide-down data-[state=closed]:animate-slide-up">
               <div className="flex flex-col space-y-1">
                 {comment.replies.map((replyComment) => (
                   <Comment key={replyComment.id} comment={replyComment} />
