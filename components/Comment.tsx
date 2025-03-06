@@ -1,16 +1,27 @@
 "use client";
 
-import { Comment as CommentType, Author } from "@/lib/types";
+import { Comment as CommentType } from "@/lib/types";
 import { normalizeDate } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
 import UserTagAndCreation from "./UserTagAndCreation";
 import { useState } from "react";
 import CreateComment from "./CreateComment";
 import { Button } from "./ui/button";
-import { MessageCircleIcon } from "lucide-react";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import {
+  MessageCircleIcon,
+  ChevronUp,
+  ChevronDown,
+  CirclePlusIcon,
+  CircleMinusIcon,
+} from "lucide-react";
 
 const Comment = ({ comment }: { comment: CommentType }) => {
   const normalizeCommentDate = normalizeDate(comment.created_on);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [showCommentForm, setShowCommentForm] = useState<boolean>(false);
 
   const handleReply = () => {
@@ -21,8 +32,12 @@ const Comment = ({ comment }: { comment: CommentType }) => {
     setShowCommentForm(false);
   };
 
+  const handleToggleOpenReplies = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
-    <div className="flex flex-col space-y-1">
+    <div className="flex flex-col space-y-2">
       <div>
         <UserTagAndCreation
           user={comment.author}
@@ -30,9 +45,24 @@ const Comment = ({ comment }: { comment: CommentType }) => {
         />
       </div>
       {/* comment text */}
-      <p className="text-sm pl-8 py-2">{comment.text}</p>
-      {/* comment controls */}
-      <div className="flex flex-row pl-8 space-x-2 items-center">
+      <p className="text-sm pl-6">{comment.text}</p>
+      {/* comment controls - view replies, view votes, reply */}
+      <div className="flex flex-row pl-6 space-x-2 items-center">
+        {/* open replies  */}
+        {comment?.replies && comment.replies.length > 0 && (
+          <Button
+            variant="ghost"
+            className="p-0 h-full"
+            onClick={handleToggleOpenReplies}
+          >
+            {isOpen ? (
+              <CircleMinusIcon className="h-4 w-4" />
+            ) : (
+              <CirclePlusIcon className="h-4 w-4" />
+            )}
+          </Button>
+        )}
+
         {/* comment votes */}
         {/* comment reply button */}
         <Button
@@ -44,7 +74,7 @@ const Comment = ({ comment }: { comment: CommentType }) => {
           <span className="text-sm">Reply</span>
         </Button>
       </div>
-      <div className="py-2 pl-8 ">
+      <div className="pl-6 ml-2">
         {showCommentForm && (
           <CreateComment
             postId={comment.post_id}
@@ -54,14 +84,19 @@ const Comment = ({ comment }: { comment: CommentType }) => {
             onReset={cancelReply}
           />
         )}
-        {/* replies */}
-        <div className="flex flex-col space-y-1">
-          {comment?.replies &&
-            comment.replies.length > 0 &&
-            comment.replies.map((replyComment) => (
-              <Comment key={replyComment.id} comment={replyComment} />
-            ))}
-        </div>
+
+        {/* Replies */}
+        {comment?.replies && comment.replies.length > 0 && (
+          <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+            <CollapsibleContent className="pl-2 border-l-2 border-slate-200 dark:border-slate-700">
+              <div className="flex flex-col space-y-1">
+                {comment.replies.map((replyComment) => (
+                  <Comment key={replyComment.id} comment={replyComment} />
+                ))}
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
+        )}
       </div>
     </div>
   );
