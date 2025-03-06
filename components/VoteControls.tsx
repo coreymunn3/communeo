@@ -3,8 +3,8 @@
 import UpvoteDownvoteButton from "./UpvoteDownvoteButton";
 
 interface VoteControlsProps {
-  handleUpvote: () => void;
-  handleDownvote: () => void;
+  handleUpvote: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  handleDownvote: (e: React.MouseEvent<HTMLButtonElement>) => void;
   userVoteValue: number;
   totalVoteValue: number;
   emphasize?: boolean;
@@ -20,7 +20,7 @@ const VoteControls = ({
   return (
     <div
       className={`flex ${
-        emphasize ? "bg-slate-100 dark:bg-slate-900" : ""
+        emphasize ? "bg-slate-200 dark:bg-slate-800" : ""
       } rounded-full items-center`}
     >
       <UpvoteDownvoteButton

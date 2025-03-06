@@ -1,8 +1,7 @@
 "use client";
 import React from "react";
-import { CommunityPost, Author } from "@/lib/types";
+import { CommunityPost } from "@/lib/types";
 import { Separator } from "./ui/separator";
-import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { normalizeDate } from "@/lib/utils";
 import Image from "next/image";
@@ -16,6 +15,10 @@ const Post = ({ post }: { post: CommunityPost }) => {
   const params = useParams();
   const router = useRouter();
   const normalizedPostDate = normalizeDate(post.created_on);
+
+  const hanldePostClick = () => {
+    router.push(`/c/${params.slug}/post/${post.id}`);
+  };
 
   const renderPostContent = (type: string, content: string, postId: string) => {
     switch (type) {
@@ -44,14 +47,19 @@ const Post = ({ post }: { post: CommunityPost }) => {
     }
   };
 
-  const handleOpenComments = () => {
+  const handleOpenComments = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     router.push(`/c/${params.slug}/post/${post.id}`);
   };
 
   return (
     <div className="flex flex-col space-y-1">
       <Separator />
-      <div className="flex flex-col space-y-1 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg p-2">
+      <div
+        className={`flex flex-col space-y-1 hover:bg-slate-100 dark:hover:bg-slate-900 
+          rounded-lg p-2 cursor-pointer transition-all duration-300`}
+        onClick={hanldePostClick}
+      >
         {/* top line - avatar, username, datetime posted (time ago) */}
         <UserTagAndCreation
           user={post.author}

@@ -8,7 +8,7 @@ type CommentCountProps = {
   postId: string;
   commentId?: never;
   emphasize?: boolean;
-  action: () => void;
+  action: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 // Retrieves and displays the number of comments on a post
@@ -27,7 +27,7 @@ const CommentCount = ({ emphasize, postId, action }: CommentCountProps) => {
     <Button
       variant={"ghost"}
       className={`flex ${
-        emphasize ? "bg-slate-100 dark:bg-slate-900" : ""
+        emphasize ? "bg-slate-200 dark:bg-slate-800" : ""
       } rounded-full items-center py-2 px-4`}
       onClick={action}
     >

@@ -87,13 +87,21 @@ const PostVotes = ({ postId }: { postId: string }) => {
     },
   });
 
-  const handleUpvote = useCallback(() => {
-    voteMutation.mutate({ voteValue: 1 });
-  }, [voteMutation]);
+  const handleUpvote = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.stopPropagation();
+      voteMutation.mutate({ voteValue: 1 });
+    },
+    [voteMutation]
+  );
 
-  const handleDownvote = useCallback(() => {
-    voteMutation.mutate({ voteValue: -1 });
-  }, [voteMutation]);
+  const handleDownvote = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.stopPropagation();
+      voteMutation.mutate({ voteValue: -1 });
+    },
+    [voteMutation]
+  );
 
   if (userVoteQuery.isSuccess && totalVotesQuery.isSuccess) {
     return (

@@ -33,7 +33,7 @@ const LinkPreview = ({ url, postId }: { url: string; postId: string }) => {
         target="_blank"
         rel="noopener noreferrer"
       >
-        <div className="flex rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-900">
+        <div className="flex rounded-lg overflow-hidden bg-slate-200 dark:bg-slate-800">
           {linkPreviewQuery.data?.image && (
             <div className="w-1/3 aspect-video relative">
               <Image

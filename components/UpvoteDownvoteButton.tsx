@@ -9,7 +9,7 @@ import {
 interface UpvoteDownvoteButtonProps {
   type: "upvote" | "downvote";
   isActive: boolean;
-  onClick: () => void;
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const UpvoteDownvoteButton = ({
