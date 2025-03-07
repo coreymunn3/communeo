@@ -70,7 +70,6 @@ export async function GET(
     });
     // return comments
     const commentTree = buildCommentTree(comments);
-    console.log(buildCommentTree(comments));
     return NextResponse.json(commentTree, { status: 200 });
   } catch (error) {
     console.error(
