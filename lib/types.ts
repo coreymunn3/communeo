@@ -154,8 +154,8 @@ export type UserVote = {
   id: string;
   created_on: Date;
   user_id: string;
-  post_id: string;
-  comment_id: string;
+  post_id?: string;
+  comment_id?: string;
   value: number;
 };
 

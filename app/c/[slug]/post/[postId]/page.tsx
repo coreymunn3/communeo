@@ -30,8 +30,6 @@ const PostPage = async ({ params }: PostPageProps) => {
     },
   });
 
-  console.log(post);
-
   // get the comments
   const comments = await prisma.comment.findMany({
     where: {

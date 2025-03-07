@@ -11,11 +11,13 @@ import {
   MessageCircleIcon,
   CirclePlusIcon,
   CircleMinusIcon,
+  MessageCirclePlusIcon,
 } from "lucide-react";
+import CommentVotes from "./CommentVotes";
 
 const Comment = ({ comment }: { comment: CommentType }) => {
   const normalizeCommentDate = normalizeDate(comment.created_on);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(true);
   const [showCommentForm, setShowCommentForm] = useState<boolean>(false);
 
   const handleCommentClick = () => {
@@ -40,7 +42,7 @@ const Comment = ({ comment }: { comment: CommentType }) => {
     <div className="flex flex-col space-y-1">
       {/* The Comment Itself */}
       <div
-        className="flex flex-col space-y-2 px-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors duration-300 cursor-pointer"
+        className="flex flex-col space-y-2 px-2 py-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors duration-300 cursor-pointer"
         onClick={handleCommentClick}
         role="button"
         tabIndex={0}
@@ -74,13 +76,19 @@ const Comment = ({ comment }: { comment: CommentType }) => {
           )}
 
           {/* comment votes */}
+          <CommentVotes commentId={comment.id} />
+          {/* number of replies */}
+          <Button variant={"ghost"}>
+            <MessageCircleIcon className="mr-1 h-4 w-4" />
+            {(comment?.replies && comment.replies.length) || 0}
+          </Button>
           {/* comment reply button */}
           <Button
             variant={"ghost"}
             className="flex items-center"
             onClick={handleReply}
           >
-            <MessageCircleIcon className="mr-1" />
+            <MessageCirclePlusIcon className="mr-1" />
             <span className="text-sm">Reply</span>
           </Button>
         </div>
