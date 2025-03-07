@@ -116,7 +116,7 @@ const CommunityPage = async ({ params }: CommunityPageProps) => {
             <Posts communityId={community.id} initialPosts={communityPosts} />
           </div>
           {/* Right Section - Meta & Controls */}
-          <div className="md:w-1/3 bg-slate-100 dark:bg-slate-900 rounded-lg p-4 text-slate-600 dark:text-slate-400">
+          <div className="md:w-1/3 self-start bg-slate-100 dark:bg-slate-900 rounded-lg p-4 text-slate-600 dark:text-slate-400">
             {/* top section, about the community */}
             <div className="flex flex-col space-y-1 text-sm">
               <p className="text-lg font-semibold">
