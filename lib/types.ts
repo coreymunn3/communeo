@@ -150,7 +150,7 @@ export type VoteData = {
   voteValue: number;
 };
 
-export type UserPostVote = {
+export type UserVote = {
   id: string;
   created_on: Date;
   user_id: string;

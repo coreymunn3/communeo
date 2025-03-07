@@ -1,7 +1,7 @@
 "use client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback } from "react";
-import { UserPostVote, VoteData } from "@/lib/types";
+import { UserVote, VoteData } from "@/lib/types";
 import { voteOnPostOrComment } from "@/actions/voteOnPostOrComment";
 import { toast } from "sonner";
 import VoteControls from "./VoteControls";
@@ -23,7 +23,7 @@ const PostVotes = ({ postId }: { postId: string }) => {
   /**
    * Query to fetch the user's vote on this post
    */
-  const userVoteQuery = useQuery<UserPostVote>({
+  const userVoteQuery = useQuery<UserVote>({
     queryKey: ["post", postId, "user-vote"],
     queryFn: async () => {
       const res = await fetch(`/api/post/${postId}/userVote`);
@@ -60,7 +60,7 @@ const PostVotes = ({ postId }: { postId: string }) => {
       // Optimistically update the user-vote
       queryClient.setQueryData(
         ["post", postId, "user-vote"],
-        (old: UserPostVote) => ({
+        (old: UserVote) => ({
           ...old,
           value: data.voteValue,
         })
