@@ -2,6 +2,7 @@ import Comments from "@/components/Comments";
 import CreateComment from "@/components/CreateComment";
 import Post from "@/components/Post";
 import { prisma } from "@/lib/prisma";
+import { buildCommentTree } from "@/lib/utils";
 import { notFound } from "next/navigation";
 
 interface PostPageProps {
@@ -45,6 +46,7 @@ const PostPage = async ({ params }: PostPageProps) => {
       },
     },
   });
+  const commentTree = buildCommentTree(comments);
 
   if (!post) {
     notFound();
@@ -61,7 +63,7 @@ const PostPage = async ({ params }: PostPageProps) => {
 
       {/* tree of comments on this post */}
       <div>
-        <Comments postId={post.id} initialComments={comments} />
+        <Comments postId={post.id} initialComments={commentTree} />
       </div>
     </div>
   );
