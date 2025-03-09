@@ -58,19 +58,13 @@ const CommunityPage = async ({ params }: CommunityPageProps) => {
           },
         },
       },
+      orderBy: {
+        created_on: "desc",
+      },
     });
 
     return (
       <div>
-        {/* Banner */}
-        {/* Name & Icon */}
-        {/* Main Content                    |      SideBar             */}
-        {/* First 10 Posts, with infinite
-           scroll                           |      Name, Desc, Created 
-           - filter by flair                |      Num Members   
-           - Top by Day/Week/Month/Year/AllTime |      Rules */}
-
-        {/* Banner & Icon */}
         <div className="relative">
           <div className="w-full h-[200px] relative overflow-hidden rounded-lg">
             <Image
