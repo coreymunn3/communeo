@@ -2,30 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { Comment } from "@/lib/types";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
-
-const buildCommentTree = (comments: Comment[]) => {
-  const commentMap: { [key: string]: Comment } = {};
-  const commentTree: Comment[] = [];
-
-  // map comments
-  comments.forEach((comment) => {
-    commentMap[comment.id] = { ...comment, replies: [] };
-  });
-  // assign replies to their parents
-  comments.forEach((comment) => {
-    // if there's a parent comment, put this comment in that parent's replies
-    if (comment.parent_comment_id) {
-      const parent = commentMap[comment.parent_comment_id];
-      if (parent) {
-        parent.replies?.push(commentMap[comment.id]);
-      }
-    } else {
-      // if no parent, it's a top-level comment
-      commentTree.push(commentMap[comment.id]);
-    }
-  });
-  return commentTree;
-};
+import { buildCommentTree } from "@/lib/utils";
 
 export async function GET(
   request: NextRequest,

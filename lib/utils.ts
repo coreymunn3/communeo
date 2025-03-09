@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { Comment } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -49,4 +50,34 @@ export const normalizeDate = (date: Date | string): string => {
     return date.toISOString();
   }
   return date;
+};
+
+/**
+ * This function takes a flat array of comments, and creates a tree structure of nested objects
+ * child comments are placed in the replies array.
+ * @param comments array of Comments
+ * @returns A tree of neseted comments
+ */
+export const buildCommentTree = (comments: Comment[]) => {
+  const commentMap: { [key: string]: Comment } = {};
+  const commentTree: Comment[] = [];
+
+  // map comments
+  comments.forEach((comment) => {
+    commentMap[comment.id] = { ...comment, replies: [] };
+  });
+  // assign replies to their parents
+  comments.forEach((comment) => {
+    // if there's a parent comment, put this comment in that parent's replies
+    if (comment.parent_comment_id) {
+      const parent = commentMap[comment.parent_comment_id];
+      if (parent) {
+        parent.replies?.push(commentMap[comment.id]);
+      }
+    } else {
+      // if no parent, it's a top-level comment
+      commentTree.push(commentMap[comment.id]);
+    }
+  });
+  return commentTree;
 };
