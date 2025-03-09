@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { TanstackQueryClientProvider } from "@/components/providers/TanstackQueryClientProvider";
 import { Toaster } from "@/components/ui/sonner";
 import Header from "@/components/Header";
+import PageLayoutContainer from "@/components/PageLayoutContainer";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -43,7 +44,7 @@ export default function RootLayout({
               <div className="fixed top-0 left-0 w-full z-10 backdrop-blur-md  bg-slate-100/70 dark:bg-slate-800/70">
                 <Header />
               </div>
-              <div className="pt-12">{children}</div>
+              <PageLayoutContainer>{children}</PageLayoutContainer>
               <Toaster position="top-center" richColors />
             </ThemeProvider>
           </TanstackQueryClientProvider>

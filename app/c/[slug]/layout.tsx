@@ -2,6 +2,6 @@ import PageLayoutContainer from "@/components/PageLayoutContainer";
 import React from "react";
 
 const CommunityPageLayout = ({ children }: { children: React.ReactNode }) => {
-  return <PageLayoutContainer>{children}</PageLayoutContainer>;
+  return <div>{children}</div>;
 };
 export default CommunityPageLayout;
