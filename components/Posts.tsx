@@ -12,7 +12,7 @@ const Posts = ({
 }) => {
   const isFeedPosts = !Boolean(communityId);
   // fetch the posts for this community using as placeholder the initial posts from the server
-  const { data: posts, isSuccess } = useQuery<CommunityPost[]>({
+  const { data: posts } = useQuery<CommunityPost[]>({
     queryKey: isFeedPosts
       ? ["feed", "posts"]
       : ["community", communityId, "posts"],

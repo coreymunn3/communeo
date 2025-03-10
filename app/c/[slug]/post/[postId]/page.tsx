@@ -1,7 +1,7 @@
 import Comments from "@/components/Comments";
 import CreateComment from "@/components/CreateComment";
 import Post from "@/components/Post";
-import { prisma } from "@/lib/prisma";
+import { getComments, getPost } from "@/lib/queries";
 import { buildCommentTree } from "@/lib/utils";
 import { notFound } from "next/navigation";
 
@@ -16,36 +16,10 @@ const PostPage = async ({ params }: PostPageProps) => {
   const { slug, postId } = params;
 
   // get the post
-  const post = await prisma.post.findUnique({
-    where: {
-      id: postId,
-    },
-    include: {
-      author: {
-        select: {
-          id: true,
-          username: true,
-          avatar_url: true,
-        },
-      },
-    },
-  });
+  const post = await getPost(postId);
 
   // get the comments
-  const comments = await prisma.comment.findMany({
-    where: {
-      post_id: postId,
-    },
-    include: {
-      author: {
-        select: {
-          id: true,
-          username: true,
-          avatar_url: true,
-        },
-      },
-    },
-  });
+  const comments = await getComments(postId);
   const commentTree = buildCommentTree(comments);
 
   if (!post) {

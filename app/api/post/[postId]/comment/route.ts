@@ -3,6 +3,7 @@ import { Comment } from "@/lib/types";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import { buildCommentTree } from "@/lib/utils";
+import { getComments, getPost } from "@/lib/queries";
 
 export async function GET(
   request: NextRequest,
@@ -11,16 +12,13 @@ export async function GET(
   auth.protect();
   // get the sort param
   const { searchParams } = new URL(request.url);
+  // TO DO - implement sorting
   const sort = searchParams.get("sort");
 
   try {
     const { postId } = params;
     // first make sure the post exists
-    const post = await prisma.post.findUnique({
-      where: {
-        id: postId,
-      },
-    });
+    const post = await getPost(postId);
     if (!post) {
       return NextResponse.json(
         { error: `Post ${postId} not found` },
@@ -28,23 +26,7 @@ export async function GET(
       );
     }
     // fetch the comments
-    const comments = await prisma.comment.findMany({
-      where: {
-        post_id: postId,
-      },
-      include: {
-        author: {
-          select: {
-            id: true,
-            username: true,
-            avatar_url: true,
-          },
-        },
-      },
-      // TO DO - how to implement sort by top? votes stored in different table. should I create a view?
-      // orderBy: {
-      // }
-    });
+    const comments = await getComments(postId);
     // return comments
     const commentTree = buildCommentTree(comments);
     return NextResponse.json(commentTree, { status: 200 });

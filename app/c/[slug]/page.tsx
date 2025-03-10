@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import Posts from "@/components/Posts";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getCommunityFromSlug, getCommunityPosts } from "@/lib/queries";
 
 interface CommunityPageProps {
   params: {
@@ -19,17 +20,13 @@ interface CommunityPageProps {
 const CommunityPage = async ({ params }: CommunityPageProps) => {
   const { slug } = params;
   // get the community data from the slug
-  const community = await prisma.community.findUnique({
-    where: {
-      slug,
-    },
-  });
-  const communityRules = community?.rules as CommunityRule[];
-  const communityFlairs = community?.flairs as CommunityFlair[];
-
+  const community = await getCommunityFromSlug(slug);
   if (!community) {
     notFound();
   }
+
+  const communityRules = community?.rules as CommunityRule[];
+  const communityFlairs = community?.flairs as CommunityFlair[];
 
   if (community) {
     // find the moderator
@@ -45,23 +42,7 @@ const CommunityPage = async ({ params }: CommunityPageProps) => {
       },
     });
     // get the posts for this community
-    const communityPosts = await prisma.post.findMany({
-      where: {
-        community_id: community.id,
-      },
-      include: {
-        author: {
-          select: {
-            id: true,
-            username: true,
-            avatar_url: true,
-          },
-        },
-      },
-      orderBy: {
-        created_on: "desc",
-      },
-    });
+    const communityPosts = await getCommunityPosts(community.id);
 
     return (
       <div>

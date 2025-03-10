@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { getCommunityById, getCommunityPosts } from "@/lib/queries";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -16,11 +17,7 @@ export async function GET(
   try {
     const { communityId } = params;
     // first make sure the community exists
-    const community = await prisma.community.findUnique({
-      where: {
-        id: communityId,
-      },
-    });
+    const community = getCommunityById(communityId);
     if (!community) {
       return NextResponse.json(
         { error: `Community ${community} not found` },
@@ -28,38 +25,11 @@ export async function GET(
       );
     }
     // then fetch the posts
-    const posts = await prisma.post.findMany({
-      where: {
-        community_id: communityId,
-      },
-      include: {
-        author: {
-          select: {
-            id: true,
-            username: true,
-            avatar_url: true,
-          },
-        },
-        community: {
-          select: {
-            id: true,
-            name: true,
-            slug: true,
-            icon: true,
-          },
-        },
-      },
-      orderBy: {
-        created_on: "desc",
-      },
-    });
+    const posts = await getCommunityPosts(communityId);
     // return posts as json response
     return NextResponse.json(posts, { status: 200 });
   } catch (error) {
-    console.error(
-      "Error fetching posts in /api/community/communityId: ",
-      error
-    );
+    console.error("Error fetching posts in /api/community/communityId", error);
     return NextResponse.json(
       { error: `Failed to fetch posts for community ${params.communityId}` },
       { status: 500 }

@@ -12,7 +12,7 @@ import CommentCount from "./CommentCount";
 import UserTagAndCreation from "./UserTagAndCreation";
 import CommunitySlugAndCreation from "./CommunitySlugAndCreation";
 
-const Post = ({ post, isFeed }: { post: CommunityPost; isFeed: boolean }) => {
+const Post = ({ post, isFeed }: { post: CommunityPost; isFeed?: boolean }) => {
   const params = useParams();
   const router = useRouter();
   const normalizedPostDate = normalizeDate(post.created_on);
