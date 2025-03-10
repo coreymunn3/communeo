@@ -55,7 +55,7 @@ const CommunityPage = async ({ params }: CommunityPageProps) => {
               style={{ objectFit: "cover" }}
             />
           </div>
-          <div className="absolute w-16 h-16 md:w-32 md:h-32 -bottom-8 md:-bottom-[30%] left-6 overflow-hidden rounded-full">
+          <div className="absolute w-16 h-16 md:w-24 md:h-24 -bottom-8 md:-bottom-[25%] left-6 overflow-hidden rounded-full">
             <Image
               src={community.icon}
               alt="Community Icon Image"
