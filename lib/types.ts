@@ -181,3 +181,8 @@ export type Comment = {
   author: Author;
   replies?: Comment[];
 };
+
+export type SortOption = {
+  label: string;
+  value: string;
+};

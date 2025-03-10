@@ -1,5 +1,6 @@
 import { getDbUser } from "@/actions/getDbUser";
 import Posts from "@/components/Posts";
+import Sort from "@/components/Sort";
 import { prisma } from "@/lib/prisma";
 import { getFeedPosts } from "@/lib/queries";
 import { CommunityPost } from "@/lib/types";
@@ -50,7 +51,7 @@ export default async function Home() {
 
   return (
     <div>
-      {/* top - sort by top/newest */}
+      <Sort />
       <Posts initialPosts={feedPosts} />
     </div>
   );
