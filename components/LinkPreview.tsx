@@ -37,7 +37,11 @@ const LinkPreview = ({ url, postId }: { url: string; postId: string }) => {
           {linkPreviewQuery.data?.image && (
             <div className="w-1/3 aspect-video relative">
               <Image
-                src={linkPreviewQuery.data.image}
+                src={
+                  linkPreviewQuery.data.image === "broken"
+                    ? "/images/brokenlink.jpg"
+                    : linkPreviewQuery.data.image
+                }
                 alt={linkPreviewQuery.data.title || "Link preview image"}
                 fill
                 style={{ objectFit: "cover" }}

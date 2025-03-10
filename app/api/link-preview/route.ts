@@ -94,8 +94,15 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error(`Error fetching link metadata: ${url}, ${error}`);
     return NextResponse.json(
-      { error: "Failed to fetch link metadata" },
-      { status: 500 }
+      {
+        title: "Oops! This link appears to be broken",
+        description: "Unable to generate link preview",
+        image: "broken",
+        author_name: null,
+        author_url: null,
+        url: url,
+      },
+      { status: 200 }
     );
   }
 }
