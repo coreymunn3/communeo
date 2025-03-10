@@ -2,7 +2,6 @@
 import React from "react";
 import { CommunityPost } from "@/lib/types";
 import { Separator } from "./ui/separator";
-import Link from "next/link";
 import { normalizeDate } from "@/lib/utils";
 import Image from "next/image";
 import LinkPreview from "./LinkPreview";
@@ -17,7 +16,10 @@ const Post = ({ post, isFeed }: { post: CommunityPost; isFeed?: boolean }) => {
   const router = useRouter();
   const normalizedPostDate = normalizeDate(post.created_on);
 
-  const hanldePostClick = () => {
+  const handleNavigateToPost = (e?: React.MouseEvent<HTMLElement>) => {
+    if (e) {
+      e.stopPropagation(); // Stop propagation if the event is from a child element
+    }
     router.push(`/c/${post.community.slug}/post/${post.id}`);
   };
 
@@ -59,7 +61,7 @@ const Post = ({ post, isFeed }: { post: CommunityPost; isFeed?: boolean }) => {
       <div
         className={`flex flex-col space-y-1 hover:bg-slate-100 dark:hover:bg-slate-900 
           rounded-lg p-2 cursor-pointer transition-all duration-300`}
-        onClick={hanldePostClick}
+        onClick={handleNavigateToPost}
       >
         {/* author tag line - username details if a community post, and community icon and details, if in feed */}
         <div>
@@ -77,12 +79,7 @@ const Post = ({ post, isFeed }: { post: CommunityPost; isFeed?: boolean }) => {
         </div>
 
         {/* title */}
-        <Link
-          href={`/c/${params.slug}/post/${post.id}`}
-          className="font-semibold text-lg hover:text-blue-800 dark:hover:text-blue-200 transition-colors duration-300"
-        >
-          {post.title}
-        </Link>
+        <p className="font-semibold text-lg">{post.title}</p>
         {/* content */}
         <div>
           <p className="text-slate-500 dark:text-slate-400 text-sm">
@@ -95,7 +92,7 @@ const Post = ({ post, isFeed }: { post: CommunityPost; isFeed?: boolean }) => {
           <CommentCount
             postId={post.id}
             emphasize={true}
-            action={handleOpenComments}
+            action={handleNavigateToPost}
           />
         </div>
       </div>

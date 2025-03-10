@@ -11,6 +11,11 @@ interface UserTagAndCreationProps {
 }
 
 const UserTagAndCreation = ({ user, createdDate }: UserTagAndCreationProps) => {
+  // don't propagate events up on this link click
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.stopPropagation();
+  };
+
   return (
     <div className="flex space-x-1 w-full pt-2 items-center text-sm">
       {/* user avatar */}
@@ -19,7 +24,7 @@ const UserTagAndCreation = ({ user, createdDate }: UserTagAndCreationProps) => {
         <AvatarFallback>{user.username}</AvatarFallback>
       </Avatar>
       {/* username - links to the user's page */}
-      <Link href={`/u/${user.username}`}>
+      <Link href={`/u/${user.username}`} onClick={handleLinkClick}>
         <p className="font-semibold">{`/u/${user.username}`}</p>
       </Link>
       {/* datetime posted */}

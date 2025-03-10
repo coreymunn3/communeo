@@ -18,6 +18,11 @@ const CommunitySlugAndCreation = ({
   community,
   createdDate,
 }: CommunitySlugAndCreationProps) => {
+  // don't propagate events up on this link click
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.stopPropagation();
+  };
+
   return (
     <div className="flex space-x-1 w-full pt-2 items-center text-sm">
       {/* community avatar icon */}
@@ -26,7 +31,7 @@ const CommunitySlugAndCreation = ({
         <AvatarFallback>{community.slug}</AvatarFallback>
       </Avatar>
       {/* community name - links to the community page */}
-      <Link href={`/c/${community.slug}`}>
+      <Link href={`/c/${community.slug}`} onClick={handleLinkClick}>
         <p className="font-semibold">{`/c/${community.slug}`}</p>
       </Link>
       {/* datetime posted */}
