@@ -4,13 +4,33 @@ import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import DarkModeToggle from "./DarkModeToggle";
 import { Button } from "./ui/button";
-import { Plus } from "lucide-react";
+import { MenuIcon, Plus } from "lucide-react";
 import { useState } from "react";
 import CreateCommunityDialog from "./CreateCommunityDialog";
+import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 
 const Header = () => {
   const [createCommunityOpen, setCreateCommunityOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const handleCloseForm = () => setCreateCommunityOpen(false);
+
+  const CreatePostButton = () => {
+    return (
+      <Button variant={"ghost"}>
+        <Plus />
+        Post
+      </Button>
+    );
+  };
+
+  const CreateCommunityButton = () => {
+    return (
+      <Button variant={"ghost"} onClick={() => setCreateCommunityOpen(true)}>
+        <Plus />
+        Community
+      </Button>
+    );
+  };
 
   return (
     <div className="px-4 py-2 flex justify-between items-center">
@@ -24,23 +44,12 @@ const Header = () => {
           A Space for the Community
         </p>
       </Link>
-      {/* Log In / User Avatar */}
-      <div className="flex items-center space-x-2">
+      {/* show the buttons on larger screens */}
+      <div className="hidden md:flex items-center space-x-2">
         <DarkModeToggle />
         <SignedIn>
-          {/* button to quickly create a post */}
-          <Button variant={"ghost"}>
-            <Plus />
-            Post
-          </Button>
-          {/* button to quickly create a community */}
-          <Button
-            variant={"ghost"}
-            onClick={() => setCreateCommunityOpen(true)}
-          >
-            <Plus />
-            Community
-          </Button>
+          <CreatePostButton />
+          <CreateCommunityButton />
           <UserButton />
         </SignedIn>
         <SignedOut>
@@ -49,6 +58,33 @@ const Header = () => {
           </SignInButton>
         </SignedOut>
       </div>
+
+      {/* Hamburger Menu for smaller screens */}
+      <div className="md:hidden flex items-center space-x-2">
+        <Sheet open={drawerOpen} onOpenChange={setDrawerOpen}>
+          <SignedOut>
+            <SignInButton mode="modal">
+              <Button>Sign In</Button>
+            </SignInButton>
+          </SignedOut>
+          <SignedIn>
+            <SheetTrigger asChild>
+              <Button variant={"ghost"} size={"icon"}>
+                <MenuIcon className="h-4 w-4" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side={"left"} className="w-[200px]">
+              <div className=" flex flex-col p-4 space-y-2">
+                <CreatePostButton />
+                <CreateCommunityButton />
+                <DarkModeToggle />
+              </div>
+            </SheetContent>
+          </SignedIn>
+        </Sheet>
+        <UserButton />
+      </div>
+
       {/* Dialog to create a new community */}
       <CreateCommunityDialog
         open={createCommunityOpen}

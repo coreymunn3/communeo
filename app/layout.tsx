@@ -41,7 +41,7 @@ export default function RootLayout({
               defaultTheme="light"
               enableSystem={false}
             >
-              <div className="fixed top-0 left-0 w-full z-10 backdrop-blur-md  bg-slate-100/70 dark:bg-slate-800/70">
+              <div className="fixed top-0 left-0 w-full z-50 backdrop-blur-md  bg-slate-100/70 dark:bg-slate-800/70">
                 <Header />
               </div>
               <PageLayoutContainer>{children}</PageLayoutContainer>
