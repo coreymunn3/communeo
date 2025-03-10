@@ -135,6 +135,12 @@ export type CommunityPost = {
   community_id: string;
   created_on: Date;
   author: Author;
+  community: {
+    id: string;
+    name: string;
+    slug: string;
+    icon: string;
+  };
 };
 
 export type LinkPreviewMetadata = {

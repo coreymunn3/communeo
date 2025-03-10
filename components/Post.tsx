@@ -8,16 +8,17 @@ import Image from "next/image";
 import LinkPreview from "./LinkPreview";
 import PostVotes from "./PostVotes";
 import { useParams, useRouter } from "next/navigation";
-import UserTagAndCreation from "./UserTagAndCreation";
 import CommentCount from "./CommentCount";
+import UserTagAndCreation from "./UserTagAndCreation";
+import CommunitySlugAndCreation from "./CommunitySlugAndCreation";
 
-const Post = ({ post }: { post: CommunityPost }) => {
+const Post = ({ post, isFeed }: { post: CommunityPost; isFeed: boolean }) => {
   const params = useParams();
   const router = useRouter();
   const normalizedPostDate = normalizeDate(post.created_on);
 
   const hanldePostClick = () => {
-    router.push(`/c/${params.slug}/post/${post.id}`);
+    router.push(`/c/${post.community.slug}/post/${post.id}`);
   };
 
   const renderPostContent = (type: string, content: string, postId: string) => {
@@ -49,7 +50,7 @@ const Post = ({ post }: { post: CommunityPost }) => {
 
   const handleOpenComments = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    router.push(`/c/${params.slug}/post/${post.id}`);
+    router.push(`/c/${post.community.slug}/post/${post.id}`);
   };
 
   return (
@@ -60,11 +61,21 @@ const Post = ({ post }: { post: CommunityPost }) => {
           rounded-lg p-2 cursor-pointer transition-all duration-300`}
         onClick={hanldePostClick}
       >
-        {/* top line - avatar, username, datetime posted (time ago) */}
-        <UserTagAndCreation
-          user={post.author}
-          createdDate={normalizedPostDate}
-        />
+        {/* author tag line - username details if a community post, and community icon and details, if in feed */}
+        <div>
+          {isFeed ? (
+            <CommunitySlugAndCreation
+              community={post.community}
+              createdDate={normalizedPostDate}
+            />
+          ) : (
+            <UserTagAndCreation
+              user={post.author}
+              createdDate={normalizedPostDate}
+            />
+          )}
+        </div>
+
         {/* title */}
         <Link
           href={`/c/${params.slug}/post/${post.id}`}

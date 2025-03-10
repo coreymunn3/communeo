@@ -40,6 +40,14 @@ export async function GET(
             avatar_url: true,
           },
         },
+        community: {
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+            icon: true,
+          },
+        },
       },
       orderBy: {
         created_on: "desc",

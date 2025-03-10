@@ -8,13 +8,19 @@ const Posts = ({
   communityId,
 }: {
   initialPosts: CommunityPost[];
-  communityId: string;
+  communityId?: string;
 }) => {
+  const isFeedPosts = !Boolean(communityId);
   // fetch the posts for this community using as placeholder the initial posts from the server
-  const { data: posts } = useQuery<CommunityPost[]>({
-    queryKey: ["community", communityId, "posts"],
+  const { data: posts, isSuccess } = useQuery<CommunityPost[]>({
+    queryKey: isFeedPosts
+      ? ["feed", "posts"]
+      : ["community", communityId, "posts"],
     queryFn: async () => {
-      const res = await fetch(`/api/community/${communityId}/post`);
+      const url = isFeedPosts
+        ? `/api/feed`
+        : `/api/community/${communityId}/post`;
+      const res = await fetch(url);
       return res.json();
     },
     initialData: initialPosts,
@@ -31,7 +37,7 @@ const Posts = ({
   return (
     <div className="flex flex-col space-y-1">
       {posts.map((post: CommunityPost) => (
-        <Post post={post} key={post.id} />
+        <Post post={post} key={post.id} isFeed={isFeedPosts} />
       ))}
     </div>
   );
