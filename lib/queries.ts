@@ -125,3 +125,29 @@ export async function getCommunityById(communityId: string) {
     },
   });
 }
+
+export async function getUserCommunities(userId: string) {
+  return await prisma.community.findMany({
+    where: {
+      members: {
+        some: {
+          user_id: userId,
+        },
+      },
+    },
+    select: {
+      id: true,
+      slug: true,
+      name: true,
+      description: true,
+      icon: true,
+      founder_id: true,
+      moderator_id: true,
+      _count: {
+        select: {
+          members: true,
+        },
+      },
+    },
+  });
+}

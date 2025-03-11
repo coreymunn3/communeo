@@ -1,5 +1,6 @@
 import { getDbUser } from "@/actions/getDbUser";
 import Posts from "@/components/Posts";
+import YourCommunities from "@/components/YourCommunities";
 import { prisma } from "@/lib/prisma";
 import { getFeedPosts } from "@/lib/queries";
 import { CommunityPost } from "@/lib/types";
@@ -49,7 +50,10 @@ export default async function Home() {
   }
 
   return (
-    <div>
+    <div className="flex flex-col space-y-2">
+      <div>
+        <YourCommunities />
+      </div>
       <Posts initialPosts={feedPosts} />
     </div>
   );

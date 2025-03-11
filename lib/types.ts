@@ -27,6 +27,17 @@ export type Community = {
   moderator_id: string;
 } | null;
 
+export type CommunityWithSubs = {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  icon: string;
+  isFounder: boolean;
+  isModerator: boolean;
+  members: number;
+};
+
 export type CommunityRule = {
   title: string;
   description: string;
