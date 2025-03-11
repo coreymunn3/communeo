@@ -12,12 +12,11 @@ import { CommunityWithSubs } from "@/lib/types";
 import { capitalizeEachWord } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { GavelIcon, TelescopeIcon } from "lucide-react";
-import { Fragment } from "react";
 
 const CommunityTab = ({ community }: { community: CommunityWithSubs }) => {
   return (
     <TooltipProvider>
-      <div className="p-2 flex items-center justify-between rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
+      <div className="p-2 flex items-center justify-between rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-300">
         {/* name and icon */}
         <div className="flex space-x-2 items-center">
           <Avatar className="h-8 w-8">

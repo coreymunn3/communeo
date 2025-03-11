@@ -1,6 +1,6 @@
 "use client";
 
-import { UsersRoundIcon } from "lucide-react";
+import { Plus, UsersRoundIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { useEffect, useState, Fragment } from "react";
@@ -8,9 +8,17 @@ import { useQuery } from "@tanstack/react-query";
 import { CommunityWithSubs } from "@/lib/types";
 import { Separator } from "./ui/separator";
 import CommunityTab from "./CommunityTab";
+import { useAppContext } from "@/context/AppContext";
 
 const YourCommunities = () => {
   const [open, setOpen] = useState(false);
+  const { createCommunityOpen, setCreateCommunityOpen } = useAppContext();
+
+  const handleOpenCreateCommunityDialog = () => {
+    setCreateCommunityOpen(true);
+  };
+
+  // state to manage lists of communities where the user is a leader or just member
   const [leaderCommunities, setLeaderCommunities] = useState<
     CommunityWithSubs[]
   >([]);
@@ -18,8 +26,9 @@ const YourCommunities = () => {
     CommunityWithSubs[]
   >([]);
 
-  console.log(leaderCommunities, memberCommunities);
-
+  /**
+   * Query to fetch list of communities the user has membership to
+   */
   const communitiesQuery = useQuery<CommunityWithSubs[]>({
     queryKey: ["communities", "subscribed"],
     queryFn: async () => {
@@ -59,7 +68,14 @@ const YourCommunities = () => {
       </SheetTrigger>
 
       <SheetContent side={"left"}>
-        <p className="font-semibold tracking-wide">{`Your Communities (${communitiesQuery.data?.length})`}</p>
+        <p className="font-semibold tracking-wide mb-4">{`Your Communities (${communitiesQuery.data?.length})`}</p>
+        <div
+          className="p-4 text-sm flex space-x-2 items-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-300 cursor-pointer"
+          onClick={handleOpenCreateCommunityDialog}
+        >
+          <Plus className="h-4 w-4" />
+          <span>Create Community</span>
+        </div>
         {leaderCommunities.length > 0 && (
           <Fragment>
             <Separator className="my-4" />

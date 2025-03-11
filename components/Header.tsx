@@ -8,9 +8,10 @@ import { MenuIcon, Plus } from "lucide-react";
 import { useState } from "react";
 import CreateCommunityDialog from "./CreateCommunityDialog";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
+import { useAppContext } from "@/context/AppContext";
 
 const Header = () => {
-  const [createCommunityOpen, setCreateCommunityOpen] = useState(false);
+  const { createCommunityOpen, setCreateCommunityOpen } = useAppContext();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const handleCloseForm = () => setCreateCommunityOpen(false);
 

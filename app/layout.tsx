@@ -7,6 +7,7 @@ import { TanstackQueryClientProvider } from "@/components/providers/TanstackQuer
 import { Toaster } from "@/components/ui/sonner";
 import Header from "@/components/Header";
 import PageLayoutContainer from "@/components/PageLayoutContainer";
+import AppProvider from "@/context/AppContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -41,11 +42,13 @@ export default function RootLayout({
               defaultTheme="light"
               enableSystem={false}
             >
-              <div className="fixed top-0 left-0 w-full z-50 backdrop-blur-md  bg-slate-100/70 dark:bg-slate-800/70">
-                <Header />
-              </div>
-              <PageLayoutContainer>{children}</PageLayoutContainer>
-              <Toaster position="top-center" richColors />
+              <AppProvider>
+                <div className="fixed top-0 left-0 w-full z-50 backdrop-blur-md  bg-slate-100/70 dark:bg-slate-800/70">
+                  <Header />
+                </div>
+                <PageLayoutContainer>{children}</PageLayoutContainer>
+                <Toaster position="top-center" richColors />
+              </AppProvider>
             </ThemeProvider>
           </TanstackQueryClientProvider>
         </body>
