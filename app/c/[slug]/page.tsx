@@ -77,7 +77,7 @@ const CommunityPage = async ({ params }: CommunityPageProps) => {
                 Create Post
               </Link>
             </Button>
-            <JoinButton communityId={community.id} />
+            <JoinButton community={community} />
           </div>
         </div>
         {/* Main Content */}

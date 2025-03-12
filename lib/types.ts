@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { isValidUrl } from "./utils";
+import { JsonValue } from "@prisma/client/runtime/library";
 
 export interface ClerkWebhookEvent {
   type: string;
@@ -19,13 +20,13 @@ export type Community = {
   slug: string;
   description: string;
   created_on: Date;
-  flairs?: CommunityFlair[];
-  rules?: CommunityRule[];
+  flairs?: CommunityFlair[] | JsonValue;
+  rules?: CommunityRule[] | JsonValue;
   icon?: string;
   banner?: string;
   founder_id: string;
   moderator_id: string;
-} | null;
+};
 
 export type CommunityWithSubs = {
   id: string;
