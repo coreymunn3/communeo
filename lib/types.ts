@@ -39,6 +39,12 @@ export type CommunityWithSubs = {
   members: number;
 };
 
+export type CommunityMembership = {
+  isMember: boolean;
+  isModerator: boolean;
+  isFounder: boolean;
+};
+
 export type CommunityRule = {
   title: string;
   description: string;
