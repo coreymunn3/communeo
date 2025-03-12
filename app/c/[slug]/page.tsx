@@ -10,6 +10,7 @@ import Posts from "@/components/Posts";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCommunityFromSlug, getCommunityPosts } from "@/lib/queries";
+import { JoinButton } from "@/components/JoinButton";
 
 interface CommunityPageProps {
   params: {
@@ -76,12 +77,7 @@ const CommunityPage = async ({ params }: CommunityPageProps) => {
                 Create Post
               </Link>
             </Button>
-            <Button
-              variant={"community"}
-              className="bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800"
-            >
-              Join
-            </Button>
+            <JoinButton communityId={community.id} />
           </div>
         </div>
         {/* Main Content */}

@@ -1,4 +1,3 @@
-import { prisma } from "@/lib/prisma";
 import { getCommunityById, getCommunityPosts } from "@/lib/queries";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -29,7 +28,10 @@ export async function GET(
     // return posts as json response
     return NextResponse.json(posts, { status: 200 });
   } catch (error) {
-    console.error("Error fetching posts in /api/community/communityId", error);
+    console.error(
+      "Error fetching posts in /api/community/communityId/post",
+      error
+    );
     return NextResponse.json(
       { error: `Failed to fetch posts for community ${params.communityId}` },
       { status: 500 }

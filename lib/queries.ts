@@ -151,3 +151,15 @@ export async function getUserCommunities(userId: string) {
     },
   });
 }
+
+export async function getUserMembershipInCommunity(
+  communityId: string,
+  userId: string
+) {
+  return await prisma.community_member.findFirst({
+    where: {
+      user_id: userId,
+      community_id: communityId,
+    },
+  });
+}
