@@ -6,11 +6,14 @@ import DarkModeToggle from "./DarkModeToggle";
 import { Button } from "./ui/button";
 import { MenuIcon, Plus } from "lucide-react";
 import { useState } from "react";
+import { useParams } from "next/navigation";
 import CreateCommunityDialog from "./CreateCommunityDialog";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { useAppContext } from "@/context/AppContext";
+import ContextualSearch from "./ContextualSearch";
 
 const Header = () => {
+  const { slug } = useParams();
   const { createCommunityOpen, setCreateCommunityOpen } = useAppContext();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const handleCloseForm = () => setCreateCommunityOpen(false);
@@ -45,6 +48,10 @@ const Header = () => {
           A Space for the Community
         </p>
       </Link>
+      {/* Search Bar */}
+      <div className="hidden md:flex">
+        <ContextualSearch />
+      </div>
       {/* show the buttons on larger screens */}
       <div className="hidden md:flex items-center space-x-2">
         <DarkModeToggle />
@@ -76,6 +83,7 @@ const Header = () => {
             </SheetTrigger>
             <SheetContent side={"left"} className="w-[200px]">
               <div className=" flex flex-col p-4 space-y-2">
+                <div>search</div>
                 <CreatePostButton />
                 <CreateCommunityButton />
                 <DarkModeToggle />
