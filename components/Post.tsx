@@ -11,7 +11,13 @@ import CommentCount from "./CommentCount";
 import UserTagAndCreation from "./UserTagAndCreation";
 import CommunitySlugAndCreation from "./CommunitySlugAndCreation";
 
-const Post = ({ post, isFeed }: { post: CommunityPost; isFeed?: boolean }) => {
+const Post = ({
+  post,
+  isCommunityPost,
+}: {
+  post: CommunityPost;
+  isCommunityPost?: boolean;
+}) => {
   const params = useParams();
   const router = useRouter();
   const normalizedPostDate = normalizeDate(post.created_on);
@@ -65,14 +71,14 @@ const Post = ({ post, isFeed }: { post: CommunityPost; isFeed?: boolean }) => {
       >
         {/* author tag line - username details if a community post, and community icon and details, if in feed */}
         <div>
-          {isFeed ? (
-            <CommunitySlugAndCreation
-              community={post.community}
+          {isCommunityPost ? (
+            <UserTagAndCreation
+              user={post.author}
               createdDate={normalizedPostDate}
             />
           ) : (
-            <UserTagAndCreation
-              user={post.author}
+            <CommunitySlugAndCreation
+              community={post.community}
               createdDate={normalizedPostDate}
             />
           )}
