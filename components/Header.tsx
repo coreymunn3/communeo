@@ -49,7 +49,7 @@ const Header = () => {
         </p>
       </Link>
       {/* Search Bar */}
-      <div className="hidden md:flex">
+      <div className="hidden md:flex w-[400px]">
         <ContextualSearch />
       </div>
       {/* show the buttons on larger screens */}
@@ -81,9 +81,9 @@ const Header = () => {
                 <MenuIcon className="h-4 w-4" />
               </Button>
             </SheetTrigger>
-            <SheetContent side={"left"} className="w-[200px]">
+            <SheetContent side={"left"} className="w-[80%]">
               <div className=" flex flex-col p-4 space-y-2">
-                <div>search</div>
+                <ContextualSearch />
                 <CreatePostButton />
                 <CreateCommunityButton />
                 <DarkModeToggle />

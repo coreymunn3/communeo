@@ -34,7 +34,7 @@ const ContextualSearch = () => {
   }`;
 
   return (
-    <div className="relative">
+    <div className="relative w-full flex">
       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
         <SearchIcon className="h-5 w-5 text-slate-500 dark:text-slate-400" />
       </div>
@@ -45,7 +45,7 @@ const ContextualSearch = () => {
         value={searchValue}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
-        className="pl-10 border-none rounded-full min-w-[400px] bg-slate-200 dark:bg-slate-600 placeholder:text-slate-500 dark:placeholder:text-slate-400" // Add padding to the left to make space for the icon
+        className="pl-10 border-none rounded-full flex-1 bg-slate-200 dark:bg-slate-600 placeholder:text-slate-500 dark:placeholder:text-slate-400" // Add padding to the left to make space for the icon
       />
     </div>
   );
