@@ -30,7 +30,7 @@ export default async function Search({ searchParams }: SearchPageProps) {
       initialPosts={posts}
       query={{
         queryKey: ["posts", q],
-        url: `/api/posts?q=${q}`,
+        url: `/api/post?q=${q}`,
       }}
     />
   );

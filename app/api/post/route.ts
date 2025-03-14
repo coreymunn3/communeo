@@ -1,5 +1,5 @@
 import { getDbUser } from "@/actions/getDbUser";
-import { getFeedPosts } from "@/lib/queries";
+import { getPostsForUser, getPostsFromSearchTerm } from "@/lib/queries";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -17,16 +17,31 @@ export async function GET(request: NextRequest) {
   auth.protect();
   // get the url params
   const { searchParams } = new URL(request.url);
-  console.log(searchParams);
-  const q = searchParams.get("url");
+  const q = searchParams.get("q");
   // get the db user
   const dbUser = await getDbUser();
 
+  if (q) {
+    try {
+      const posts = await getPostsFromSearchTerm(q);
+      return NextResponse.json(posts, { status: 200 });
+    } catch (error) {
+      console.error(
+        `Error fetching posts from search term in /api/post?q=${q}`,
+        error
+      );
+      return NextResponse.json(
+        { error: `Failed to fetch posts from search term ${q}` },
+        { status: 500 }
+      );
+    }
+  }
+
   try {
-    const feedPosts = await getFeedPosts(dbUser.id);
-    return NextResponse.json(feedPosts, { status: 200 });
+    const posts = await getPostsForUser(dbUser.id);
+    return NextResponse.json(posts, { status: 200 });
   } catch (error) {
-    console.error("Error fetching feed in /api/feed ", error);
+    console.error("Error fetching posts in /api/post ", error);
     return NextResponse.json(
       { error: `Failed to fetch posts user feed` },
       { status: 500 }
