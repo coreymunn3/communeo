@@ -2,7 +2,7 @@ import { getDbUser } from "@/actions/getDbUser";
 import Posts from "@/components/Posts";
 import YourCommunities from "@/components/YourCommunities";
 import { prisma } from "@/lib/prisma";
-import { getFeedPosts } from "@/lib/queries";
+import { getPostsForUser } from "@/lib/queries";
 import { CommunityPost } from "@/lib/types";
 import { auth } from "@clerk/nextjs/server";
 
@@ -12,7 +12,7 @@ export default async function Home() {
   // if user is logged in, fetch list of posts from their communities
   if (userId) {
     const dbUser = await getDbUser();
-    feedPosts = await getFeedPosts(dbUser.id);
+    feedPosts = await getPostsForUser(dbUser.id);
   } else {
     // fetch list of highest scoring posts from the last day or so, from all communities
     /**

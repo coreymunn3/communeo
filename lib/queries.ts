@@ -1,7 +1,7 @@
 "use server";
 import { prisma } from "@/lib/prisma";
 
-export async function getFeedPosts(userId?: string) {
+export async function getPostsForUser(userId?: string) {
   return await prisma.post.findMany({
     where: {
       community: {
