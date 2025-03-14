@@ -15,11 +15,11 @@ const Posts = ({
   const { data: posts } = useQuery<CommunityPost[]>({
     queryKey: isCommunityPosts
       ? ["community", communityId, "posts"]
-      : ["feed", "posts"],
+      : ["posts"],
     queryFn: async () => {
       const url = isCommunityPosts
         ? `/api/community/${communityId}/post`
-        : `/api/feed`;
+        : `/api/post`;
       const res = await fetch(url);
       return res.json();
     },
