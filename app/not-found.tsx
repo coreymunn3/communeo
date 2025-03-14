@@ -1,11 +1,13 @@
+import Link from "next/link";
+import FullPageMessageLayout from "@/components/FullPageMessageLayout";
+
 // app/not-found.tsx
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center px-4">
-      <div className="text-center">
-        {/* Reddit-like Logo */}
+    <FullPageMessageLayout
+      icon={
         <svg
-          className="w-16 h-16 mx-auto mb-6 text-red-500"
+          className="w-16 h-16 text-primary"
           fill="currentColor"
           viewBox="0 0 20 20"
           xmlns="http://www.w3.org/2000/svg"
@@ -16,25 +18,17 @@ export default function NotFound() {
             clipRule="evenodd"
           />
         </svg>
-
-        {/* Title */}
-        <h1 className="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
-          404 - Page Not Found
-        </h1>
-
-        {/* Description */}
-        <p className="text-lg text-gray-600 dark:text-slate-400 mb-8">
-          Oops! The page you're looking for doesn't exist or has been moved.
-        </p>
-
-        {/* Back to Home Button */}
-        <a
-          href="/"
-          className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-        >
-          Go Back Home
-        </a>
-      </div>
-    </div>
+      }
+      title="404 - Page Not Found"
+      subtitle="Oops! The page you're looking for doesn't exist or has been moved."
+    >
+      {/* Back to Home Button */}
+      <Link
+        href="/"
+        className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full text-white bg-primary hover:bg-primary/80 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+      >
+        Go Back Home
+      </Link>
+    </FullPageMessageLayout>
   );
 }
