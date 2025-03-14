@@ -54,7 +54,13 @@ export default async function Home() {
       <div>
         <YourCommunities />
       </div>
-      <Posts initialPosts={feedPosts} />
+      <Posts
+        initialPosts={feedPosts}
+        query={{
+          queryKey: ["posts", "feed"],
+          url: `/api/post`,
+        }}
+      />
     </div>
   );
 }

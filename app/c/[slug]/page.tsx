@@ -84,7 +84,14 @@ const CommunityPage = async ({ params }: CommunityPageProps) => {
         <div className="flex gap-4 flex-col-reverse md:flex-row">
           {/* Left Section - Posts */}
           <div className="md:w-2/3">
-            <Posts communityId={community.id} initialPosts={communityPosts} />
+            <Posts
+              communityId={community.id}
+              initialPosts={communityPosts}
+              query={{
+                queryKey: ["community", community.id, "posts"],
+                url: `/api/community/${community.id}/post`,
+              }}
+            />
           </div>
           {/* Right Section - Meta & Controls */}
           <div className="md:w-1/3 self-start bg-slate-100 dark:bg-slate-900 rounded-lg p-4 text-slate-600 dark:text-slate-400">

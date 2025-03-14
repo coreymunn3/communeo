@@ -3,23 +3,24 @@ import { CommunityPost } from "@/lib/types";
 import { useQuery } from "@tanstack/react-query";
 import Post from "./Post";
 
+interface PostProps {
+  initialPosts: CommunityPost[];
+  communityId?: string;
+  query: {
+    queryKey: string[];
+    url: string;
+  };
+}
+
 const Posts = ({
   initialPosts,
   communityId,
-}: {
-  initialPosts: CommunityPost[];
-  communityId?: string;
-}) => {
-  const isCommunityPosts = Boolean(communityId);
+  query: { queryKey, url },
+}: PostProps) => {
   // fetch the posts for this community using as placeholder the initial posts from the server
   const { data: posts } = useQuery<CommunityPost[]>({
-    queryKey: isCommunityPosts
-      ? ["community", communityId, "posts"]
-      : ["posts"],
+    queryKey: queryKey,
     queryFn: async () => {
-      const url = isCommunityPosts
-        ? `/api/community/${communityId}/post`
-        : `/api/post`;
       const res = await fetch(url);
       return res.json();
     },
@@ -37,7 +38,7 @@ const Posts = ({
   return (
     <div className="flex flex-col space-y-1">
       {posts.map((post: CommunityPost) => (
-        <Post post={post} key={post.id} isCommunityPost={isCommunityPosts} />
+        <Post post={post} key={post.id} inCommunity={Boolean(communityId)} />
       ))}
     </div>
   );

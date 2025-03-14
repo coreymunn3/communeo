@@ -13,12 +13,11 @@ import CommunitySlugAndCreation from "./CommunitySlugAndCreation";
 
 const Post = ({
   post,
-  isCommunityPost,
+  inCommunity,
 }: {
   post: CommunityPost;
-  isCommunityPost?: boolean;
+  inCommunity?: boolean;
 }) => {
-  const params = useParams();
   const router = useRouter();
   const normalizedPostDate = normalizeDate(post.created_on);
 
@@ -56,11 +55,6 @@ const Post = ({
     }
   };
 
-  const handleOpenComments = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    router.push(`/c/${post.community.slug}/post/${post.id}`);
-  };
-
   return (
     <div className="flex flex-col space-y-1">
       <Separator />
@@ -71,7 +65,7 @@ const Post = ({
       >
         {/* author tag line - username details if a community post, and community icon and details, if in feed */}
         <div>
-          {isCommunityPost ? (
+          {inCommunity ? (
             <UserTagAndCreation
               user={post.author}
               createdDate={normalizedPostDate}
