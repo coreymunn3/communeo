@@ -25,7 +25,7 @@ import { toast } from "sonner";
 import { postFormData, postFormSchema } from "@/lib/types";
 import { AlertTriangle, Eye, Loader2Icon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { createPost } from "@/actions/createPost";
 
 interface CreatePostFormProps {
@@ -41,6 +41,14 @@ const CreatePostForm = ({
 }: CreatePostFormProps) => {
   const router = useRouter();
   const queryClient = useQueryClient();
+
+  const community = useQuery({
+    queryKey: ["community", communityId],
+    queryFn: async () => {
+      const res = await fetch(`/api/community/${communityId}`);
+      return res.json();
+    },
+  });
 
   const createPostForm = useForm<postFormData>({
     resolver: zodResolver(postFormSchema),
