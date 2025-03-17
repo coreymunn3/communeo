@@ -20,8 +20,8 @@ export type Community = {
   slug: string;
   description: string;
   created_on: Date;
-  flairs?: CommunityFlair[] | JsonValue;
-  rules?: CommunityRule[] | JsonValue;
+  flairs?: CommunityFlair[];
+  rules?: CommunityRule[];
   icon?: string;
   banner?: string;
   founder_id: string;

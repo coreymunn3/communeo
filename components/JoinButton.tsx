@@ -24,16 +24,22 @@ interface DialogContent {
   footer: React.ReactNode;
 }
 
-export const JoinButton = ({ community }: { community: Community }) => {
+export const JoinButton = ({
+  communityId,
+  communityName,
+}: {
+  communityId: string;
+  communityName: string;
+}) => {
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [dialogContent, setDialogContent] = useState<DialogContent>();
 
   // query to get the user's membership status and if they are moderator/founder
   const membership = useQuery<CommunityMembership>({
-    queryKey: ["community", community.id, "membership"],
+    queryKey: ["community", communityId, "membership"],
     queryFn: async () => {
-      const res = await fetch(`/api/community/${community.id}/membership`);
+      const res = await fetch(`/api/community/${communityId}/membership`);
       return res.json();
     },
   });
@@ -44,17 +50,17 @@ export const JoinButton = ({ community }: { community: Community }) => {
   };
 
   const handleJoin = async () => {
-    await joinCommunity(community.id);
+    await joinCommunity(communityId);
     queryClient.invalidateQueries({
-      queryKey: ["community", community.id, "membership"],
+      queryKey: ["community", communityId, "membership"],
     });
-    return toast.success(`Welcome to ${capitalizeEachWord(community.name)}`);
+    return toast.success(`Welcome to ${capitalizeEachWord(communityName)}`);
   };
 
   const handleLeave = async () => {
-    await leaveCommunity(community.id);
+    await leaveCommunity(communityId);
     queryClient.invalidateQueries({
-      queryKey: ["community", community.id, "membership"],
+      queryKey: ["community", communityId, "membership"],
     });
     return;
   };
