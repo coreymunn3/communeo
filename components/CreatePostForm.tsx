@@ -22,11 +22,14 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
-import { postFormData, postFormSchema } from "@/lib/types";
+import { Community, postFormData, postFormSchema } from "@/lib/types";
 import { AlertTriangle, Eye, Loader2Icon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { createPost } from "@/actions/createPost";
+import CommunityFlairs from "./CommunityFlairs";
+import { useEffect, useState } from "react";
+import { Badge } from "./ui/badge";
 
 interface CreatePostFormProps {
   redirectOnCreate: string;
@@ -42,13 +45,35 @@ const CreatePostForm = ({
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const community = useQuery({
+  const community = useQuery<Community>({
     queryKey: ["community", communityId],
     queryFn: async () => {
       const res = await fetch(`/api/community/${communityId}`);
       return res.json();
     },
   });
+  const [selectedFlair, setSelectedFlairs] = useState<Record<string, boolean>>(
+    {}
+  );
+  console.log(selectedFlair);
+
+  useEffect(() => {
+    if (community.data?.flairs) {
+      community.data.flairs.forEach((flair) => {
+        setSelectedFlairs((prev) => ({
+          ...prev,
+          [flair.title]: false,
+        }));
+      });
+    }
+  }, [community.data]);
+
+  const handleToggleFlair = (flairTitle: string) => {
+    setSelectedFlairs((prev) => ({
+      ...prev,
+      [flairTitle]: !prev[flairTitle],
+    }));
+  };
 
   const createPostForm = useForm<postFormData>({
     resolver: zodResolver(postFormSchema),
@@ -149,6 +174,24 @@ const CreatePostForm = ({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Post Content</FormLabel>
+                {/* flairs */}
+                {community.isSuccess && community.data?.flairs && (
+                  <div className="flex space-x-2">
+                    {community.data.flairs.map((flair, i) => {
+                      const isSelected = selectedFlair[flair.title];
+                      return (
+                        <Badge
+                          key={i}
+                          variant={isSelected ? "default" : "outline"}
+                          onClick={() => handleToggleFlair(flair.title)}
+                        >
+                          {flair.title}
+                        </Badge>
+                      );
+                    })}
+                  </div>
+                )}
+                {/* content area */}
                 <FormControl>
                   <Textarea {...field} />
                 </FormControl>
