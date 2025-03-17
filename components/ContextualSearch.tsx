@@ -19,13 +19,12 @@ const ContextualSearch = () => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       if (searchValue.trim()) {
-        router.push(`/search?q=${searchValue}`);
+        if (params?.slug) {
+          router.push(`/search?community=${params.slug}&q=${searchValue}`);
+        } else {
+          router.push(`/search?q=${searchValue}`);
+        }
       }
-      // to do, execute search
-      // guard, trim text and don't advance if empty string
-      // navigate to the /search?q='search term'
-      // in that page, pull out the url params and do a query with prisma to get all posts with that term in the title or content
-      // maybe theres
     }
   };
 

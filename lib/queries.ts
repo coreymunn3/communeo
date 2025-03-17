@@ -164,13 +164,17 @@ export async function getUserMembershipInCommunity(
   });
 }
 
-export async function getPostsFromSearchTerm(searchTerm: string) {
+export async function getPostsFromSearchTerm(
+  searchTerm: string,
+  communityId?: string
+) {
   return await prisma.post.findMany({
     where: {
       OR: [
         { title: { contains: searchTerm, mode: "insensitive" } },
         { content: { contains: searchTerm, mode: "insensitive" } },
       ],
+      ...(communityId && { community_id: communityId }),
     },
     include: {
       author: {
