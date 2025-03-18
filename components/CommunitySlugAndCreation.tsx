@@ -12,11 +12,13 @@ interface CommunitySlugAndCreationProps {
     icon: string;
   };
   createdDate: string;
+  children?: React.ReactNode;
 }
 
 const CommunitySlugAndCreation = ({
   community,
   createdDate,
+  children,
 }: CommunitySlugAndCreationProps) => {
   // don't propagate events up on this link click
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -36,6 +38,7 @@ const CommunitySlugAndCreation = ({
       </Link>
       {/* datetime posted */}
       <p> | {DateTime.fromISO(createdDate).toRelative()}</p>
+      {children}
     </div>
   );
 };

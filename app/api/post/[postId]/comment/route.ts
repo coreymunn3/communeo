@@ -3,7 +3,7 @@ import { Comment } from "@/lib/types";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import { buildCommentTree } from "@/lib/utils";
-import { getComments, getPost } from "@/lib/queries";
+import { getComments, getPostById } from "@/lib/queries";
 
 export async function GET(
   request: NextRequest,
@@ -18,7 +18,7 @@ export async function GET(
   try {
     const { postId } = params;
     // first make sure the post exists
-    const post = await getPost(postId);
+    const post = await getPostById(postId);
     if (!post) {
       return NextResponse.json(
         { error: `Post ${postId} not found` },

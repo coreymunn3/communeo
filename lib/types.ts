@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { isValidUrl } from "./utils";
-import { JsonValue } from "@prisma/client/runtime/library";
 
 export interface ClerkWebhookEvent {
   type: string;
@@ -165,6 +164,7 @@ export type CommunityPost = {
     slug: string;
     icon: string;
   };
+  flair?: CommunityFlair | null;
 };
 
 export type LinkPreviewMetadata = {

@@ -28,6 +28,7 @@ export async function getPostsForUser(userId?: string) {
           icon: true,
         },
       },
+      flair: true,
     },
     orderBy: [
       { created_on: "desc" },
@@ -61,6 +62,7 @@ export async function getCommunityPosts(communityId: string) {
           icon: true,
         },
       },
+      flair: true,
     },
     orderBy: {
       created_on: "desc",
@@ -68,7 +70,7 @@ export async function getCommunityPosts(communityId: string) {
   });
 }
 
-export async function getPost(postId: string) {
+export async function getPostById(postId: string) {
   return await prisma.post.findUnique({
     where: {
       id: postId,
@@ -89,6 +91,7 @@ export async function getPost(postId: string) {
           icon: true,
         },
       },
+      flair: true,
     },
   });
 }
@@ -198,6 +201,7 @@ export async function getPostsFromSearchTerm(
           icon: true,
         },
       },
+      flair: true,
     },
     orderBy: {
       created_on: "desc",

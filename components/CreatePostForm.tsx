@@ -27,8 +27,7 @@ import { AlertTriangle, Eye, Loader2Icon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { createPost } from "@/actions/createPost";
-import CommunityFlairs from "./CommunityFlairs";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Badge } from "./ui/badge";
 
 interface CreatePostFormProps {
@@ -52,31 +51,19 @@ const CreatePostForm = ({
       return res.json();
     },
   });
-  const [selectedFlair, setSelectedFlairs] = useState<Record<string, boolean>>(
-    {}
-  );
-  console.log(selectedFlair);
+  const [selectedFlair, setSelectedFlair] = useState<string | undefined>();
 
   /**
-   * This useEffect sets the default flair selection state for the useState above
-   * Map through the flairs and set to false (unselected)
+   * If the user clicks the flair, select it,
+   * unless that is the flair that is already selected, in which case we will unselect it
+   * @param flairId string
    */
-  useEffect(() => {
-    if (community.data?.flairs) {
-      community.data.flairs.forEach((flair) => {
-        setSelectedFlairs((prev) => ({
-          ...prev,
-          [flair.id]: false,
-        }));
-      });
-    }
-  }, [community.data]);
-
   const handleToggleFlair = (flairId: string) => {
-    setSelectedFlairs((prev) => ({
-      ...prev,
-      [flairId]: !prev[flairId],
-    }));
+    if (selectedFlair === flairId) {
+      setSelectedFlair(undefined);
+    } else {
+      setSelectedFlair(flairId);
+    }
   };
 
   const createPostForm = useForm<postFormData>({
@@ -92,7 +79,8 @@ const CreatePostForm = ({
   });
 
   const createPostMutation = useMutation({
-    mutationFn: (formData: postFormData) => createPost(formData, communityId),
+    mutationFn: (formData: postFormData) =>
+      createPost(formData, communityId, selectedFlair),
     // if successful, alert the user and redirect
     onSuccess: (data) => {
       toast.success("Post has been created");
@@ -182,7 +170,8 @@ const CreatePostForm = ({
                 {community.isSuccess && community.data.flairs && (
                   <div className="flex space-x-2">
                     {community.data.flairs.map((flair, i) => {
-                      const isSelected = selectedFlair[flair.id];
+                      const isSelected = selectedFlair === flair.id;
+                      console.log(isSelected, `bg-[${flair.color}]`);
                       return (
                         <Badge
                           key={i}

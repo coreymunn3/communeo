@@ -5,7 +5,11 @@ import { postFormData } from "@/lib/types";
 import { auth } from "@clerk/nextjs/server";
 import { getDbUser } from "./getDbUser";
 
-export async function createPost(formData: postFormData, communityId: string) {
+export async function createPost(
+  formData: postFormData,
+  communityId: string,
+  selectedFlairId?: string
+) {
   auth.protect();
   const dbUser = await getDbUser();
   // create the post
@@ -19,6 +23,7 @@ export async function createPost(formData: postFormData, communityId: string) {
         is_spoiler: formData.is_spoiler,
         user_id: dbUser.id,
         community_id: communityId,
+        ...(selectedFlairId && { flair_id: selectedFlairId }),
       },
     });
     return { success: true, post };

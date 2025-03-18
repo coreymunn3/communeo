@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { Fragment } from "react";
 import { CommunityPost } from "@/lib/types";
 import { Separator } from "./ui/separator";
 import { normalizeDate } from "@/lib/utils";
@@ -10,6 +10,8 @@ import { useParams, useRouter } from "next/navigation";
 import CommentCount from "./CommentCount";
 import UserTagAndCreation from "./UserTagAndCreation";
 import CommunitySlugAndCreation from "./CommunitySlugAndCreation";
+import { Badge } from "lucide-react";
+import CommunityFlairs from "./CommunityFlairs";
 
 const Post = ({
   post,
@@ -69,24 +71,26 @@ const Post = ({
             <UserTagAndCreation
               user={post.author}
               createdDate={normalizedPostDate}
-            />
+            >
+              {post?.flair && <CommunityFlairs flairs={[post.flair]} />}
+            </UserTagAndCreation>
           ) : (
             <CommunitySlugAndCreation
               community={post.community}
               createdDate={normalizedPostDate}
-            />
+            >
+              {post?.flair && <CommunityFlairs flairs={[post.flair]} />}
+            </CommunitySlugAndCreation>
           )}
         </div>
 
         {/* title */}
         <p className="font-semibold text-lg">{post.title}</p>
         {/* content */}
-        <div>
-          <p className="text-slate-500 dark:text-slate-400 text-sm">
-            {renderPostContent(post.type, post.content, post.id)}
-          </p>
+        <div className="text-slate-500 dark:text-slate-400 text-sm">
+          {renderPostContent(post.type, post.content, post.id)}
         </div>
-        {/* TO DO - controls: upvote downvote (with count), number of comments (expandable), share (copy link, crosspost, embed?) */}
+        {/* comments and controls */}
         <div className="flex flex-row space-x-2 items-center pt-4">
           <PostVotes postId={post.id} />
           <CommentCount

@@ -1,7 +1,7 @@
 import Comments from "@/components/Comments";
 import CreateComment from "@/components/CreateComment";
 import Post from "@/components/Post";
-import { getComments, getPost } from "@/lib/queries";
+import { getComments, getPostById } from "@/lib/queries";
 import { buildCommentTree } from "@/lib/utils";
 import { notFound } from "next/navigation";
 
@@ -16,7 +16,7 @@ const PostPage = async ({ params }: PostPageProps) => {
   const { slug, postId } = params;
 
   // get the post
-  const post = await getPost(postId);
+  const post = await getPostById(postId);
 
   // get the comments
   const comments = await getComments(postId);

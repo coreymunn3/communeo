@@ -8,9 +8,14 @@ import Link from "next/link";
 interface UserTagAndCreationProps {
   user: Author;
   createdDate: string;
+  children?: React.ReactNode;
 }
 
-const UserTagAndCreation = ({ user, createdDate }: UserTagAndCreationProps) => {
+const UserTagAndCreation = ({
+  user,
+  createdDate,
+  children,
+}: UserTagAndCreationProps) => {
   // don't propagate events up on this link click
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.stopPropagation();
@@ -29,6 +34,7 @@ const UserTagAndCreation = ({ user, createdDate }: UserTagAndCreationProps) => {
       </Link>
       {/* datetime posted */}
       <p> | {DateTime.fromISO(createdDate).toRelative()}</p>
+      {children}
     </div>
   );
 };
