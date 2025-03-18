@@ -62,14 +62,14 @@ model post {
   is_spoiler   Boolean   @default(false)
   user_id      String
   community_id String
+  flair_id     String?
 
   // Relations
   author    app_user  @relation(fields: [user_id], references: [id])
   community community @relation(fields: [community_id], references: [id])
   comments  comment[] // One-to-many relation with Comment
   votes     vote[]
-  flairs    flair[]   @relation("PostFlairs")
-  flair_id  String?
+  flair     flair?    @relation(fields: [flair_id], references: [id])
 }
 
 model flair {
@@ -80,7 +80,7 @@ model flair {
 
   // Relations
   community community @relation(fields: [community_id], references: [id])
-  posts     post[]    @relation("PostFlairs")
+  posts     post[]
 
   @@unique([title, community_id]) // Enforce unique flair per community
 }
