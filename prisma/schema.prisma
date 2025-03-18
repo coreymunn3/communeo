@@ -69,7 +69,7 @@ model post {
   comments  comment[] // One-to-many relation with Comment
   votes     vote[]
   flairs    flair[]   @relation("PostFlairs")
-  flairId   String?
+  flair_id  String?
 }
 
 model flair {
