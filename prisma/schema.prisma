@@ -81,8 +81,6 @@ model flair {
   // Relations
   community community @relation(fields: [community_id], references: [id])
   posts     post[]    @relation("PostFlairs")
-  comment   comment?  @relation(fields: [commentId], references: [id])
-  commentId String?
 
   @@unique([title, community_id]) // Enforce unique flair per community
 }
@@ -101,7 +99,6 @@ model comment {
   parent   comment?  @relation("ParentChild", fields: [parent_comment_id], references: [id])
   children comment[] @relation("ParentChild")
   votes    vote[]
-  flairs   flair[]
 }
 
 model community_member {
