@@ -32,7 +32,6 @@ model community {
   slug         String   @unique // a URL-friendly version of the name that we will use for routing
   description  String
   created_on   DateTime @default(now())
-  flairs       Json?
   rules        Json?
   icon         String
   banner       String
@@ -44,6 +43,7 @@ model community {
   moderator app_user           @relation("Moderator", fields: [moderator_id], references: [id])
   posts     post[]
   members   community_member[]
+  flairs    flair[]
 }
 
 enum post_type {
@@ -68,6 +68,23 @@ model post {
   community community @relation(fields: [community_id], references: [id])
   comments  comment[] // One-to-many relation with Comment
   votes     vote[]
+  flairs    flair[]   @relation("PostFlairs")
+  flairId   String?
+}
+
+model flair {
+  id           String @id @default(uuid())
+  title        String
+  color        String
+  community_id String
+
+  // Relations
+  community community @relation(fields: [community_id], references: [id])
+  posts     post[]    @relation("PostFlairs")
+  comment   comment?  @relation(fields: [commentId], references: [id])
+  commentId String?
+
+  @@unique([title, community_id]) // Enforce unique flair per community
 }
 
 model comment {
@@ -84,6 +101,7 @@ model comment {
   parent   comment?  @relation("ParentChild", fields: [parent_comment_id], references: [id])
   children comment[] @relation("ParentChild")
   votes    vote[]
+  flairs   flair[]
 }
 
 model community_member {
