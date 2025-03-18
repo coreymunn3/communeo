@@ -15,6 +15,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { HexColorPicker } from "react-colorful";
 import { Input } from "@/components/ui/input";
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,6 +30,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { createCommunity } from "@/actions/createCommunity";
+import { Fragment } from "react";
 
 const CreateCommunityDialog = ({
   open,
@@ -259,7 +261,7 @@ const CreateCommunityDialog = ({
                       type="button"
                       variant="ghost"
                       size="sm"
-                      onClick={() => appendFlair({ title: "" })}
+                      onClick={() => appendFlair({ title: "", color: "" })}
                     >
                       <Plus className="h-4 w-4" />
                       Add Flair
@@ -273,21 +275,58 @@ const CreateCommunityDialog = ({
                         className="flex flex-row bg-slate-100 dark:bg-slate-900 space-x-2 p-2 rounded-lg"
                       >
                         <div className="flex-1">
+                          {/* flair title  */}
                           <FormField
                             control={createCommunityForm.control}
                             name={`flairs.${index}.title`}
                             render={({ field }) => (
-                              <FormItem className="flex flex-row items-center space-x-4">
+                              <Fragment>
+                                <FormItem className="flex flex-row items-center space-x-4">
+                                  <FormLabel className="w-20 text-right mt-2">
+                                    Flair Title
+                                  </FormLabel>
+                                  <div className="flex-1 flex flex-col space-y-1">
+                                    <FormControl>
+                                      <Input
+                                        placeholder="Enter rule title"
+                                        className="bg-slate-100 dark:bg-slate-900 border-slate-300 dark:border-slate-700"
+                                        {...field}
+                                      />
+                                    </FormControl>
+                                    <FormMessage className="ml-2" />
+                                  </div>
+                                </FormItem>
+                              </Fragment>
+                            )}
+                          />
+                          {/* flair color */}
+                          <FormField
+                            control={createCommunityForm.control}
+                            name={`flairs.${index}.color`}
+                            render={({ field }) => (
+                              <FormItem className="flex flex-row items-center space-x-4 mt-2">
                                 <FormLabel className="w-20 text-right mt-2">
-                                  Flair Title
+                                  Flair Color
                                 </FormLabel>
                                 <div className="flex-1 flex flex-col space-y-1">
                                   <FormControl>
-                                    <Input
-                                      placeholder="Enter rule title"
-                                      className="bg-slate-100 dark:bg-slate-900 border-slate-300 dark:border-slate-700"
-                                      {...field}
-                                    />
+                                    <Fragment>
+                                      <HexColorPicker
+                                        color={field.value || "#3b82f6"} // Default to a Tailwind blue color
+                                        onChange={(color) =>
+                                          field.onChange(color)
+                                        }
+                                        className="rounded-lg border border-slate-300 dark:border-slate-700"
+                                      />
+                                      <Input
+                                        placeholder="Enter hex color"
+                                        value={field.value || ""}
+                                        onChange={(e) =>
+                                          field.onChange(e.target.value)
+                                        }
+                                        className="bg-slate-100 dark:bg-slate-900 border-slate-300 dark:border-slate-700"
+                                      />
+                                    </Fragment>
                                   </FormControl>
                                   <FormMessage className="ml-2" />
                                 </div>

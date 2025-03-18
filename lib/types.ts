@@ -95,6 +95,9 @@ export const createCommunityFormSchema = z.object({
           .string()
           .min(1, "Flair title is required.")
           .max(20, "Flair title cannot exceed 20 characters."),
+        color: z
+          .string()
+          .regex(/^#([0-9A-F]{3}){1,2}$/i, "Color must be a valid hex value."),
       })
     )
     .min(1, "At least 1 flair is required for each commune"),

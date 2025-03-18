@@ -8,7 +8,6 @@ import { getDbUser } from "./getDbUser";
 
 export async function createCommunity(formData: createCommunityFormData) {
   auth.protect();
-  const { userId: clerkUserId } = await auth();
   const dbUser = await getDbUser();
   try {
     // create the community
@@ -20,10 +19,19 @@ export async function createCommunity(formData: createCommunityFormData) {
         icon: formData?.icon || DEFAULT_COMMUNITY_ICON,
         banner: formData?.banner || DEFAULT_COMMUNITY_BANNER,
         rules: formData?.rules,
-        flairs: formData?.flairs,
         founder_id: dbUser.id,
         moderator_id: dbUser.id,
       },
+    });
+    // create the flairs for this community
+    formData.flairs.forEach(async (flair) => {
+      await prisma.flair.create({
+        data: {
+          title: flair.title,
+          color: flair.color,
+          community_id: community.id,
+        },
+      });
     });
     // add the user as a community member for this community
     await prisma.community_member.create({
