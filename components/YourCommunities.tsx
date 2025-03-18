@@ -56,16 +56,18 @@ const YourCommunities = () => {
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger asChild>
-        <Button variant={"ghost"} disabled={communitiesQuery.isLoading}>
-          <UsersRoundIcon className="h-4 w-4" />
-          {`Your Communities ${
-            communitiesQuery.isSuccess
-              ? `(${communitiesQuery.data.length})`
-              : ""
-          }`}
-        </Button>
-      </SheetTrigger>
+      {communitiesQuery.isSuccess && communitiesQuery.data.length > 0 && (
+        <SheetTrigger asChild>
+          <Button variant={"ghost"} disabled={communitiesQuery.isLoading}>
+            <UsersRoundIcon className="h-4 w-4" />
+            {`Your Communities ${
+              communitiesQuery.isSuccess
+                ? `(${communitiesQuery.data.length})`
+                : ""
+            }`}
+          </Button>
+        </SheetTrigger>
+      )}
 
       <SheetContent side={"left"}>
         <p className="font-semibold tracking-wide mb-4">{`Your Communities (${communitiesQuery.data?.length})`}</p>
