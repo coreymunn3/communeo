@@ -9,7 +9,7 @@ const CommunityFlairs = ({ flairs }: { flairs: CommunityFlair[] }) => {
       {flairs.map((flair) => (
         <Badge
           key={flair.title}
-          className="bg-primary/50 text-slate-600 dark:text-white"
+          className={`bg-[${flair.color}] text-slate-600 dark:text-white`}
         >
           {flair.title}
         </Badge>

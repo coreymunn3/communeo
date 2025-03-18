@@ -20,7 +20,7 @@ export type Community = {
   slug: string;
   description: string;
   created_on: Date;
-  flairs?: CommunityFlair[];
+  flairs: CommunityFlair[];
   rules?: CommunityRule[];
   icon?: string;
   banner?: string;
@@ -52,6 +52,7 @@ export type CommunityRule = {
 
 export type CommunityFlair = {
   title: string;
+  color: string;
 };
 
 /**

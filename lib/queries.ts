@@ -115,6 +115,9 @@ export async function getCommunityFromSlug(slug: string) {
     where: {
       slug,
     },
+    include: {
+      flairs: true,
+    },
   });
 }
 
@@ -122,6 +125,9 @@ export async function getCommunityById(communityId: string) {
   return await prisma.community.findUnique({
     where: {
       id: communityId,
+    },
+    include: {
+      flairs: true,
     },
   });
 }

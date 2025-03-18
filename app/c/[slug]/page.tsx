@@ -25,9 +25,7 @@ const CommunityPage = async ({ params }: CommunityPageProps) => {
   if (!community) {
     notFound();
   }
-
   const communityRules = community?.rules as CommunityRule[];
-  const communityFlairs = community?.flairs as CommunityFlair[];
 
   if (community) {
     // find the moderator
@@ -135,9 +133,7 @@ const CommunityPage = async ({ params }: CommunityPageProps) => {
             <div className="flex flex-col space-y-2 text-sm">
               <p className="text-base font-semibold">Flairs</p>
               <p className="text-sm">Click to Sort Posts</p>
-              {Array.isArray(communityFlairs) && (
-                <CommunityFlairs flairs={communityFlairs} />
-              )}
+              <CommunityFlairs flairs={community.flairs} />
             </div>
           </div>
         </div>
