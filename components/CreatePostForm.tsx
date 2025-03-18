@@ -57,21 +57,25 @@ const CreatePostForm = ({
   );
   console.log(selectedFlair);
 
+  /**
+   * This useEffect sets the default flair selection state for the useState above
+   * Map through the flairs and set to false (unselected)
+   */
   useEffect(() => {
     if (community.data?.flairs) {
       community.data.flairs.forEach((flair) => {
         setSelectedFlairs((prev) => ({
           ...prev,
-          [flair.title]: false,
+          [flair.id]: false,
         }));
       });
     }
   }, [community.data]);
 
-  const handleToggleFlair = (flairTitle: string) => {
+  const handleToggleFlair = (flairId: string) => {
     setSelectedFlairs((prev) => ({
       ...prev,
-      [flairTitle]: !prev[flairTitle],
+      [flairId]: !prev[flairId],
     }));
   };
 
@@ -175,15 +179,22 @@ const CreatePostForm = ({
               <FormItem>
                 <FormLabel>Post Content</FormLabel>
                 {/* flairs */}
-                {community.isSuccess && community.data?.flairs && (
+                {community.isSuccess && community.data.flairs && (
                   <div className="flex space-x-2">
                     {community.data.flairs.map((flair, i) => {
-                      const isSelected = selectedFlair[flair.title];
+                      const isSelected = selectedFlair[flair.id];
                       return (
                         <Badge
                           key={i}
-                          variant={isSelected ? "default" : "outline"}
-                          onClick={() => handleToggleFlair(flair.title)}
+                          // variant={isSelected ? "default" : "outline"}
+                          variant={"outline"}
+                          onClick={() => handleToggleFlair(flair.id)}
+                          className={
+                            isSelected
+                              ? `bg-[${flair.color}]`
+                              : "bg-slate-100 dark:bg-slate-800"
+                          }
+                          // className="bg-red-500"
                         >
                           {flair.title}
                         </Badge>

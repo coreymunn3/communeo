@@ -51,8 +51,10 @@ export type CommunityRule = {
 };
 
 export type CommunityFlair = {
+  id: string;
   title: string;
   color: string;
+  community_id: string;
 };
 
 /**
