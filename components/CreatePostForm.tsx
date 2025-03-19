@@ -24,33 +24,30 @@ import { Button } from "./ui/button";
 import { toast } from "sonner";
 import { Community, postFormData, postFormSchema } from "@/lib/types";
 import { AlertTriangle, Eye, Loader2Icon } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { createPost } from "@/actions/createPost";
 import { useState } from "react";
 import { Badge } from "./ui/badge";
 
 interface CreatePostFormProps {
-  redirectOnCreate: string;
-  redirectOnCancel: string;
-  communityId: string;
+  onSuccess?: () => void;
+  redirectOnSuccess?: string;
+  onCancel?: () => void;
+  redirectOnCancel?: string;
+  community: Community;
 }
 
 const CreatePostForm = ({
-  redirectOnCreate,
+  onSuccess,
+  redirectOnSuccess,
+  onCancel,
   redirectOnCancel,
-  communityId,
+  community,
 }: CreatePostFormProps) => {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const community = useQuery<Community>({
-    queryKey: ["community", communityId],
-    queryFn: async () => {
-      const res = await fetch(`/api/community/${communityId}`);
-      return res.json();
-    },
-  });
   const [selectedFlair, setSelectedFlair] = useState<string | undefined>();
 
   /**
@@ -80,13 +77,14 @@ const CreatePostForm = ({
 
   const createPostMutation = useMutation({
     mutationFn: (formData: postFormData) =>
-      createPost(formData, communityId, selectedFlair),
-    // if successful, alert the user and redirect
+      createPost(formData, community.id, selectedFlair),
+    // if successful, alert the user, run any success actions they want, invalidate the previous query & refetch
     onSuccess: (data) => {
       toast.success("Post has been created");
-      router.push(redirectOnCreate);
+      if (onSuccess) onSuccess();
+      if (redirectOnSuccess) router.push(redirectOnSuccess);
       queryClient.invalidateQueries({
-        queryKey: ["community", communityId, "posts"],
+        queryKey: ["community", community.id, "posts"],
       });
     },
     // if failure, alert the user, keep form dirty
@@ -104,8 +102,9 @@ const CreatePostForm = ({
   const handleCancel = () => {
     // clear fields
     createPostForm.reset();
-    // then redirect
-    router.push(redirectOnCancel);
+    // run any cancel actions & redirects
+    if (onCancel) onCancel();
+    if (redirectOnCancel) router.push(redirectOnCancel);
   };
 
   return (
@@ -167,31 +166,31 @@ const CreatePostForm = ({
               <FormItem>
                 <FormLabel>Post Content</FormLabel>
                 {/* flairs */}
-                {community.isSuccess && community.data.flairs && (
-                  <div className="flex space-x-2">
-                    {community.data.flairs.map((flair, i) => {
-                      const isSelected = selectedFlair === flair.id;
-                      console.log(isSelected, `bg-[${flair.color}]`);
-                      return (
-                        <Badge
-                          key={i}
-                          // variant={isSelected ? "default" : "outline"}
-                          variant={"outline"}
-                          onClick={() => handleToggleFlair(flair.id)}
-                          style={{
-                            backgroundColor: isSelected ? flair.color : "",
-                          }}
-                          className="bg-slate-100 dark:bg-slate-800"
-                        >
-                          {flair.title}
-                        </Badge>
-                      );
-                    })}
-                  </div>
-                )}
+                <div className="flex space-x-2">
+                  {community.flairs.map((flair, i) => {
+                    const isSelected = selectedFlair === flair.id;
+                    return (
+                      <Badge
+                        key={i}
+                        // variant={isSelected ? "default" : "outline"}
+                        variant={"outline"}
+                        onClick={() => handleToggleFlair(flair.id)}
+                        style={{
+                          backgroundColor: isSelected ? flair.color : "",
+                        }}
+                        className="bg-slate-100 dark:bg-slate-800"
+                      >
+                        {flair.title}
+                      </Badge>
+                    );
+                  })}
+                </div>
                 {/* content area */}
                 <FormControl>
-                  <Textarea {...field} />
+                  <Textarea
+                    {...field}
+                    placeholder="What do you want to share with the community?"
+                  />
                 </FormControl>
                 <FormMessage className="ml-2" />
               </FormItem>

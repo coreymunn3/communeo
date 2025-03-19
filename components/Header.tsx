@@ -11,16 +11,23 @@ import CreateCommunityDialog from "./CreateCommunityDialog";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { useAppContext } from "@/context/AppContext";
 import ContextualSearch from "./ContextualSearch";
+import CreatePostDialog from "./CreatePostDialog";
 
 const Header = () => {
-  const { slug } = useParams();
-  const { createCommunityOpen, setCreateCommunityOpen } = useAppContext();
+  const {
+    createCommunityOpen,
+    setCreateCommunityOpen,
+    createPostOpen,
+    setCreatePostOpen,
+  } = useAppContext();
+
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const handleCloseForm = () => setCreateCommunityOpen(false);
+  const handleCloseCommunity = () => setCreateCommunityOpen(false);
+  const handleClosePost = () => setCreatePostOpen(false);
 
   const CreatePostButton = () => {
     return (
-      <Button variant={"ghost"}>
+      <Button variant={"ghost"} onClick={() => setCreatePostOpen(true)}>
         <Plus />
         Post
       </Button>
@@ -97,8 +104,10 @@ const Header = () => {
       {/* Dialog to create a new community */}
       <CreateCommunityDialog
         open={createCommunityOpen}
-        onClose={handleCloseForm}
+        onClose={handleCloseCommunity}
       />
+
+      <CreatePostDialog open={createPostOpen} onClose={handleClosePost} />
     </div>
   );
 };

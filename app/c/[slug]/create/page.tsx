@@ -1,5 +1,5 @@
 import CreatePostForm from "@/components/CreatePostForm";
-import { prisma } from "@/lib/prisma";
+import { getCommunityFromSlug } from "@/lib/queries";
 import { capitalizeEachWord } from "@/lib/utils";
 import Image from "next/image";
 import { redirect } from "next/navigation";
@@ -11,11 +11,11 @@ interface CreatePostPageProps {
 }
 
 const CreatePostPage = async ({ params }: CreatePostPageProps) => {
-  const community = await prisma.community.findUnique({
-    where: {
-      slug: params.slug,
-    },
-  });
+  const community = await getCommunityFromSlug(params.slug);
+
+  if (!community) {
+    redirect("/");
+  }
 
   if (community) {
     return (
@@ -38,9 +38,9 @@ const CreatePostPage = async ({ params }: CreatePostPageProps) => {
             </h1>
           </div>
           <CreatePostForm
-            redirectOnCreate={`/c/${params.slug}`}
+            redirectOnSuccess={`/c/${params.slug}`}
             redirectOnCancel={`/c/${params.slug}`}
-            communityId={community.id}
+            community={community}
           />
         </div>
       </div>
