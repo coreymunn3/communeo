@@ -178,12 +178,10 @@ const CreatePostForm = ({
                           // variant={isSelected ? "default" : "outline"}
                           variant={"outline"}
                           onClick={() => handleToggleFlair(flair.id)}
-                          className={
-                            isSelected
-                              ? `bg-[${flair.color}]`
-                              : "bg-slate-100 dark:bg-slate-800"
-                          }
-                          // className="bg-red-500"
+                          style={{
+                            backgroundColor: isSelected ? flair.color : "",
+                          }}
+                          className="bg-slate-100 dark:bg-slate-800"
                         >
                           {flair.title}
                         </Badge>
