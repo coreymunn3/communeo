@@ -51,8 +51,6 @@ const CreatePostDialog = ({ open, onClose }: CreatePostDialogProps) => {
     },
     enabled: Boolean(selectedCommunityId),
   });
-  console.log("community id", selectedCommunityId, "slug", slug);
-  console.log("full data", selectedCommunityFull.data);
 
   // get a list of communities that the user can post in
   const userCommunities = useQuery<CommunityWithSubs[]>({
