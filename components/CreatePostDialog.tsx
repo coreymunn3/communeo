@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import CreatePostForm from "./CreatePostForm";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
@@ -100,9 +101,16 @@ const CreatePostDialog = ({ open, onClose }: CreatePostDialogProps) => {
                     <SelectContent>
                       {userCommunities.isSuccess &&
                         userCommunities.data.map((community) => (
-                          // TO DO Also render the community Icon!
                           <SelectItem key={community.id} value={community.id}>
-                            {community.name}
+                            <div className="w-full flex items-center space-x-2">
+                              <Avatar className="h-6 w-6">
+                                <AvatarImage src={community.icon || ""} />
+                                <AvatarFallback>
+                                  {community.slug}
+                                </AvatarFallback>
+                              </Avatar>
+                              <div>{community.name}</div>
+                            </div>
                           </SelectItem>
                         ))}
                     </SelectContent>
