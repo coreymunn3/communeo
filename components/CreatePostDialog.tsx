@@ -81,7 +81,7 @@ const CreatePostDialog = ({ open, onClose }: CreatePostDialogProps) => {
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="max-h-screen overflow-scroll">
+      <DialogContent className="overflow-auto">
         <DialogHeader>
           <DialogTitle>Create a Post</DialogTitle>
           <DialogDescription>
