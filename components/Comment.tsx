@@ -15,7 +15,13 @@ import {
 } from "lucide-react";
 import CommentVotes from "./CommentVotes";
 
-const Comment = ({ comment }: { comment: CommentType }) => {
+const Comment = ({
+  comment,
+  allowReply,
+}: {
+  comment: CommentType;
+  allowReply?: boolean;
+}) => {
   const normalizeCommentDate = normalizeDate(comment.created_on);
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const [showCommentForm, setShowCommentForm] = useState<boolean>(false);
@@ -83,14 +89,16 @@ const Comment = ({ comment }: { comment: CommentType }) => {
             {(comment?.replies && comment.replies.length) || 0}
           </Button>
           {/* comment reply button */}
-          <Button
-            variant={"ghost"}
-            className="flex items-center"
-            onClick={handleReply}
-          >
-            <MessageCirclePlusIcon className="mr-1" />
-            <span className="text-sm">Reply</span>
-          </Button>
+          {allowReply && (
+            <Button
+              variant={"ghost"}
+              className="flex items-center"
+              onClick={handleReply}
+            >
+              <MessageCirclePlusIcon className="mr-1" />
+              <span className="text-sm">Reply</span>
+            </Button>
+          )}
         </div>
       </div>
 
@@ -118,7 +126,11 @@ const Comment = ({ comment }: { comment: CommentType }) => {
             >
               <div className="flex flex-col space-y-1">
                 {comment.replies.map((replyComment) => (
-                  <Comment key={replyComment.id} comment={replyComment} />
+                  <Comment
+                    key={replyComment.id}
+                    comment={replyComment}
+                    allowReply={allowReply}
+                  />
                 ))}
               </div>
             </CollapsibleContent>

@@ -38,6 +38,7 @@ const PostPage = async ({ params }: PostPageProps) => {
       {/* tree of comments on this post */}
       <div>
         <Comments
+          allowReply={true}
           initialComments={commentTree}
           query={{
             queryKey: ["post", postId, "comments"],

@@ -28,6 +28,7 @@ const UserActivity = ({
       name: "Posts",
       component: (
         <Posts
+          showAuthor={true}
           initialPosts={initialPosts}
           query={{
             queryKey: ["user", user.username, "posts"],
@@ -41,6 +42,7 @@ const UserActivity = ({
       name: "Commenets",
       component: (
         <Comments
+          allowReply={false}
           initialComments={initialComments}
           query={{
             queryKey: ["user", user.username, "comments"],
