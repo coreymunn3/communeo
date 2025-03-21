@@ -39,9 +39,7 @@ export async function GET(request: NextRequest) {
         description: `Tweet by ${author_name}`,
         author_name,
         author_url,
-        image:
-          media[0] ||
-          "https://pbs.twimg.com/card_img/1882916950201802752/SUFG9nGN?format=png&name=900x900",
+        image: media[0] || "/images/xlogo.jpeg",
         url: url,
       });
     }
