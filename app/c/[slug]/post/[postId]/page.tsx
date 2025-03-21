@@ -28,7 +28,7 @@ const PostPage = async ({ params }: PostPageProps) => {
 
   return (
     <div className="flex flex-col space-y-8">
-      <Post post={post} />
+      <Post post={post} showAuthor={true} />
 
       {/* Textarea to leave a comment with comment/cancel buttons "inside" */}
       <CreateComment postId={postId} parentCommentId={null} />
@@ -37,7 +37,13 @@ const PostPage = async ({ params }: PostPageProps) => {
 
       {/* tree of comments on this post */}
       <div>
-        <Comments postId={post.id} initialComments={commentTree} />
+        <Comments
+          initialComments={commentTree}
+          query={{
+            queryKey: ["post", postId, "comments"],
+            url: `/api/post/${postId}/comment`,
+          }}
+        />
       </div>
     </div>
   );

@@ -5,20 +5,23 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import Comment from "./Comment";
 
+interface CommentsProps {
+  initialComments: CommentType[];
+  query: {
+    queryKey: string[];
+    url: string;
+  };
+}
+
 const Comments = ({
   initialComments,
-  postId,
-}: {
-  initialComments: CommentType[];
-  postId: string;
-}) => {
-  const sortByOptions = ["top", "newest"];
-  const [sortBy, setSortBy] = useState<string>(sortByOptions[0]);
+  query: { queryKey, url },
+}: CommentsProps) => {
   // fetch the comments for this post using the initialComments as placeholder
   const { data: comments } = useQuery<CommentType[]>({
-    queryKey: ["post", postId, "comments"],
+    queryKey,
     queryFn: async () => {
-      const res = await fetch(`/api/post/${postId}/comment?sort=${sortBy}`);
+      const res = await fetch(url);
       return res.json();
     },
     initialData: initialComments,
