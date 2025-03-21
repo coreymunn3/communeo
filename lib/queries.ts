@@ -208,3 +208,61 @@ export async function getPostsFromSearchTerm(
     },
   });
 }
+
+export async function getUserFromUsername(username: string) {
+  return await prisma.app_user.findUnique({
+    where: {
+      username,
+    },
+    select: {
+      id: true,
+      username: true,
+      avatar_url: true,
+      email: true,
+      created_on: true,
+    },
+  });
+}
+
+export async function getPostsByUserId(userId: string) {
+  return await prisma.post.findMany({
+    where: {
+      user_id: userId,
+    },
+    include: {
+      author: {
+        select: {
+          id: true,
+          username: true,
+          avatar_url: true,
+        },
+      },
+      community: {
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          icon: true,
+        },
+      },
+      flair: true,
+    },
+  });
+}
+
+export async function getCommentsByUserId(userId: string) {
+  return await prisma.comment.findMany({
+    where: {
+      user_id: userId,
+    },
+    include: {
+      author: {
+        select: {
+          id: true,
+          username: true,
+          avatar_url: true,
+        },
+      },
+    },
+  });
+}

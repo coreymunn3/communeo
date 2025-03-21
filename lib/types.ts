@@ -14,6 +14,14 @@ export interface ClerkWebhookEvent {
   };
 }
 
+export type AppUser = {
+  id: string;
+  username: string;
+  avatar_url: string | null;
+  email: string;
+  created_on: Date;
+};
+
 export type Community = {
   id: string;
   name: string;
