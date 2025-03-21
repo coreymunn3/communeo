@@ -86,7 +86,7 @@ const CommunityPage = async ({ params }: CommunityPageProps) => {
           {/* Left Section - Posts */}
           <div className="md:w-2/3">
             <Posts
-              communityId={community.id}
+              showAuthor={true}
               initialPosts={communityPosts}
               query={{
                 queryKey: ["community", community.id, "posts"],

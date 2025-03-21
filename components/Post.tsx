@@ -15,10 +15,10 @@ import CommunityFlairs from "./CommunityFlairs";
 
 const Post = ({
   post,
-  inCommunity,
+  showAuthor,
 }: {
   post: CommunityPost;
-  inCommunity?: boolean;
+  showAuthor?: boolean;
 }) => {
   const router = useRouter();
   const normalizedPostDate = normalizeDate(post.created_on);
@@ -67,7 +67,7 @@ const Post = ({
       >
         {/* author tag line - username details if a community post, and community icon and details, if in feed */}
         <div>
-          {inCommunity ? (
+          {showAuthor ? (
             <UserTagAndCreation
               user={post.author}
               createdDate={normalizedPostDate}

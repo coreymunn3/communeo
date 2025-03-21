@@ -5,21 +5,21 @@ import Post from "./Post";
 
 interface PostProps {
   initialPosts: CommunityPost[];
-  communityId?: string;
   query: {
     queryKey: string[];
     url: string;
   };
+  showAuthor?: boolean;
 }
 
 const Posts = ({
+  showAuthor,
   initialPosts,
-  communityId,
   query: { queryKey, url },
 }: PostProps) => {
   // fetch the posts for this community using as placeholder the initial posts from the server
   const { data: posts } = useQuery<CommunityPost[]>({
-    queryKey: queryKey,
+    queryKey,
     queryFn: async () => {
       const res = await fetch(url);
       return res.json();
@@ -38,7 +38,7 @@ const Posts = ({
   return (
     <div className="flex flex-col space-y-1">
       {posts.map((post: CommunityPost) => (
-        <Post post={post} key={post.id} inCommunity={Boolean(communityId)} />
+        <Post post={post} key={post.id} showAuthor={showAuthor} />
       ))}
     </div>
   );
