@@ -1,0 +1,69 @@
+# Communeo Project Rules and Patterns
+
+This file captures important patterns, preferences, and project intelligence for Communeo. It serves as a learning journal to help work more effectively with the project.
+
+## Code Organization
+
+- **Component Structure**: Components are organized by feature/functionality rather than by type
+- **API Routes**: Follow RESTful patterns with resource-based organization
+- **Server Actions**: Used for data mutations and form submissions
+- **Type Definitions**: Centralized in lib/types.ts with Zod schemas for validation
+
+## Naming Conventions
+
+- **Components**: PascalCase (e.g., CreateCommunityDialog)
+- **Files**: kebab-case for most files, PascalCase for React components
+- **Functions**: camelCase
+- **Database Models**: snake_case (following Prisma conventions)
+- **API Routes**: kebab-case
+
+## UI Patterns
+
+- **Responsive Design**: Mobile-first approach with conditional rendering for different screen sizes
+- **Dark Mode**: Implemented using next-themes with consistent color variables
+- **Form Handling**: React Hook Form with Zod validation
+- **Data Fetching**: TanStack Query for client-side data fetching and state management
+- **Loading States**: Skeleton loaders for content loading
+- **Error Handling**: Toast notifications for user feedback
+
+## Authentication Patterns
+
+- **Clerk Integration**: Used for all authentication and user management
+- **Protected Routes**: Routes requiring authentication use auth.protect()
+- **User Synchronization**: Clerk webhook syncs user data to local database
+
+## Database Patterns
+
+- **Prisma ORM**: Used for all database operations
+- **Migrations**: Run with npm run migrate:dev
+- **Relations**: Defined in Prisma schema with appropriate cascades
+- **Queries**: Complex queries are abstracted in lib/queries.ts
+
+## Development Workflow
+
+- **Local Development**: Run on port 3002 with npm run dev
+- **Database Management**: PostgreSQL with Prisma migrations
+- **Environment Variables**: Managed with dotenv-cli
+- **Code Quality**: ESLint for linting
+
+## Project-Specific Patterns
+
+- **Community Slugs**: Generated from community names for URL-friendly routing
+- **Post Types**: Enum with text, image, and link types
+- **Voting System**: Values of 1 (upvote) or -1 (downvote)
+- **Nested Comments**: Parent-child relationship for threaded discussions
+- **Flairs**: Community-specific tags for categorizing posts
+
+## Known Challenges
+
+- **Public Access**: Currently routes are over-protected, limiting public access
+- **Performance**: Feed generation needs optimization for larger datasets
+- **Authentication UI**: Clerk elements need customization to match application design
+
+## Future Considerations
+
+- **AI Integration**: Plan to add various AI capabilities as outlined in project brief
+- **Monetization**: Long-term goal to enable monetization for expert contributors
+- **Scaling**: Will need to optimize for larger communities and datasets
+
+This document will be updated as new patterns and preferences are discovered during development.
