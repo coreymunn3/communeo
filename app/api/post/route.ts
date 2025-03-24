@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
   const communityId = searchParams.get("communityId");
   const cursor = searchParams.get("cursor") || undefined;
   const limitParam = searchParams.get("limit");
-  const limit = limitParam ? parseInt(limitParam) : 3;
+  const limit = limitParam ? parseInt(limitParam) : 10;
 
   // get the db user
   const dbUser = await getDbUser();

@@ -12,7 +12,7 @@ export async function GET(
     const { searchParams } = new URL(request.url);
     const cursor = searchParams.get("cursor") || undefined;
     const limitParam = searchParams.get("limit");
-    const limit = limitParam ? parseInt(limitParam) : 3;
+    const limit = limitParam ? parseInt(limitParam) : 10;
 
     // first, make sure the username is a real user
     const user = await getUserFromUsername(username);

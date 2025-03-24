@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 
 export async function getPostsForUser(
   userId?: string,
-  limit: number = 3,
+  limit: number = 10,
   cursor?: string
 ) {
   const posts = await prisma.post.findMany({
@@ -64,7 +64,7 @@ export async function getPostsForUser(
 
 export async function getCommunityPosts(
   communityId: string,
-  limit: number = 3,
+  limit: number = 10,
   cursor?: string
 ) {
   const posts = await prisma.post.findMany({
@@ -218,7 +218,7 @@ export async function getUserMembershipInCommunity(
 export async function getPostsFromSearchTerm(
   searchTerm: string,
   communityId?: string,
-  limit: number = 3,
+  limit: number = 10,
   cursor?: string
 ) {
   const posts = await prisma.post.findMany({
@@ -287,7 +287,7 @@ export async function getUserFromUsername(username: string) {
 
 export async function getPostsByUserId(
   userId: string,
-  limit: number = 3,
+  limit: number = 10,
   cursor?: string
 ) {
   const posts = await prisma.post.findMany({
