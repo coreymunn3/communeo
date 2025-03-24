@@ -5,8 +5,8 @@ import {
 } from "@/lib/queries";
 import { notFound } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import UserActivity from "@/components/UserActivity";
+import UserDashboard from "@/components/UserDashboard";
 
 interface UserPageProps {
   params: {
@@ -41,35 +41,42 @@ const UserPage = async ({ params }: UserPageProps) => {
     const initialUserComments = await getCommentsByUserId(user.id);
 
     return (
-      <div className="flex flex-col-reverse md:flex-row">
-        {/* left seciton - user info and posts/comments window */}
-        <div className="md:w-2/3 flex flex-col space-y-8">
-          {/* top - big user avatar and name */}
-          <div className="flex items-center space-x-4">
-            <div>
-              <Avatar className="h-32 w-32">
-                <AvatarImage src={user.avatar_url || ""} />
-                <AvatarFallback>{user.username}</AvatarFallback>
-              </Avatar>
-            </div>
-            <div className="flex flex-col space-y-2">
-              <p className="text-4xl font-semibold tracking-wide">
-                {user.username}
-              </p>
-              <p className="text-slate-500 dark:text-slate-400">{`/u/${user.username}`}</p>
-            </div>
+      <div className="flex flex-col">
+        {/* top - big user avatar and name */}
+        <div className="flex items-center space-x-4 mb-12">
+          <div>
+            <Avatar className="h-32 w-32">
+              <AvatarImage src={user.avatar_url || ""} />
+              <AvatarFallback>{user.username}</AvatarFallback>
+            </Avatar>
           </div>
-          {/* selecter to determine what you want to see from this user */}
-          <UserActivity
-            user={user}
-            initialPosts={initialUserPosts}
-            initialNextCursor={nextCursor}
-            initialHasMore={hasMore}
-            initialComments={initialUserComments}
-          />
+          <div className="flex flex-col space-y-2">
+            <p className="text-4xl font-semibold tracking-wide">
+              {user.username}
+            </p>
+            <p className="text-slate-500 dark:text-slate-400">{`/u/${user.username}`}</p>
+          </div>
+          {/* TO DO - eventually we want to display under the user's nametag and picture, an AI summary of the user's activity */}
         </div>
-        {/* right section - user stats */}
-        <div className="md:w-1/3 bg-slate-100 dark:bg-slate-900 rounded-lg p-4 text-slate-600 dark:text-slate-400"></div>
+
+        {/* left & right sections for user activity */}
+        <div className="flex flex-col-reverse md:flex-row">
+          {/* left seciton - user info and posts/comments window */}
+          <div className="md:w-2/3 flex flex-col">
+            {/* selecter to determine what you want to see from this user */}
+            <UserActivity
+              user={user}
+              initialPosts={initialUserPosts}
+              initialNextCursor={nextCursor}
+              initialHasMore={hasMore}
+              initialComments={initialUserComments}
+            />
+          </div>
+          {/* right section - user stats */}
+          <div className="md:w-1/3 self-start bg-slate-100 dark:bg-slate-900 rounded-lg text-slate-600 dark:text-slate-400">
+            <UserDashboard username={username} />
+          </div>
+        </div>
       </div>
     );
   }
