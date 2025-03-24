@@ -2,6 +2,12 @@ import { getUserFromUsername } from "@/lib/queries";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
+/**
+ * Get all posts the user has made
+ * @param request NextRequest
+ * @param param1 username
+ * @returns
+ */
 export async function GET(
   request: NextRequest,
   { params }: { params: { username: string } }

@@ -6,6 +6,12 @@ import {
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
+/**
+ * Get all comments that the user has made
+ * @param request NextRequest
+ * @param param1 username
+ * @returns the user's comments
+ */
 export async function GET(
   request: NextRequest,
   { params }: { params: { username: string } }
