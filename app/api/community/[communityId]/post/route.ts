@@ -15,6 +15,11 @@ export async function GET(
   auth.protect();
   try {
     const { communityId } = params;
+    const { searchParams } = new URL(request.url);
+    const cursor = searchParams.get("cursor") || undefined;
+    const limitParam = searchParams.get("limit");
+    const limit = limitParam ? parseInt(limitParam) : 3;
+
     // first make sure the community exists
     const community = getCommunityById(communityId);
     if (!community) {
@@ -24,9 +29,9 @@ export async function GET(
       );
     }
     // then fetch the posts
-    const posts = await getCommunityPosts(communityId);
+    const result = await getCommunityPosts(communityId, limit, cursor);
     // return posts as json response
-    return NextResponse.json(posts, { status: 200 });
+    return NextResponse.json(result, { status: 200 });
   } catch (error) {
     console.error(
       "Error fetching posts in /api/community/communityId/post",

@@ -41,7 +41,11 @@ const CommunityPage = async ({ params }: CommunityPageProps) => {
       },
     });
     // get the posts for this community
-    const communityPosts = await getCommunityPosts(community.id);
+    const {
+      posts: communityPosts,
+      nextCursor,
+      hasMore,
+    } = await getCommunityPosts(community.id);
 
     return (
       <div>
@@ -88,6 +92,8 @@ const CommunityPage = async ({ params }: CommunityPageProps) => {
             <Posts
               showAuthor={true}
               initialPosts={communityPosts}
+              initialNextCursor={nextCursor}
+              initialHasMore={hasMore}
               query={{
                 queryKey: ["community", community.id, "posts"],
                 url: `/api/community/${community.id}/post`,

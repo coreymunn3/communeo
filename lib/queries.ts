@@ -1,8 +1,12 @@
 "use server";
 import { prisma } from "@/lib/prisma";
 
-export async function getPostsForUser(userId?: string) {
-  return await prisma.post.findMany({
+export async function getPostsForUser(
+  userId?: string,
+  limit: number = 3,
+  cursor?: string
+) {
+  const posts = await prisma.post.findMany({
     where: {
       community: {
         members: {
@@ -38,11 +42,32 @@ export async function getPostsForUser(userId?: string) {
         },
       },
     ],
+    take: limit + 1, // Take one more to determine if there are more posts
+    ...(cursor && {
+      cursor: {
+        id: cursor,
+      },
+      skip: 1, // Skip the cursor
+    }),
   });
+
+  const hasMore = posts.length > limit;
+  const nextPosts = hasMore ? posts.slice(0, limit) : posts;
+  const nextCursor = hasMore ? posts[limit - 1].id : undefined;
+
+  return {
+    posts: nextPosts,
+    nextCursor,
+    hasMore,
+  };
 }
 
-export async function getCommunityPosts(communityId: string) {
-  return await prisma.post.findMany({
+export async function getCommunityPosts(
+  communityId: string,
+  limit: number = 3,
+  cursor?: string
+) {
+  const posts = await prisma.post.findMany({
     where: {
       community_id: communityId,
     },
@@ -67,7 +92,24 @@ export async function getCommunityPosts(communityId: string) {
     orderBy: {
       created_on: "desc",
     },
+    take: limit + 1, // Take one more to determine if there are more posts
+    ...(cursor && {
+      cursor: {
+        id: cursor,
+      },
+      skip: 1, // Skip the cursor
+    }),
   });
+
+  const hasMore = posts.length > limit;
+  const nextPosts = hasMore ? posts.slice(0, limit) : posts;
+  const nextCursor = hasMore ? posts[limit - 1].id : undefined;
+
+  return {
+    posts: nextPosts,
+    nextCursor,
+    hasMore,
+  };
 }
 
 export async function getPostById(postId: string) {
@@ -175,9 +217,11 @@ export async function getUserMembershipInCommunity(
 
 export async function getPostsFromSearchTerm(
   searchTerm: string,
-  communityId?: string
+  communityId?: string,
+  limit: number = 3,
+  cursor?: string
 ) {
-  return await prisma.post.findMany({
+  const posts = await prisma.post.findMany({
     where: {
       OR: [
         { title: { contains: searchTerm, mode: "insensitive" } },
@@ -206,7 +250,24 @@ export async function getPostsFromSearchTerm(
     orderBy: {
       created_on: "desc",
     },
+    take: limit + 1, // Take one more to determine if there are more posts
+    ...(cursor && {
+      cursor: {
+        id: cursor,
+      },
+      skip: 1, // Skip the cursor
+    }),
   });
+
+  const hasMore = posts.length > limit;
+  const nextPosts = hasMore ? posts.slice(0, limit) : posts;
+  const nextCursor = hasMore ? posts[limit - 1].id : undefined;
+
+  return {
+    posts: nextPosts,
+    nextCursor,
+    hasMore,
+  };
 }
 
 export async function getUserFromUsername(username: string) {
@@ -224,8 +285,12 @@ export async function getUserFromUsername(username: string) {
   });
 }
 
-export async function getPostsByUserId(userId: string) {
-  return await prisma.post.findMany({
+export async function getPostsByUserId(
+  userId: string,
+  limit: number = 3,
+  cursor?: string
+) {
+  const posts = await prisma.post.findMany({
     where: {
       user_id: userId,
     },
@@ -247,7 +312,27 @@ export async function getPostsByUserId(userId: string) {
       },
       flair: true,
     },
+    orderBy: {
+      created_on: "desc",
+    },
+    take: limit + 1, // Take one more to determine if there are more posts
+    ...(cursor && {
+      cursor: {
+        id: cursor,
+      },
+      skip: 1, // Skip the cursor
+    }),
   });
+
+  const hasMore = posts.length > limit;
+  const nextPosts = hasMore ? posts.slice(0, limit) : posts;
+  const nextCursor = hasMore ? posts[limit - 1].id : undefined;
+
+  return {
+    posts: nextPosts,
+    nextCursor,
+    hasMore,
+  };
 }
 
 export async function getCommentsByUserId(userId: string) {

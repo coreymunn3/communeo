@@ -23,6 +23,9 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const q = searchParams.get("q");
   const communityId = searchParams.get("communityId");
+  const cursor = searchParams.get("cursor") || undefined;
+  const limitParam = searchParams.get("limit");
+  const limit = limitParam ? parseInt(limitParam) : 3;
 
   // get the db user
   const dbUser = await getDbUser();
@@ -42,8 +45,13 @@ export async function GET(request: NextRequest) {
           );
         }
         // get posts
-        const posts = await getPostsFromSearchTerm(q, communityId);
-        return NextResponse.json(posts, { status: 200 });
+        const result = await getPostsFromSearchTerm(
+          q,
+          communityId,
+          limit,
+          cursor
+        );
+        return NextResponse.json(result, { status: 200 });
       } catch (error) {
         console.error(
           `Error fetching posts from search term in /api/post?q=${q}&community=${communityId}`,
@@ -58,8 +66,13 @@ export async function GET(request: NextRequest) {
       }
     } else {
       try {
-        const posts = await getPostsFromSearchTerm(q);
-        return NextResponse.json(posts, { status: 200 });
+        const result = await getPostsFromSearchTerm(
+          q,
+          undefined,
+          limit,
+          cursor
+        );
+        return NextResponse.json(result, { status: 200 });
       } catch (error) {
         console.error(
           `Error fetching posts from search term in /api/post?q=${q}`,
@@ -77,8 +90,8 @@ export async function GET(request: NextRequest) {
    * Otherwise, get all posts relevant to the user's subscriptions
    */
   try {
-    const posts = await getPostsForUser(dbUser.id);
-    return NextResponse.json(posts, { status: 200 });
+    const result = await getPostsForUser(dbUser.id, limit, cursor);
+    return NextResponse.json(result, { status: 200 });
   } catch (error) {
     console.error("Error fetching posts in /api/post ", error);
     return NextResponse.json(

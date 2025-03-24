@@ -16,10 +16,14 @@ type ActivityType = {
 const UserActivity = ({
   user,
   initialPosts,
+  initialNextCursor,
+  initialHasMore,
   initialComments,
 }: {
   user: AppUser;
   initialPosts: CommunityPost[];
+  initialNextCursor?: string;
+  initialHasMore?: boolean;
   initialComments: Comment[];
 }) => {
   const activityTypes: ActivityType[] = [
@@ -30,6 +34,8 @@ const UserActivity = ({
         <Posts
           showAuthor={true}
           initialPosts={initialPosts}
+          initialNextCursor={initialNextCursor}
+          initialHasMore={initialHasMore}
           query={{
             queryKey: ["user", user.username, "posts"],
             url: `/api/user/${user.username}/post`,

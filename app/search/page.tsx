@@ -37,10 +37,15 @@ export default async function Search({ searchParams }: SearchPageProps) {
       );
     }
     // if community exists, search posts within it, and pass the new query param to the client side fetch url
-    const posts = await getPostsFromSearchTerm(q, community.id);
+    const { posts, nextCursor, hasMore } = await getPostsFromSearchTerm(
+      q,
+      community.id
+    );
     return (
       <Posts
         initialPosts={posts}
+        initialNextCursor={nextCursor}
+        initialHasMore={hasMore}
         query={{
           queryKey: ["posts", communitySlug, q],
           url: `/api/post?communityId=${community.id}&q=${q}`,
@@ -49,10 +54,12 @@ export default async function Search({ searchParams }: SearchPageProps) {
     );
   } else {
     // if no community slug is passed, just search all posts
-    const posts = await getPostsFromSearchTerm(q);
+    const { posts, nextCursor, hasMore } = await getPostsFromSearchTerm(q);
     return (
       <Posts
         initialPosts={posts}
+        initialNextCursor={nextCursor}
+        initialHasMore={hasMore}
         query={{
           queryKey: ["posts", q],
           url: `/api/post?q=${q}`,

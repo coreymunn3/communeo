@@ -33,7 +33,11 @@ const UserPage = async ({ params }: UserPageProps) => {
   if (user) {
     console.log(user);
     // get the user's initial posts and comments
-    const initialUserPosts = await getPostsByUserId(user.id);
+    const {
+      posts: initialUserPosts,
+      nextCursor,
+      hasMore,
+    } = await getPostsByUserId(user.id);
     const initialUserComments = await getCommentsByUserId(user.id);
 
     return (
@@ -59,6 +63,8 @@ const UserPage = async ({ params }: UserPageProps) => {
           <UserActivity
             user={user}
             initialPosts={initialUserPosts}
+            initialNextCursor={nextCursor}
+            initialHasMore={hasMore}
             initialComments={initialUserComments}
           />
         </div>

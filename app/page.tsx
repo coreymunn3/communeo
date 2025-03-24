@@ -9,17 +9,24 @@ import { auth } from "@clerk/nextjs/server";
 export default async function Home() {
   const { userId } = await auth();
   let feedPosts: CommunityPost[] = [];
+  let nextCursor: string | undefined = undefined;
+  let hasMore = false;
+
   // if user is logged in, fetch list of posts from their communities
   if (userId) {
     const dbUser = await getDbUser();
-    feedPosts = await getPostsForUser(dbUser.id);
+    const {
+      posts: feedPosts,
+      nextCursor,
+      hasMore,
+    } = await getPostsForUser(dbUser.id);
   } else {
     // fetch list of highest scoring posts from the last day or so, from all communities
     /**
      * TO DO - while the query works, most of the apps functionality is being protected
      * by the auth.protec and relies on the dbUser to complete. This needs work, probably across the entire app
      */
-    feedPosts = await prisma.post.findMany({
+    const posts = await prisma.post.findMany({
       include: {
         author: {
           select: {
@@ -47,6 +54,7 @@ export default async function Home() {
       ],
       take: 10,
     });
+    feedPosts = posts;
   }
 
   return (
@@ -56,6 +64,8 @@ export default async function Home() {
       </div>
       <Posts
         initialPosts={feedPosts}
+        initialNextCursor={nextCursor}
+        initialHasMore={hasMore}
         query={{
           queryKey: ["posts", "feed"],
           url: `/api/post`,

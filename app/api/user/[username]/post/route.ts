@@ -9,6 +9,11 @@ export async function GET(
   auth.protect();
   try {
     const { username } = params;
+    const { searchParams } = new URL(request.url);
+    const cursor = searchParams.get("cursor") || undefined;
+    const limitParam = searchParams.get("limit");
+    const limit = limitParam ? parseInt(limitParam) : 3;
+
     // first, make sure the username is a real user
     const user = await getUserFromUsername(username);
     if (!user) {
@@ -18,8 +23,8 @@ export async function GET(
       );
     }
     // then, get the posts
-    const userPosts = await getPostsByUserId(user.id);
-    return NextResponse.json(userPosts, { status: 200 });
+    const result = await getPostsByUserId(user.id, limit, cursor);
+    return NextResponse.json(result, { status: 200 });
   } catch (error) {
     console.error(`Error fetching posts for user ${params.username}`, error);
     return NextResponse.json(
