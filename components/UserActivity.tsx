@@ -1,9 +1,7 @@
 "use client";
 
-import { act, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AppUser, Comment, CommunityPost } from "@/lib/types";
-import { useQuery } from "@tanstack/react-query";
 import Posts from "./Posts";
 import Comments from "./Comments";
 
@@ -58,20 +56,19 @@ const UserActivity = ({
       ),
     },
   ];
-  const [activityType, setActityType] = useState<ActivityType>(
-    activityTypes[0]
-  );
 
   return (
     <div>
-      <Tabs defaultValue={activityType.id} className="w-full">
+      <Tabs defaultValue={activityTypes[0].id} className="w-full">
         <TabsList>
           {activityTypes.map((activity) => (
-            <TabsTrigger value={activity.id}>{activity.name}</TabsTrigger>
+            <TabsTrigger key={activity.id} value={activity.id}>
+              {activity.name}
+            </TabsTrigger>
           ))}
         </TabsList>
         {activityTypes.map((activity) => (
-          <TabsContent value={activity.id}>
+          <TabsContent key={activity.id} value={activity.id}>
             <div className="p-2">{activity.component}</div>
           </TabsContent>
         ))}
