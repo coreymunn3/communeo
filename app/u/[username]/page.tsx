@@ -73,7 +73,7 @@ const UserPage = async ({ params }: UserPageProps) => {
             />
           </div>
           {/* right section - user stats */}
-          <div className="md:w-1/3 self-start bg-slate-100 dark:bg-slate-900 rounded-lg text-slate-600 dark:text-slate-400">
+          <div className="md:w-1/3 md:self-start mb-4 bg-slate-100 dark:bg-slate-900 rounded-lg text-slate-600 dark:text-slate-400">
             <UserDashboard username={username} />
           </div>
         </div>

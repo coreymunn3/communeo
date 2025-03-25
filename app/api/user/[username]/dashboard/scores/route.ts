@@ -8,10 +8,8 @@ export async function GET(
   { params }: { params: { username: string } }
 ) {
   auth.protect();
-  console.log("HELLOOOOO");
   try {
     const { username } = params;
-    console.log(username);
     // first, make sure the username is a real user
     const user = await getUserFromUsername(username);
     if (!user) {

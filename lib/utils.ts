@@ -81,3 +81,22 @@ export const buildCommentTree = (comments: Comment[]) => {
   });
   return commentTree;
 };
+
+/**
+ * Formats a number to relevant units
+ * @param num
+ * @returns a string of the formatted number
+ */
+export function formatNumber(num: number): string {
+  if (num >= 1000000) {
+    // Format for millions (e.g., 1.23M)
+    const millions = num / 1000000;
+    return millions.toFixed(millions < 10 ? 2 : 1) + "M";
+  } else if (num >= 10000) {
+    // Format for thousands (e.g., 12.3k)
+    const thousands = num / 1000;
+    return thousands.toFixed(1) + "k";
+  }
+  // Return plain number for values under 10k
+  return num.toString();
+}
