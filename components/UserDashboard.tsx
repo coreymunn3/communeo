@@ -34,7 +34,7 @@ interface UserScores {
   postScore: number;
 }
 
-interface UserPosts {
+interface UserPostsAndComments {
   total: number;
   thisMonth: number;
   thisWeek: number;
@@ -80,10 +80,18 @@ const UserDashboard = ({ username }: { username: string }) => {
     },
   });
 
-  const userPosts = useQuery<UserPosts>({
+  const userPosts = useQuery<UserPostsAndComments>({
     queryKey: ["user", username, "dashboard", "posts"],
     queryFn: async () => {
       const res = await fetch(`/api/user/${username}/dashboard/posts`);
+      return res.json();
+    },
+  });
+
+  const userComments = useQuery<UserPostsAndComments>({
+    queryKey: ["user", username, "dashboard", "comments"],
+    queryFn: async () => {
+      const res = await fetch(`/api/user/${username}/dashboard/comments`);
       return res.json();
     },
   });
@@ -99,16 +107,25 @@ const UserDashboard = ({ username }: { username: string }) => {
             <WidgetLoadingSkeleton />
           ) : (
             <WidgetWrapper className="pb-2">
-              <p>Score on activity</p>
+              <p className="font-semibold">Score on activity</p>
               <div className="w-full flex justify-evenly flex-row md:flex-col md:space-y-2 items-center">
-                <p className="font-bold">
-                  Total: {formatNumber(userScores.data!.totalScore)}
+                <p>
+                  Total:{" "}
+                  <span className="font-semibold">
+                    {formatNumber(userScores.data!.totalScore)}
+                  </span>
                 </p>
-                <p className="font-bold">
-                  Posts: {formatNumber(userScores.data!.postScore)}
+                <p>
+                  Posts:{" "}
+                  <span className="font-semibold">
+                    {formatNumber(userScores.data!.postScore)}
+                  </span>
                 </p>
-                <p className="font-bold">
-                  Comments: {formatNumber(userScores.data!.commentScore)}
+                <p>
+                  Comments:{" "}
+                  <span className="font-semibold">
+                    {formatNumber(userScores.data!.commentScore)}
+                  </span>
                 </p>
               </div>
             </WidgetWrapper>
@@ -120,16 +137,55 @@ const UserDashboard = ({ username }: { username: string }) => {
             <WidgetLoadingSkeleton />
           ) : (
             <WidgetWrapper>
-              <p>Posts</p>
+              <p className="font-semibold">Number of Posts</p>
               <div className="w-full flex justify-evenly flex-row md:flex-col md:space-y-2 items-center">
-                <p className="font-bold">
-                  Total: {formatNumber(userPosts.data!.total)}
+                <p>
+                  Total:{" "}
+                  <span className="font-semibold">
+                    {formatNumber(userPosts.data!.total)}
+                  </span>
                 </p>
-                <p className="font-bold">
-                  This Week: {formatNumber(userPosts.data!.thisWeek)}
+                <p>
+                  This Week:{" "}
+                  <span className="font-semibold">
+                    {formatNumber(userPosts.data!.thisWeek)}
+                  </span>
                 </p>
-                <p className="font-bold">
-                  This Month: {formatNumber(userPosts.data!.thisMonth)}
+                <p>
+                  This Month:{" "}
+                  <span className="font-semibold">
+                    {formatNumber(userPosts.data!.thisMonth)}
+                  </span>
+                </p>
+              </div>
+            </WidgetWrapper>
+          )}
+        </div>
+
+        <div>
+          {userComments.isLoading ? (
+            <WidgetLoadingSkeleton />
+          ) : (
+            <WidgetWrapper>
+              <p className="font-semibold">Number of Comments</p>
+              <div className="w-full flex justify-evenly flex-row md:flex-col md:space-y-2 items-center">
+                <p>
+                  Total:{" "}
+                  <span className="font-semibold">
+                    {formatNumber(userComments.data!.total)}
+                  </span>
+                </p>
+                <p>
+                  This Week:{" "}
+                  <span className="font-semibold">
+                    {formatNumber(userComments.data!.thisWeek)}
+                  </span>
+                </p>
+                <p>
+                  This Month:{" "}
+                  <span className="font-semibold">
+                    {formatNumber(userComments.data!.thisMonth)}
+                  </span>
                 </p>
               </div>
             </WidgetWrapper>
