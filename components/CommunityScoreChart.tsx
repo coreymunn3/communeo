@@ -62,12 +62,15 @@ const CommunityScoreChart = ({ data }: { data: UserCommunityScore[] }) => {
         barCategoryGap={5}
       >
         {/* Hide XAxis but keep it for functionality */}
-        <XAxis type="number" hide={true} />
+        <XAxis type="number" hide={true} axisLine={false} tickLine={false} />
         <YAxis
           type="category"
           dataKey="communityName"
           width={50}
           tick={{ fontSize: 12, fill: "#64748b" }}
+          axisLine={false}
+          tickLine={false}
+          tickMargin={0}
         />
         <Tooltip content={<CustomTooltip />} />
         {/* Removed Legend for a cleaner look */}
