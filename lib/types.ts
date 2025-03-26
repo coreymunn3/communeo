@@ -219,3 +219,11 @@ export type SortOption = {
   label: string;
   value: string;
 };
+
+export type UserCommunityScore = {
+  communityName: string;
+  communitySlug: string;
+  postScore: number;
+  commentScore: number;
+  totalScore: number;
+};
