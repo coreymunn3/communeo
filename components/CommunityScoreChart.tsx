@@ -58,7 +58,7 @@ const CommunityScoreChart = ({ data }: { data: UserCommunityScore[] }) => {
       <BarChart
         data={limitedData}
         layout="vertical"
-        margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
+        margin={{ top: 5, right: 10, left: 10, bottom: 5 }}
         barCategoryGap={5}
       >
         {/* Hide XAxis but keep it for functionality */}
