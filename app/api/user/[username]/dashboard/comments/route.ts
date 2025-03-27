@@ -60,7 +60,7 @@ export async function GET(
     console.error("Error fetching the comments for user dashboard", error);
     return NextResponse.json(
       {
-        error: `Failed to fetch comments for ${params.username}`,
+        error: `Failed to fetch comment activity for ${params.username}`,
       },
       { status: 500 }
     );

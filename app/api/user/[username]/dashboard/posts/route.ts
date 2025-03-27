@@ -59,7 +59,7 @@ export async function GET(
     console.error("Error fetching the posts for user dashboard", error);
     return NextResponse.json(
       {
-        error: `Failed to fetch posts for ${params.username}`,
+        error: `Failed to fetch post activity for ${params.username}`,
       },
       { status: 500 }
     );
