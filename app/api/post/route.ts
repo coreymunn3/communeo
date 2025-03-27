@@ -8,14 +8,63 @@ import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
 /**
- * This route handler is a multi-purpose route to handle getting posts for various use cases
- * 1) posts to populate the user's feed
- * 2) posts that are search results from a search term
- *
- * By default, with no other parameters, this gets all posts that the logged-in user should see on their feed
- * additional utility is achieved through passing url search params
- * @param request
- * @returns
+ * @swagger
+ * /api/post:
+ *   get:
+ *     summary: Retrieve posts for user feed or search results
+ *     description: |
+ *       Multi-purpose endpoint that serves different functions based on query parameters:
+ *       1. With no parameters - Returns posts for the user's feed based on their community memberships
+ *       2. With 'q' parameter - Returns search results matching the query term
+ *       3. With 'q' and 'communityId' parameters - Returns search results within a specific community
+ *     tags: [Posts]
+ *     security:
+ *       - clerkAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: q
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: Search term to filter posts
+ *       - in: query
+ *         name: communityId
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: Community ID to limit search results to a specific community
+ *       - in: query
+ *         name: cursor
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: Cursor for pagination (ID of the last post in previous page)
+ *       - in: query
+ *         name: limit
+ *         required: false
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of posts to return per page
+ *     responses:
+ *       200:
+ *         description: List of posts (either from feed or search results)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/PostsResponse'
+ *       404:
+ *         description: Community not found (when communityId is provided)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 export async function GET(request: NextRequest) {
   auth.protect();

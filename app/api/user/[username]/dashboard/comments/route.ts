@@ -4,6 +4,46 @@ import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import { DateTime } from "luxon";
 
+/**
+ * @swagger
+ * /api/user/{username}/dashboard/comments:
+ *   get:
+ *     summary: Get comment activity metrics for user dashboard
+ *     description: |
+ *       Retrieves comment activity metrics for a user's dashboard, including:
+ *       - Total number of comments created by the user
+ *       - Number of comments created this month
+ *       - Number of comments created this week
+ *     tags: [Users, Comments]
+ *     security:
+ *       - clerkAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: username
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The username of the user
+ *     responses:
+ *       200:
+ *         description: Comment activity metrics for the user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UserDashboardComments'
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 export async function GET(
   request: NextRequest,
   { params }: { params: { username: string } }

@@ -5,6 +5,49 @@ import { NextRequest, NextResponse } from "next/server";
 import { buildCommentTree } from "@/lib/utils";
 import { getComments, getPostById } from "@/lib/queries";
 
+/**
+ * @swagger
+ * /api/post/{postId}/comment:
+ *   get:
+ *     summary: Retrieve comments for a post
+ *     description: Fetches all comments for a specific post and organizes them into a nested tree structure
+ *     tags: [Posts, Comments]
+ *     security:
+ *       - clerkAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: postId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The unique identifier of the post
+ *       - in: query
+ *         name: sort
+ *         required: false
+ *         schema:
+ *           type: string
+ *           enum: [newest, oldest, score]
+ *         description: Sort order for comments (not yet implemented)
+ *     responses:
+ *       200:
+ *         description: Nested tree of comments for the post
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/CommentTree'
+ *       404:
+ *         description: Post not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 export async function GET(
   request: NextRequest,
   { params }: { params: { postId: string } }

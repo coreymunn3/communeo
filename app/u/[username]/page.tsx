@@ -7,6 +7,7 @@ import { notFound } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import UserActivity from "@/components/UserActivity";
 import UserDashboard from "@/components/UserDashboard";
+import { DateTime } from "luxon";
 
 interface UserPageProps {
   params: {
@@ -55,6 +56,9 @@ const UserPage = async ({ params }: UserPageProps) => {
               {user.username}
             </p>
             <p className="text-slate-500 dark:text-slate-400">{`/u/${user.username}`}</p>
+            <p className="text-slate-500 dark:text-slate-400 text-sm">{`Created on ${DateTime.fromJSDate(
+              user.created_on
+            ).toFormat("MMM dd, yyyy")}`}</p>
           </div>
           {/* TO DO - eventually we want to display under the user's nametag and picture, an AI summary of the user's activity */}
         </div>
@@ -73,7 +77,7 @@ const UserPage = async ({ params }: UserPageProps) => {
             />
           </div>
           {/* right section - user stats */}
-          <div className="md:w-1/3 md:self-start mb-4 bg-slate-100 dark:bg-slate-900 rounded-lg text-slate-600 dark:text-slate-400">
+          <div className="md:w-1/3 md:self-start mb-4 md:mt-12 bg-slate-100 dark:bg-slate-900 rounded-lg text-slate-600 dark:text-slate-400">
             <UserDashboard username={username} />
           </div>
         </div>

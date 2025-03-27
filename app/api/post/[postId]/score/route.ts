@@ -3,10 +3,34 @@ import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
 /**
- * This api route returns the total score (upvotes minus downvotes) for a post
- * @param request
- * @param param1 the postId
- * @returns
+ * @swagger
+ * /api/post/{postId}/score:
+ *   get:
+ *     summary: Get score for a post
+ *     description: Returns the total score (upvotes minus downvotes) for a specific post
+ *     tags: [Posts]
+ *     security:
+ *       - clerkAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: postId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The unique identifier of the post
+ *     responses:
+ *       200:
+ *         description: Score for the post
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Score'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 export async function GET(
   request: NextRequest,

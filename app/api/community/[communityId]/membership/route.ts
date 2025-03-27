@@ -3,6 +3,42 @@ import { getCommunityById, getUserMembershipInCommunity } from "@/lib/queries";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
+/**
+ * @swagger
+ * /api/community/{communityId}/membership:
+ *   get:
+ *     summary: Check user's membership status in a community
+ *     description: Determines if the authenticated user is a member, moderator, or founder of the specified community
+ *     tags: [Communities]
+ *     security:
+ *       - clerkAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: communityId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The unique identifier of the community
+ *     responses:
+ *       200:
+ *         description: User's membership status in the community
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/MembershipResponse'
+ *       404:
+ *         description: Community not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 export async function GET(
   request: NextRequest,
   { params }: { params: { communityId: string } }

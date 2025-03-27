@@ -7,10 +7,42 @@ import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
 /**
- * Get all comments that the user has made
- * @param request NextRequest
- * @param param1 username
- * @returns the user's comments
+ * @swagger
+ * /api/user/{username}/comment:
+ *   get:
+ *     summary: Retrieve comments created by a user
+ *     description: Fetches all comments created by a specific user identified by username
+ *     tags: [Users, Comments]
+ *     security:
+ *       - clerkAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: username
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The username of the user whose comments to retrieve
+ *     responses:
+ *       200:
+ *         description: List of comments created by the user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Comment'
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 export async function GET(
   request: NextRequest,

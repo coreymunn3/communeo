@@ -5,6 +5,30 @@ import { ClerkWebhookEvent } from "@/lib/types";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
+/**
+ * @swagger
+ * /api/webhooks:
+ *   post:
+ *     summary: Handle Clerk authentication webhooks
+ *     description: |
+ *       Processes webhooks from Clerk authentication service to synchronize user data with the application database.
+ *       Handles user creation, updates, and deletion events.
+ *     tags: [Utilities]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             description: Clerk webhook payload
+ *     responses:
+ *       200:
+ *         description: Webhook processed successfully
+ *       400:
+ *         description: Invalid webhook payload or missing headers
+ *       500:
+ *         description: Server error during webhook processing
+ */
 export async function POST(req: Request) {
   const CLERK_WEBHOOK_SIGNING_SECRET = process.env.CLERK_WEBHOOK_SIGNING_SECRET;
 

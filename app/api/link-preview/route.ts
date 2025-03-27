@@ -3,6 +3,38 @@ import puppeteer from "puppeteer";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 
+/**
+ * @swagger
+ * /api/link-preview:
+ *   get:
+ *     summary: Generate link preview for a URL
+ *     description: |
+ *       Fetches metadata for a URL to generate a link preview, including title, description, and image.
+ *       Has special handling for Twitter/X and Facebook Marketplace links.
+ *     tags: [Utilities]
+ *     security:
+ *       - clerkAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: url
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The URL to generate a preview for
+ *     responses:
+ *       200:
+ *         description: Link preview metadata
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/LinkPreview'
+ *       400:
+ *         description: Missing URL parameter
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 export async function GET(request: NextRequest) {
   auth.protect();
   const { searchParams } = new URL(request.url);

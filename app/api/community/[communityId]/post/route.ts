@@ -3,10 +3,53 @@ import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
 /**
- * This endpoint fetches the posts in a community
- * @param request the NextRequest object
- * @param param1 community ID string
- * @returns
+ * @swagger
+ * /api/community/{communityId}/post:
+ *   get:
+ *     summary: Retrieve posts in a community
+ *     description: Fetches paginated posts belonging to a specific community
+ *     tags: [Communities, Posts]
+ *     security:
+ *       - clerkAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: communityId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The unique identifier of the community
+ *       - in: query
+ *         name: cursor
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: Cursor for pagination (ID of the last post in previous page)
+ *       - in: query
+ *         name: limit
+ *         required: false
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of posts to return per page
+ *     responses:
+ *       200:
+ *         description: List of posts in the community
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/PostsResponse'
+ *       404:
+ *         description: Community not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 export async function GET(
   request: NextRequest,

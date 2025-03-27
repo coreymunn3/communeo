@@ -4,6 +4,46 @@ import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import { DateTime } from "luxon";
 
+/**
+ * @swagger
+ * /api/user/{username}/dashboard/posts:
+ *   get:
+ *     summary: Get post activity metrics for user dashboard
+ *     description: |
+ *       Retrieves post activity metrics for a user's dashboard, including:
+ *       - Total number of posts created by the user
+ *       - Number of posts created this month
+ *       - Number of posts created this week
+ *     tags: [Users, Posts]
+ *     security:
+ *       - clerkAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: username
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The username of the user
+ *     responses:
+ *       200:
+ *         description: Post activity metrics for the user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UserDashboardPosts'
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 export async function GET(
   request: NextRequest,
   { params }: { params: { username: string } }

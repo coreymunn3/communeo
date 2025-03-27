@@ -3,6 +3,46 @@ import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+/**
+ * @swagger
+ * /api/user/{username}/dashboard/communities:
+ *   get:
+ *     summary: Get community activity for user dashboard
+ *     description: |
+ *       Retrieves community-related metrics for a user's dashboard, including:
+ *       - Total number of communities the user is a member of
+ *       - List of communities where the user has activity (posts or comments)
+ *       - Score breakdown for each community (post scores, comment scores, total scores)
+ *     tags: [Users, Communities]
+ *     security:
+ *       - clerkAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: username
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The username of the user
+ *     responses:
+ *       200:
+ *         description: Community activity metrics for the user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UserDashboardCommunities'
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 export async function GET(
   request: NextRequest,
   { params }: { params: { username: string } }

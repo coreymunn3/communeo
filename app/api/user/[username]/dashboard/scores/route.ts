@@ -3,6 +3,46 @@ import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+/**
+ * @swagger
+ * /api/user/{username}/dashboard/scores:
+ *   get:
+ *     summary: Get score metrics for user dashboard
+ *     description: |
+ *       Retrieves score metrics for a user's dashboard, including:
+ *       - Total score across all posts and comments
+ *       - Score from posts only
+ *       - Score from comments only
+ *     tags: [Users]
+ *     security:
+ *       - clerkAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: username
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The username of the user
+ *     responses:
+ *       200:
+ *         description: Score metrics for the user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UserDashboardScores'
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 export async function GET(
   request: NextRequest,
   { params }: { params: { username: string } }
