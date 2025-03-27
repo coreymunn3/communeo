@@ -91,6 +91,15 @@ const UserDashboard = ({ username }: { username: string }) => {
         <div>
           {userScores.isLoading ? (
             <WidgetLoadingSkeleton />
+          ) : userScores.isError ? (
+            <WidgetWrapper className="pb-2">
+              <p className="font-semibold text-red-500">
+                Failed to load score data
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Please try again later
+              </p>
+            </WidgetWrapper>
           ) : (
             userScores.isSuccess && (
               <WidgetWrapper className="pb-2">
@@ -123,6 +132,15 @@ const UserDashboard = ({ username }: { username: string }) => {
         <div>
           {userPosts.isLoading ? (
             <WidgetLoadingSkeleton />
+          ) : userPosts.isError ? (
+            <WidgetWrapper>
+              <p className="font-semibold text-red-500">
+                Failed to load post data
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Please try again later
+              </p>
+            </WidgetWrapper>
           ) : (
             userPosts.isSuccess && (
               <WidgetWrapper>
@@ -155,6 +173,15 @@ const UserDashboard = ({ username }: { username: string }) => {
         <div>
           {userComments.isLoading ? (
             <WidgetLoadingSkeleton />
+          ) : userComments.isError ? (
+            <WidgetWrapper>
+              <p className="font-semibold text-red-500">
+                Failed to load comment data
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Please try again later
+              </p>
+            </WidgetWrapper>
           ) : (
             userComments.isSuccess && (
               <WidgetWrapper>
@@ -187,6 +214,15 @@ const UserDashboard = ({ username }: { username: string }) => {
         <div>
           {userCommunityData.isLoading ? (
             <WidgetLoadingSkeleton className="h-64" />
+          ) : userCommunityData.isError ? (
+            <WidgetWrapper>
+              <p className="font-semibold text-red-500">
+                Failed to load community data
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Please try again later
+              </p>
+            </WidgetWrapper>
           ) : userCommunityData.isSuccess &&
             userCommunityData.data.scores.length > 0 ? (
             <WidgetWrapper className="p-3 h-auto">

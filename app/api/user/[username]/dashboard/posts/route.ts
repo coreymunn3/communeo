@@ -55,5 +55,13 @@ export async function GET(
       },
       { status: 200 }
     );
-  } catch (error) {}
+  } catch (error) {
+    console.error("Error fetching the posts for user dashboard", error);
+    return NextResponse.json(
+      {
+        error: `Failed to fetch posts for ${params.username}`,
+      },
+      { status: 500 }
+    );
+  }
 }

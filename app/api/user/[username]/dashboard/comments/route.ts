@@ -56,5 +56,13 @@ export async function GET(
       },
       { status: 200 }
     );
-  } catch (error) {}
+  } catch (error) {
+    console.error("Error fetching the comments for user dashboard", error);
+    return NextResponse.json(
+      {
+        error: `Failed to fetch comments for ${params.username}`,
+      },
+      { status: 500 }
+    );
+  }
 }
