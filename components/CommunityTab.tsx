@@ -9,16 +9,31 @@ import {
 } from "@/components/ui/tooltip";
 import Link from "next/link";
 import { CommunityWithSubs } from "@/lib/types";
-import { capitalizeEachWord } from "@/lib/utils";
+import { capitalizeEachWord, cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { GavelIcon, TelescopeIcon } from "lucide-react";
 
-const CommunityTab = ({ community }: { community: CommunityWithSubs }) => {
+const CommunityTab = ({
+  community,
+  className,
+  showFounderBadge = true,
+  showModeratorBadge = true,
+}: {
+  community: CommunityWithSubs;
+  className?: string;
+  showFounderBadge?: boolean;
+  showModeratorBadge?: boolean;
+}) => {
   return (
     <TooltipProvider>
-      <div className="p-2 flex items-center justify-between rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-300">
+      <div
+        className={cn(
+          `p-2 flex items-center justify-between rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-300`,
+          className
+        )}
+      >
         {/* name and icon */}
-        <div className="flex space-x-2 items-center">
+        <div className="flex flex-1 space-x-2 items-center">
           <Avatar className="h-8 w-8">
             <AvatarImage src={community.icon || ""} />
             <AvatarFallback>{community.slug}</AvatarFallback>
@@ -29,7 +44,7 @@ const CommunityTab = ({ community }: { community: CommunityWithSubs }) => {
         </div>
         {/* badges for founder or moderator */}
         <div className="flex space-x-2">
-          {community.isFounder && (
+          {showFounderBadge && community.isFounder && (
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button size="icon" variant={"ghost"}>
@@ -41,7 +56,7 @@ const CommunityTab = ({ community }: { community: CommunityWithSubs }) => {
               </TooltipContent>
             </Tooltip>
           )}
-          {community.isModerator && (
+          {showModeratorBadge && community.isModerator && (
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button size="icon" variant={"ghost"}>

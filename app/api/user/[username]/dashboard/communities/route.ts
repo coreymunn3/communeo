@@ -1,4 +1,4 @@
-import { getUserFromUsername } from "@/lib/queries";
+import { getUserCommunities, getUserFromUsername } from "@/lib/queries";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
@@ -25,7 +25,7 @@ import { prisma } from "@/lib/prisma";
  *         description: The username of the user
  *     responses:
  *       200:
- *         description: Community activity metrics for the user
+ *         description: Community activity metrics for the user as well as memberships, founding, moderation
  *         content:
  *           application/json:
  *             schema:
@@ -58,13 +58,20 @@ export async function GET(
         { status: 404 }
       );
     }
-    // Get the number of community memberships for this user
-    const memberships = await prisma.community_member.aggregate({
-      where: {
-        user_id: user.id,
-      },
-      _count: true,
-    });
+
+    // get all communities where the user is a memeber, and include if the user is a founder or moderator there
+    const userCommunities = await getUserCommunities(user.id);
+    console.log(userCommunities);
+    const memberships = userCommunities.map((c) => ({
+      id: c.id,
+      name: c.name,
+      description: c.description,
+      slug: c.slug,
+      icon: c.icon,
+      isFounder: c.founder_id === user.id,
+      isModerator: c.moderator_id === user.id,
+      members: c._count.members,
+    }));
 
     // Get all communities where the user has posts or comments
     const communitiesWithActivity = await prisma.community.findMany({
@@ -145,7 +152,7 @@ export async function GET(
 
     return NextResponse.json(
       {
-        memberships: memberships._count,
+        memberships,
         scores: filteredAndSortedCommunityScores,
       },
       { status: 200 }

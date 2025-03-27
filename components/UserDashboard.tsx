@@ -1,11 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { Fragment } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { formatNumber } from "@/lib/utils";
 import { Skeleton } from "./ui/skeleton";
-import { UserCommunityScore } from "@/lib/types";
+import { CommunityWithSubs, UserCommunityScore } from "@/lib/types";
 import CommunityScoreChart from "./CommunityScoreChart";
+import CommunityTab from "./CommunityTab";
 
 interface UserScores {
   totalScore: number;
@@ -20,7 +21,7 @@ interface UserPostsAndComments {
 }
 
 interface UserCommunityData {
-  memberships: number;
+  memberships: CommunityWithSubs[];
   scores: UserCommunityScore[];
 }
 
@@ -80,6 +81,14 @@ const UserDashboard = ({ username }: { username: string }) => {
       return res.json();
     },
   });
+
+  // get the communities where the user is a founder or moderator
+  const foundedCommunities = userCommunityData.data?.memberships.filter(
+    (m) => m.isFounder
+  );
+  const moderatedCommunities = userCommunityData.data?.memberships.filter(
+    (m) => m.isModerator
+  );
 
   return (
     <div className="p-2 text-sm">
@@ -213,7 +222,7 @@ const UserDashboard = ({ username }: { username: string }) => {
         {/* Community Scores */}
         <div>
           {userCommunityData.isLoading ? (
-            <WidgetLoadingSkeleton className="h-64" />
+            <WidgetLoadingSkeleton className="h-32" />
           ) : userCommunityData.isError ? (
             <WidgetWrapper>
               <p className="font-semibold text-red-500">
@@ -225,23 +234,93 @@ const UserDashboard = ({ username }: { username: string }) => {
             </WidgetWrapper>
           ) : userCommunityData.isSuccess &&
             userCommunityData.data.scores.length > 0 ? (
-            <WidgetWrapper className="p-3 h-auto">
+            <WidgetWrapper className="p-2 w-full">
               <p className="font-semibold mb-2">Community Activity & Scores</p>
               <div>
                 <p>
                   {username} is currently a member of{" "}
-                  <strong>{userCommunityData.data.memberships || 0}</strong>{" "}
+                  <strong>
+                    {userCommunityData.data.memberships.length || 0}
+                  </strong>{" "}
                   communities. Below is a summary of how much people have
                   enjoyed their contributions in those communities.
                 </p>
-              </div>
-              <div className="w-full">
                 <CommunityScoreChart data={userCommunityData.data.scores} />
               </div>
             </WidgetWrapper>
           ) : (
             <WidgetWrapper>
               <p className="font-semibold">Community Scores</p>
+              <p className="text-muted-foreground">No community activity yet</p>
+            </WidgetWrapper>
+          )}
+        </div>
+
+        {/* Community founding & moderation */}
+        <div>
+          {userCommunityData.isLoading ? (
+            <WidgetLoadingSkeleton className="h-32" />
+          ) : userCommunityData.isError ? (
+            <WidgetWrapper>
+              <p className="font-semibold text-red-500">
+                Failed to load community data
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Please try again later
+              </p>
+            </WidgetWrapper>
+          ) : userCommunityData.isSuccess &&
+            userCommunityData.data.scores.length > 0 ? (
+            <WidgetWrapper className="p-2 w-full flex flex-col space-y-2">
+              <p className="font-semibold mb-2">
+                Community Founding & Moderation
+              </p>
+              {/* founder */}
+              <div className="w-full">
+                <p className="pb-2">
+                  {username} is a Founder of{" "}
+                  <strong>{foundedCommunities?.length}</strong> communities
+                </p>
+                <div className="flex flex-col space-y-2">
+                  {foundedCommunities?.length &&
+                    foundedCommunities.map((communiuty) => (
+                      <CommunityTab
+                        className="hover:bg-slate-200 hover:dark:bg-slate-700"
+                        community={communiuty}
+                        showFounderBadge={false}
+                        showModeratorBadge={false}
+                      />
+                    ))}
+                </div>
+              </div>
+              {/* moderator */}
+              <div className="w-full">
+                <p className="pb-2">
+                  {username} is a Moderator of{" "}
+                  <strong>
+                    {
+                      userCommunityData.data.memberships.filter(
+                        (m) => m.isModerator
+                      ).length
+                    }
+                  </strong>{" "}
+                  communities
+                </p>
+                <div className="flex flex-col space-y-2">
+                  {moderatedCommunities?.length &&
+                    moderatedCommunities.map((communiuty) => (
+                      <CommunityTab
+                        community={communiuty}
+                        showFounderBadge={false}
+                        showModeratorBadge={false}
+                      />
+                    ))}
+                </div>
+              </div>
+            </WidgetWrapper>
+          ) : (
+            <WidgetWrapper>
+              <p className="font-semibold">Community Scores</p>q
               <p className="text-muted-foreground">No community activity yet</p>
             </WidgetWrapper>
           )}

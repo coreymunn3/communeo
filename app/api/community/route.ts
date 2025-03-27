@@ -20,7 +20,7 @@ import { NextRequest, NextResponse } from "next/server";
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/CommunityResponse'
+ *                 $ref: '#/components/schemas/CommunityMembership'
  *       500:
  *         description: Server error
  *         content:

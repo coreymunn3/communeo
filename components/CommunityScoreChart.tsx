@@ -26,6 +26,7 @@ const communityScoreChartConfig = {
 
 const CommunityScoreChart = ({ data }: { data: UserCommunityScore[] }) => {
   // Limit to top 10 communities for better visualization
+  // TO DO - take the top 9, then store "all others" as the 10th.
   const limitedData = data.slice(0, 10);
 
   // Custom tooltip to show both post and comment scores
@@ -79,7 +80,7 @@ const CommunityScoreChart = ({ data }: { data: UserCommunityScore[] }) => {
           name={communityScoreChartConfig.postScore.label}
           stackId="a"
           fill={communityScoreChartConfig.postScore.color}
-          radius={[0, 8, 8, 0]}
+          radius={limitedData[0].commentScore === 0 ? [0, 8, 8, 0] : 0}
         />
         <Bar
           dataKey="commentScore"

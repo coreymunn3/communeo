@@ -31,7 +31,7 @@
  *           format: date-time
  *           description: When the community was created
  *
- *     CommunityResponse:
+ *     CommunityMembership:
  *       type: object
  *       properties:
  *         id:
@@ -229,8 +229,10 @@
  *       type: object
  *       properties:
  *         memberships:
- *           type: integer
- *           description: Number of communities the user is a member of
+ *           type: array
+ *           description: An array of communities that the user is a member of
+ *           items:
+ *             $ref: '#/components/schemas/CommunityMembership'
  *         scores:
  *           type: array
  *           items:
