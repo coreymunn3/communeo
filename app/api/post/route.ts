@@ -18,6 +18,7 @@ import { NextRequest, NextResponse } from "next/server";
  *       1. With no parameters - Returns posts for the user's feed based on their community memberships
  *       2. With 'q' parameter - Returns search results matching the query term
  *       3. With 'q' and 'communityId' parameters - Returns search results within a specific community
+ *       4. With 'q' and 'userId' parameters - Returns search results for posts created by a specific user
  *     tags: [Posts]
  *     security:
  *       - clerkAuth: []
@@ -34,6 +35,12 @@ import { NextRequest, NextResponse } from "next/server";
  *         schema:
  *           type: string
  *         description: Community ID to limit search results to a specific community
+ *       - in: query
+ *         name: userId
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: User ID to limit search results to posts created by a specific user
  *       - in: query
  *         name: cursor
  *         required: false
@@ -55,7 +62,7 @@ import { NextRequest, NextResponse } from "next/server";
  *             schema:
  *               $ref: '#/components/schemas/PostsResponse'
  *       404:
- *         description: Community not found (when communityId is provided)
+ *         description: Community or user not found (when communityId or userId is provided)
  *         content:
  *           application/json:
  *             schema:
@@ -84,6 +91,8 @@ export async function GET(request: NextRequest) {
   /**
    * If a query is passed, we only want to return posts matching that query
    * If a community OR userId is also passed, we want to limit posts to those terms as well
+   * - With communityId: Search posts within a specific community
+   * - With userId: Search posts created by a specific user
    */
   if (q) {
     if (communityId) {
