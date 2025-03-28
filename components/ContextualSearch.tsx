@@ -7,7 +7,7 @@ import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 
 const ContextualSearch = () => {
-  const params = useParams();
+  const params: { slug?: string; username?: string } = useParams();
   const router = useRouter();
 
   const [searchValue, setSearchValue] = useState<string>("");
@@ -20,17 +20,26 @@ const ContextualSearch = () => {
     if (e.key === "Enter") {
       if (searchValue.trim()) {
         if (params?.slug) {
-          router.push(`/search?community=${params.slug}&q=${searchValue}`);
-        } else {
-          router.push(`/search?q=${searchValue}`);
+          return router.push(
+            `/search?community=${params.slug}&q=${searchValue}`
+          );
         }
+        if (params?.username) {
+          return router.push(
+            `/search?username=${params.username}&q=${searchValue}`
+          );
+        }
+        return router.push(`/search?q=${searchValue}`);
       }
     }
   };
 
-  const placeholder = `Search posts ${
-    params?.slug ? "in " + params.slug : "in communeo"
-  }`;
+  const getPlaceholder = () => {
+    let location = "communeo";
+    if (params?.slug) location = params.slug;
+    if (params?.username) location = params.username;
+    return `Search posts in ${location}`;
+  };
 
   return (
     <div className="relative w-full flex">
@@ -40,7 +49,7 @@ const ContextualSearch = () => {
       <Input
         type="text"
         id="contextual-search"
-        placeholder={placeholder}
+        placeholder={getPlaceholder()}
         value={searchValue}
         onChange={handleChange}
         onKeyDown={handleKeyDown}

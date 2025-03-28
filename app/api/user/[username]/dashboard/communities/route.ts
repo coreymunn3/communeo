@@ -61,7 +61,6 @@ export async function GET(
 
     // get all communities where the user is a memeber, and include if the user is a founder or moderator there
     const userCommunities = await getUserCommunities(user.id);
-    console.log(userCommunities);
     const memberships = userCommunities.map((c) => ({
       id: c.id,
       name: c.name,

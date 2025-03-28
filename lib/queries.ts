@@ -218,6 +218,7 @@ export async function getUserMembershipInCommunity(
 export async function getPostsFromSearchTerm(
   searchTerm: string,
   communityId?: string,
+  userId?: string,
   limit: number = 10,
   cursor?: string
 ) {
@@ -228,6 +229,7 @@ export async function getPostsFromSearchTerm(
         { content: { contains: searchTerm, mode: "insensitive" } },
       ],
       ...(communityId && { community_id: communityId }),
+      ...(userId && { user_id: userId }),
     },
     include: {
       author: {
@@ -274,6 +276,21 @@ export async function getUserFromUsername(username: string) {
   return await prisma.app_user.findUnique({
     where: {
       username,
+    },
+    select: {
+      id: true,
+      username: true,
+      avatar_url: true,
+      email: true,
+      created_on: true,
+    },
+  });
+}
+
+export async function getUserById(userId: string) {
+  return await prisma.app_user.findUnique({
+    where: {
+      id: userId,
     },
     select: {
       id: true,

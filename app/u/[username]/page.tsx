@@ -32,7 +32,6 @@ const UserPage = async ({ params }: UserPageProps) => {
   }
 
   if (user) {
-    console.log(user);
     // get the user's initial posts and comments
     const {
       posts: initialUserPosts,

@@ -3,6 +3,7 @@ import {
   getCommunityById,
   getPostsForUser,
   getPostsFromSearchTerm,
+  getUserById,
 } from "@/lib/queries";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -71,6 +72,7 @@ export async function GET(request: NextRequest) {
   // get the url params
   const { searchParams } = new URL(request.url);
   const q = searchParams.get("q");
+  const userId = searchParams.get("userId");
   const communityId = searchParams.get("communityId");
   const cursor = searchParams.get("cursor") || undefined;
   const limitParam = searchParams.get("limit");
@@ -81,6 +83,7 @@ export async function GET(request: NextRequest) {
 
   /**
    * If a query is passed, we only want to return posts matching that query
+   * If a community OR userId is also passed, we want to limit posts to those terms as well
    */
   if (q) {
     if (communityId) {
@@ -97,13 +100,14 @@ export async function GET(request: NextRequest) {
         const result = await getPostsFromSearchTerm(
           q,
           communityId,
+          undefined,
           limit,
           cursor
         );
         return NextResponse.json(result, { status: 200 });
       } catch (error) {
         console.error(
-          `Error fetching posts from search term in /api/post?q=${q}&community=${communityId}`,
+          `Error fetching posts from search term in /api/post?q=${q}&communityId=${communityId}`,
           error
         );
         return NextResponse.json(
@@ -113,10 +117,43 @@ export async function GET(request: NextRequest) {
           { status: 500 }
         );
       }
+    }
+    if (userId) {
+      try {
+        // make sure the user exists
+        const user = await getUserById(userId);
+        if (!user) {
+          return NextResponse.json(
+            { error: `user ${userId} not found` },
+            { status: 404 }
+          );
+        }
+        // get posts
+        const result = await getPostsFromSearchTerm(
+          q,
+          undefined,
+          userId,
+          limit,
+          cursor
+        );
+        return NextResponse.json(result, { status: 200 });
+      } catch (error) {
+        console.error(
+          `Error fetching posts from search term in /api/post?q=${q}&userId=${userId}`,
+          error
+        );
+        return NextResponse.json(
+          {
+            error: `Failed to fetch posts from search term ${q} in user ${userId}`,
+          },
+          { status: 500 }
+        );
+      }
     } else {
       try {
         const result = await getPostsFromSearchTerm(
           q,
+          undefined,
           undefined,
           limit,
           cursor
