@@ -50,11 +50,13 @@ The application follows a component-based architecture using React:
 
 1. **Layout Components**: Define the overall structure of pages (Header, PageLayoutContainer).
 
-2. **Feature Components**: Implement specific features (Posts, Comments, CreateCommunity).
+2. **Feature Components**: Implement specific features (Posts, Comments, CreateCommunity, UserActivity, UserDashboard).
 
-3. **UI Components**: Reusable UI elements from ShadCN/Radix UI (Button, Dialog, Form).
+3. **UI Components**: Reusable UI elements from ShadCN/Radix UI (Button, Dialog, Form, Chart).
 
 4. **Provider Components**: Manage global state and context (ThemeProvider, AppContext).
+
+5. **Dashboard Components**: Specialized components for displaying user statistics and activity (CommunityScoreChart, CommunityTab).
 
 ## State Management
 
@@ -88,6 +90,14 @@ State management is handled through a combination of:
 
 4. **Server Actions**: For form submissions and data mutations.
 
+5. **Search Queries**: Case-insensitive database queries with pagination for search functionality.
+
+6. **Dashboard Queries**: Specialized API endpoints for user dashboard data:
+   - `/api/user/[username]/dashboard/scores` - User score metrics
+   - `/api/user/[username]/dashboard/posts` - Post activity metrics
+   - `/api/user/[username]/dashboard/comments` - Comment activity metrics
+   - `/api/user/[username]/dashboard/communities` - Community activity and membership data
+
 ## Routing Structure
 
 The application uses Next.js App Router with the following route structure:
@@ -95,8 +105,11 @@ The application uses Next.js App Router with the following route structure:
 - `/` - Home page with feed of posts
 - `/c/[slug]` - Community page
 - `/c/[slug]/post/[postId]` - Individual post page
-- `/u/[username]` - User profile page
-- `/search` - Search results page
+- `/u/[username]` - User profile page with activity and dashboard
+- `/search` - Search results page with support for query parameters:
+  - `q` - Search term
+  - `community` - Community slug for scoped search
+  - `username` - Username for user-specific search
 - `/api/*` - API endpoints
 
 ## Error Handling

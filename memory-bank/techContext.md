@@ -131,7 +131,7 @@ The application syncs Clerk user data to the local database for relational queri
 The API follows RESTful principles with endpoints organized by resource:
 
 - `/api/community`: Community management
-- `/api/post`: Post creation and retrieval
+- `/api/post`: Post creation and retrieval, including search functionality
 - `/api/comment`: Comment operations
 - `/api/user`: User profile operations
 - `/api/link-preview`: Link preview generation
@@ -151,6 +151,7 @@ The API follows RESTful principles with endpoints organized by resource:
 - TanStack Query provides efficient data fetching and caching
 - Images should be optimized and served through a CDN
 - Database queries are optimized with appropriate indexes
+- Search queries use case-insensitive pattern matching with pagination for better performance
 
 ## Security Considerations
 

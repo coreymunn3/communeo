@@ -53,6 +53,8 @@ This file captures important patterns, preferences, and project intelligence for
 - **Voting System**: Values of 1 (upvote) or -1 (downvote)
 - **Nested Comments**: Parent-child relationship for threaded discussions
 - **Flairs**: Community-specific tags for categorizing posts
+- **Contextual Search**: Search adapts based on current context (global, community, or user)
+- **Search Implementation**: Uses case-insensitive contains queries with pagination support
 
 ## Known Challenges
 

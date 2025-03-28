@@ -44,7 +44,7 @@ Communeo addresses these challenges by creating a community platform that:
 - Nested commenting system
 - Upvoting/downvoting on posts and comments
 - User profiles and activity history
-- Search functionality
+- Contextual search functionality (global, community-specific, and user-specific)
 - Content moderation tools
 - Responsive design for all devices
 - Public access with login prompts for actions
