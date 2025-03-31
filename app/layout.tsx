@@ -33,24 +33,26 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased w-screen overflow-x-hidden overflow-y-scroll`}
-        >
-          <TanstackQueryClientProvider>
-            <ThemeProvider
-              attribute={"class"}
-              defaultTheme="light"
-              enableSystem={false}
-            >
-              <AppProvider>
-                <div className="fixed top-0 left-0 w-full z-50 backdrop-blur-md  bg-slate-100/70 dark:bg-slate-800/70">
-                  <Header />
-                </div>
-                <PageLayoutContainer>{children}</PageLayoutContainer>
-                <Toaster position="top-center" richColors />
-              </AppProvider>
-            </ThemeProvider>
-          </TanstackQueryClientProvider>
+        <body>
+          <div
+            className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          >
+            <TanstackQueryClientProvider>
+              <ThemeProvider
+                attribute={"class"}
+                defaultTheme="light"
+                enableSystem={false}
+              >
+                <AppProvider>
+                  <div className="fixed top-0 left-0 w-full z-50 backdrop-blur-md  bg-slate-100/70 dark:bg-slate-800/70">
+                    <Header />
+                  </div>
+                  <PageLayoutContainer>{children}</PageLayoutContainer>
+                  <Toaster position="top-center" richColors />
+                </AppProvider>
+              </ThemeProvider>
+            </TanstackQueryClientProvider>
+          </div>
         </body>
       </html>
     </ClerkProvider>

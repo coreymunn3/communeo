@@ -59,7 +59,7 @@ export default async function Home() {
 
   return (
     <div className="flex flex-col space-y-2">
-      <div>
+      <div className="flex flex-col md:flex-row space-y-2 md:space-x-2">
         <YourCommunities />
       </div>
       <Posts
