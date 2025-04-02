@@ -1,9 +1,8 @@
-import { prisma } from "@/lib/prisma";
-import { Comment } from "@/lib/types";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import { buildCommentTree } from "@/lib/utils";
 import { getComments, getPostById } from "@/lib/queries";
+import { getDbUser } from "@/actions/getDbUser";
 
 /**
  * @swagger
@@ -35,6 +34,15 @@ import { getComments, getPostById } from "@/lib/queries";
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/CommentTree'
+ *             example:
+ *               - id: "comment-id-1"
+ *                 text: "This is a comment"
+ *                 created_on: "2025-04-01T12:00:00Z"
+ *                 post_id: "post-id"
+ *                 parent_id: null
+ *                 author: { id: "user-id", username: "username", image_url: "url" }
+ *                 canEdit: true
+ *                 replies: []
  *       404:
  *         description: Post not found
  *         content:
@@ -58,6 +66,14 @@ export async function GET(
   // TO DO - implement sorting
   const sort = searchParams.get("sort");
 
+  // try to get the logged in user. If user is not logged in this will fail, which is ok
+  let dbUser = undefined;
+  try {
+    dbUser = await getDbUser();
+  } catch (error) {
+    console.log(`Unable to get the database User`);
+  }
+
   try {
     const { postId } = params;
     // first make sure the post exists
@@ -70,8 +86,13 @@ export async function GET(
     }
     // fetch the comments
     const comments = await getComments(postId);
+    // determine if the user can edit the comment (if they are the author)
+    const commentsWithEdit = comments.map((comment) => ({
+      ...comment,
+      canEdit: dbUser ? comment.author.id === dbUser.id : false,
+    }));
     // return comments
-    const commentTree = buildCommentTree(comments);
+    const commentTree = buildCommentTree(commentsWithEdit);
     return NextResponse.json(commentTree, { status: 200 });
   } catch (error) {
     console.error(

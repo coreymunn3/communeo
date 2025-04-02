@@ -160,6 +160,11 @@
  *             format: date-time
  *           user:
  *             $ref: '#/components/schemas/User'
+ *           author:
+ *             $ref: '#/components/schemas/User'
+ *           canEdit:
+ *             type: boolean
+ *             description: Whether the current user can edit this comment (true if they are the author)
  *           replies:
  *             type: array
  *             items:
