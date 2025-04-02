@@ -18,9 +18,13 @@ const PostPage = async ({ params }: PostPageProps) => {
   // get the post
   const post = await getPostById(postId);
 
-  // get the comments
+  // get the comments & build a tree
   const comments = await getComments(postId);
-  const commentTree = buildCommentTree(comments);
+  const commentsWithEdit = comments.map((comment) => ({
+    ...comment,
+    canEdit: false,
+  }));
+  const commentTree = buildCommentTree(commentsWithEdit);
 
   if (!post) {
     notFound();
@@ -31,7 +35,7 @@ const PostPage = async ({ params }: PostPageProps) => {
       <Post post={post} showAuthor={true} />
 
       {/* Textarea to leave a comment with comment/cancel buttons "inside" */}
-      <CreateComment postId={postId} parentCommentId={null} />
+      <CreateComment postId={postId} />
 
       {/* sort by: top/new */}
 

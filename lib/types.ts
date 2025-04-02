@@ -213,6 +213,7 @@ export type Comment = {
   parent_comment_id: string | null;
   author: Author;
   replies?: Comment[];
+  canEdit: boolean;
 };
 
 export type SortOption = {

@@ -12,6 +12,7 @@ import {
   CirclePlusIcon,
   CircleMinusIcon,
   MessageCirclePlusIcon,
+  PencilIcon,
 } from "lucide-react";
 import CommentVotes from "./CommentVotes";
 
@@ -24,6 +25,7 @@ const Comment = ({
 }) => {
   const normalizeCommentDate = normalizeDate(comment.created_on);
   const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
   const [showCommentForm, setShowCommentForm] = useState<boolean>(false);
 
   const handleCommentClick = () => {
@@ -35,7 +37,15 @@ const Comment = ({
     setShowCommentForm((prev) => !prev);
   };
 
-  const cancelReply = () => {
+  const handleCancelCreate = () => {
+    setShowCommentForm(false);
+  };
+
+  const handleCancelEdit = () => {
+    // This function is passed to CreateComment as onReset
+    // It will only be called after the form is successfully reset
+    // (either directly or after the dialog confirmation)
+    setIsEditing(false);
     setShowCommentForm(false);
   };
 
@@ -44,16 +54,29 @@ const Comment = ({
     setIsOpen((prev) => !prev);
   };
 
+  const handleEditComment = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setIsEditing((prev) => !prev);
+  };
+
   return (
     <div className="flex flex-col space-y-1">
       {/* The Comment Itself */}
       <div
-        className="flex flex-col space-y-2 px-2 py-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors duration-300 cursor-pointer"
+        className={`flex flex-col space-y-2 px-2 py-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors duration-300 cursor-pointer ${
+          isEditing && "border border-green-200 dark:border-green-800"
+        }`}
         onClick={handleCommentClick}
         role="button"
-        tabIndex={0}
+        tabIndex={isEditing || showCommentForm ? -1 : 0}
+        aria-expanded={isOpen}
+        aria-label={`Comment by ${comment.author.username}`}
         onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
+          if (
+            (e.key === "Enter" || e.key === " ") &&
+            !isEditing &&
+            !showCommentForm
+          ) {
             handleCommentClick();
           }
         }}
@@ -62,8 +85,23 @@ const Comment = ({
           user={comment.author}
           createdDate={normalizeCommentDate}
         />
-        {/* comment text */}
-        <p className="text-sm pl-6">{comment.text}</p>
+        {/* comment text - if editing, show the form */}
+        {isEditing ? (
+          <div onClick={(e) => e.stopPropagation()} className="pl-2">
+            <CreateComment
+              editing={true}
+              editCommentText={comment.text}
+              editCommentId={comment.id}
+              postId={comment.post_id}
+              commentOpen={true}
+              formFocused={true}
+              onReset={handleCancelEdit}
+            />
+          </div>
+        ) : (
+          <p className="text-sm pl-6">{comment.text}</p>
+        )}
+
         {/* comment controls - view replies, view votes, reply */}
         <div className="flex flex-row pl-6 space-x-2 items-center">
           {/* open replies  */}
@@ -72,6 +110,7 @@ const Comment = ({
               variant="ghost"
               className="p-0 h-full"
               onClick={handleToggleOpenReplies}
+              aria-label={isOpen ? "Collapse replies" : "Expand replies"}
             >
               {isOpen ? (
                 <CircleMinusIcon className="h-4 w-4" />
@@ -94,24 +133,39 @@ const Comment = ({
               variant={"ghost"}
               className="flex items-center"
               onClick={handleReply}
+              aria-label="Reply to comment"
             >
               <MessageCirclePlusIcon className="mr-1" />
               <span className="text-sm">Reply</span>
+            </Button>
+          )}
+          {/* edit button */}
+          {comment.canEdit && (
+            <Button
+              variant={"ghost"}
+              className="flex items-center"
+              onClick={handleEditComment}
+              aria-label="Edit comment"
+            >
+              <PencilIcon className="mr-1" />
+              <span className="text-sm">Edit</span>
             </Button>
           )}
         </div>
       </div>
 
       {/* The create comment form */}
-      <div className="pl-6 ml-4">
+      <div className="pl-6 ml-4 pr-2">
         {showCommentForm && (
-          <CreateComment
-            postId={comment.post_id}
-            parentCommentId={comment.id}
-            commentOpen={true}
-            formFocused={true}
-            onReset={cancelReply}
-          />
+          <div onClick={(e) => e.stopPropagation()}>
+            <CreateComment
+              postId={comment.post_id}
+              parentCommentId={comment.id}
+              commentOpen={true}
+              formFocused={true}
+              onReset={handleCancelCreate}
+            />
+          </div>
         )}
       </div>
 
