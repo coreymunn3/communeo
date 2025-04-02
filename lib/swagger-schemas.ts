@@ -139,6 +139,9 @@
  *           type: string
  *           format: date-time
  *           description: When the comment was created
+ *         canEdit:
+ *           type: boolean
+ *           description: Whether the current user can edit this comment (true if they are the author)
  *
  *     CommentTree:
  *       type: array
