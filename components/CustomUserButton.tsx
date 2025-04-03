@@ -1,4 +1,4 @@
-import { UserButton } from "@clerk/nextjs";
+import { UserButton, UserProfile } from "@clerk/nextjs";
 import { DotIcon, User } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 
@@ -24,7 +24,17 @@ const CustomUserButton = () => {
   });
 
   return (
-    <UserButton>
+    <UserButton
+      userProfileProps={{
+        appearance: {
+          elements: {
+            profileSection__username: {
+              display: "none",
+            },
+          },
+        },
+      }}
+    >
       <UserButton.MenuItems>
         <UserButton.Link
           href={`/u/${user.data?.username}`}
