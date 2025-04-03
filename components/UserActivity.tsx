@@ -30,7 +30,6 @@ const UserActivity = ({
       name: "Posts",
       component: (
         <Posts
-          showAuthor={true}
           initialPosts={initialPosts}
           initialNextCursor={initialNextCursor}
           initialHasMore={initialHasMore}
