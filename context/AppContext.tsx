@@ -6,20 +6,16 @@ import { createContext, useContext, useState, ReactNode } from "react";
 type AppContextType = {
   createCommunityOpen: boolean;
   createPostOpen: boolean;
-  accountManagementOpen: boolean;
   setCreateCommunityOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setCreatePostOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setAccountManagementOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 // Provide default values for the context
 const defaultContextValue: AppContextType = {
   createCommunityOpen: false,
   createPostOpen: false,
-  accountManagementOpen: false,
   setCreateCommunityOpen: () => {}, // Default empty function
   setCreatePostOpen: () => {}, // Default empty function
-  setAccountManagementOpen: () => {}, // Default empty function
 };
 
 // Create the context with a default value
@@ -40,8 +36,6 @@ export default function AppProvider({ children }: AppProviderProps) {
     setCreateCommunityOpen,
     createPostOpen,
     setCreatePostOpen,
-    accountManagementOpen,
-    setAccountManagementOpen,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
