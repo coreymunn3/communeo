@@ -39,6 +39,10 @@ const UserPage = async ({ params }: UserPageProps) => {
       hasMore,
     } = await getPostsByUserId(user.id);
     const initialUserComments = await getCommentsByUserId(user.id);
+    const initialUserCommentsWithEdit = initialUserComments.map((comment) => ({
+      ...comment,
+      canEdit: false,
+    }));
 
     return (
       <div className="flex flex-col">
@@ -72,7 +76,7 @@ const UserPage = async ({ params }: UserPageProps) => {
               initialPosts={initialUserPosts}
               initialNextCursor={nextCursor}
               initialHasMore={hasMore}
-              initialComments={initialUserComments}
+              initialComments={initialUserCommentsWithEdit}
             />
           </div>
           {/* right section - user stats */}

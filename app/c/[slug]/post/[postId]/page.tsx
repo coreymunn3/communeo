@@ -18,7 +18,7 @@ const PostPage = async ({ params }: PostPageProps) => {
   // get the post
   const post = await getPostById(postId);
 
-  // get the comments & build a tree
+  // get the comments & build a tree. We can start with canEdit of false, since we will re-fetch these in the client momentarily
   const comments = await getComments(postId);
   const commentsWithEdit = comments.map((comment) => ({
     ...comment,
