@@ -12,6 +12,7 @@ import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { useAppContext } from "@/context/AppContext";
 import ContextualSearch from "./ContextualSearch";
 import CreatePostDialog from "./CreatePostDialog";
+import CustomUserButton from "./CustomUserButton";
 
 const Header = () => {
   const {
@@ -65,7 +66,7 @@ const Header = () => {
         <SignedIn>
           <CreatePostButton />
           <CreateCommunityButton />
-          <UserButton />
+          <CustomUserButton />
         </SignedIn>
         <SignedOut>
           <SignInButton mode="modal">
@@ -98,7 +99,7 @@ const Header = () => {
             </SheetContent>
           </SignedIn>
         </Sheet>
-        <UserButton />
+        <CustomUserButton />
       </div>
 
       {/* Dialog to create a new community */}
