@@ -119,7 +119,7 @@ export type createCommunityFormData = z.infer<typeof createCommunityFormSchema>;
 // Define schemas for each post type
 const textPostSchema = z.object({
   type: z.literal("text"),
-  title: z.string().min(5).max(100),
+  title: z.string().min(5).max(500),
   content: z.string().min(1, "Content is required for text posts."),
   is_nsfw: z.boolean().default(false), // Boolean field for is_NSFW
   is_spoiler: z.boolean().default(false), // Boolean field for is_Spoiler

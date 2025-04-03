@@ -153,7 +153,7 @@ const CreatePostForm = ({
                     {...field}
                   />
                 </FormControl>
-                <FormDescription>Between 5 and 50 characters</FormDescription>
+                <FormDescription>Between 5 and 500 characters</FormDescription>
                 <FormMessage className="ml-2" />
               </FormItem>
             )}
