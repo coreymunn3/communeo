@@ -56,7 +56,7 @@ model post {
   id           String    @id @default(uuid())
   created_on   DateTime  @default(now())
   title        String
-  content      String
+  content      String    @db.Text
   type         post_type
   is_nsfw      Boolean   @default(false)
   is_spoiler   Boolean   @default(false)
@@ -88,7 +88,7 @@ model flair {
 model comment {
   id                String   @id @default(uuid())
   created_on        DateTime @default(now())
-  text              String
+  text              String   @db.Text
   user_id           String
   post_id           String // Foreign key that references Post
   parent_comment_id String?

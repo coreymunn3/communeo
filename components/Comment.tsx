@@ -1,6 +1,7 @@
 "use client";
 
 import { Comment as CommentType } from "@/lib/types";
+import { RichTextContent } from "./ui/rich-text-content";
 import { normalizeDate } from "@/lib/utils";
 import UserTagAndCreation from "./UserTagAndCreation";
 import { useState } from "react";
@@ -99,7 +100,9 @@ const Comment = ({
             />
           </div>
         ) : (
-          <p className="text-sm pl-6">{comment.text}</p>
+          <div className="pl-6">
+            <RichTextContent content={comment.text} className="text-sm" />
+          </div>
         )}
 
         {/* comment controls - view replies, view votes, reply */}

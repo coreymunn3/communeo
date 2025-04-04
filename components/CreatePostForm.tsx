@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Toggle } from "@/components/ui/toggle";
-import { Textarea } from "./ui/textarea";
+import { RichTextEditor } from "./ui/rich-text-editor";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -187,9 +187,11 @@ const CreatePostForm = ({
                 </div>
                 {/* content area */}
                 <FormControl>
-                  <Textarea
-                    {...field}
+                  <RichTextEditor
+                    value={field.value}
+                    onChange={field.onChange}
                     placeholder="What do you want to share with the community?"
+                    error={!!createPostForm.formState.errors.content}
                   />
                 </FormControl>
                 <FormMessage className="ml-2" />

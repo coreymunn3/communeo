@@ -1,5 +1,5 @@
 "use client";
-import React, { Fragment } from "react";
+import React from "react";
 import { CommunityPost } from "@/lib/types";
 import { Separator } from "./ui/separator";
 import { normalizeDate } from "@/lib/utils";
@@ -11,6 +11,7 @@ import CommentCount from "./CommentCount";
 import UserTagAndCreation from "./UserTagAndCreation";
 import CommunitySlugAndCreation from "./CommunitySlugAndCreation";
 import { Badge } from "lucide-react";
+import { RichTextContent } from "./ui/rich-text-content";
 import CommunityFlairs from "./CommunityFlairs";
 
 const Post = ({
@@ -33,7 +34,7 @@ const Post = ({
   const renderPostContent = (type: string, content: string, postId: string) => {
     switch (type) {
       case "text":
-        return <p>{content}</p>;
+        return <RichTextContent content={content} className="text-sm" />;
       case "image":
         return (
           <div className="w-full h-auto relative aspect-video">

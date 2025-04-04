@@ -8,7 +8,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Textarea } from "./ui/textarea";
+import { RichTextEditor } from "./ui/rich-text-editor";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "./ui/button";
@@ -173,10 +173,12 @@ const CreateComment = ({
               name="comment"
               render={({ field }) => (
                 <FormItem>
-                  <Textarea
-                    {...field}
-                    autoFocus
-                    className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                  <RichTextEditor
+                    value={field.value}
+                    onChange={field.onChange}
+                    placeholder="Write your comment..."
+                    error={!!createCommentForm.formState.errors.comment}
+                    className="border-0"
                   />
                 </FormItem>
               )}

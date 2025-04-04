@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { sanitizeHtml } from "@/lib/sanitize";
 import { commentFormData, postFormData } from "@/lib/types";
 import { auth } from "@clerk/nextjs/server";
 import { getDbUser } from "./getDbUser";
@@ -29,13 +30,16 @@ export async function editComment(
       `You are not the author of this comment - not allowed to edit`
     );
   }
+  // Sanitize the comment text
+  const sanitizedText = sanitizeHtml(formData.comment);
+
   // update the comment
   await prisma.comment.update({
     where: {
       id: commentId,
     },
     data: {
-      text: formData.comment,
+      text: sanitizedText,
     },
   });
   return { success: true };
