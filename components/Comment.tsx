@@ -9,13 +9,24 @@ import CreateComment from "./CreateComment";
 import { Button } from "./ui/button";
 import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
   MessageCircleIcon,
   CirclePlusIcon,
   CircleMinusIcon,
   MessageCirclePlusIcon,
   PencilIcon,
+  Trash2Icon,
 } from "lucide-react";
 import CommentVotes from "./CommentVotes";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteComment } from "@/actions/deleteComment";
 
 const Comment = ({
   comment,
@@ -24,10 +35,28 @@ const Comment = ({
   comment: CommentType;
   allowReply?: boolean;
 }) => {
+  const queryClient = useQueryClient();
   const normalizeCommentDate = normalizeDate(comment.created_on);
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [showCommentForm, setShowCommentForm] = useState<boolean>(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState<boolean>(false);
+
+  // delete the comment and re-fetch the comments for this post
+  const deleteCommentMutation = useMutation({
+    mutationKey: ["comment", comment.id, "delete"],
+    mutationFn: (commentId: string) => deleteComment(commentId),
+    onSuccess: async (data) => {
+      // invalidate the post comments
+      queryClient.invalidateQueries({
+        queryKey: ["post", comment.post_id, "comments"],
+      });
+      // invalidate the user comments
+      queryClient.invalidateQueries({
+        queryKey: ["user"],
+      });
+    },
+  });
 
   const handleCommentClick = () => {
     setIsOpen((prev) => !prev);
@@ -58,6 +87,11 @@ const Comment = ({
   const handleEditComment = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     setIsEditing((prev) => !prev);
+  };
+
+  const handleDeleteComment = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setShowDeleteConfirm(true);
   };
 
   return (
@@ -154,6 +188,18 @@ const Comment = ({
               <span className="text-sm">Edit</span>
             </Button>
           )}
+          {/* delete button */}
+          {comment.canEdit && (
+            <Button
+              variant={"ghost"}
+              className="flex items-center text-destructive hover:text-destructive"
+              onClick={handleDeleteComment}
+              aria-label="Delete comment"
+              disabled={deleteCommentMutation.isPending}
+            >
+              <Trash2Icon className="mr-1" />
+            </Button>
+          )}
         </div>
       </div>
 
@@ -194,6 +240,34 @@ const Comment = ({
           </Collapsible>
         )}
       </div>
+
+      {/* dialog to confirm delete */}
+      <Dialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Are you sure you want to delete?</DialogTitle>
+            <DialogDescription>This action cannot be undone.</DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setShowDeleteConfirm(false)}
+            >
+              No, Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={() => {
+                deleteCommentMutation.mutate(comment.id);
+                setShowDeleteConfirm(false);
+              }}
+              disabled={deleteCommentMutation.isPending}
+            >
+              {deleteCommentMutation.isPending ? "Deleting..." : "Yes, Delete"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

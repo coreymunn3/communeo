@@ -1,15 +1,10 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { sanitizeHtml } from "@/lib/sanitize";
-import { commentFormData } from "@/lib/types";
 import { auth } from "@clerk/nextjs/server";
 import { getDbUser } from "./getDbUser";
 
-export async function editComment(
-  formData: commentFormData,
-  commentId: string
-) {
+export async function deleteComment(commentId: string) {
   auth.protect();
   const dbUser = await getDbUser();
   // get the comment to make sure it exists
@@ -24,22 +19,16 @@ export async function editComment(
       `Comment with id ${commentId} not found - unable to edit this comment`
     );
   }
-  // only the author of the comment is allowed to edit
+  // only the author of the comment is allowed to delete
   if (comment.user_id !== dbUser.id) {
     throw new Error(
       `You are not the author of this comment - not allowed to edit`
     );
   }
-  // Sanitize the comment text
-  const sanitizedText = sanitizeHtml(formData.comment);
-
-  // update the comment
-  await prisma.comment.update({
+  // delete it
+  await prisma.comment.delete({
     where: {
       id: commentId,
-    },
-    data: {
-      text: sanitizedText,
     },
   });
   return { success: true };

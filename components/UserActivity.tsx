@@ -42,7 +42,7 @@ const UserActivity = ({
     },
     {
       id: "2",
-      name: "Commenets",
+      name: "Comments",
       component: (
         <Comments
           allowReply={false}
