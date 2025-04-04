@@ -366,5 +366,8 @@ export async function getCommentsByUserId(userId: string) {
         },
       },
     },
+    orderBy: {
+      created_on: "desc",
+    },
   });
 }
